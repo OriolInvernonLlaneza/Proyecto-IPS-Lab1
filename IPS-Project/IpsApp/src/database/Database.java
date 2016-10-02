@@ -2,6 +2,7 @@ package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -18,10 +19,8 @@ public class Database {
     }
 
     private Database() {
-        Properties connectionProps = new Properties();
-        connectionProps.put("user", "SA");
         try {
-            conn = DriverManager.getConnection("jdbc:h2:~/test", connectionProps);
+            conn = DriverManager.getConnection("jdbc:h2:./IpsApp/Database/files/DBApp", "SA", "");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -32,6 +31,15 @@ public class Database {
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public ResultSet executeQuery(String sql){
+        try {
+            return conn.prepareStatement(sql).executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
