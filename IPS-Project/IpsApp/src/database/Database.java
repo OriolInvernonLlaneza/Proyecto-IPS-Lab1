@@ -20,7 +20,7 @@ public class Database {
 
     private Database() {
         try {
-            conn = DriverManager.getConnection("jdbc:h2:./IpsApp/Database/files/DBApp", "SA", "");
+            conn = DriverManager.getConnection("jdbc:h2:./IpsApp/Database/files/DBApp;IFEXISTS=TRUE;AUTO_SERVER=TRUE", "SA", "");
         } catch (SQLException e) {
             e.printStackTrace();
         }
