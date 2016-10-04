@@ -1,9 +1,11 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.*;
+import java.util.Properties;
 
 public class Database {
 
@@ -18,10 +20,15 @@ public class Database {
     }
 
     private Database() {
+        Properties props;
         try {
-            conn = DriverManager.getConnection("jdbc:h2:./IpsApp/Database/files/DBApp;IFEXISTS=TRUE;AUTO_SERVER=TRUE", "SA", "");
+            props = new Properties();
+            props.load(new FileInputStream("DB.properties"));
+            conn = DriverManager.getConnection("jdbc:oracle:thin:@156.35.94.99:1521:DESA", props);
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (IOException file){
+            file.printStackTrace();
         }
     }
 
