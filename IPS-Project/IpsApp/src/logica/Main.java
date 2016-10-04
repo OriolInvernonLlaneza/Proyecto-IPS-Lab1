@@ -1,6 +1,4 @@
-package ips;
-
-import database.Database;
+package logica;
 
 public class Main {
 
