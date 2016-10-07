@@ -41,12 +41,14 @@ public class Database {
         }
     }
 
-    public ResultSet executeQuery(String sql){
-        try {
-            return conn.prepareStatement(sql).executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public ResultSet executeQuery(String sql) throws SQLException{
+    	return conn.createStatement().executeQuery(sql);
+    }
+    
+    public ResultSet executePreparedQuery(String sql, Object... strings) throws SQLException{
+    	PreparedStatement prepared = conn.prepareStatement(sql);
+    	for(int i = 0; i< strings.length; i++)
+    		prepared.setObject(i, strings[i]);
+    	return prepared.executeQuery();
     }
 }
