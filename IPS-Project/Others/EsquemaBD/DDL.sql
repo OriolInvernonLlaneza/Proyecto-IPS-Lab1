@@ -21,3 +21,30 @@ CREATE TABLE Almacenero(
 	almacenero_apellidos VARCHAR(100),
 	PRIMARY KEY (idAlmacenero)
 );
+
+CREATE TABLE Producto(
+	idProducto VARCHAR (20),
+	descripcion_producto VARCHAR(500),
+	stock NUMERIC(4, 0),
+	precio NUMERIC (4, 2),
+	
+	PRIMARY KEY idProducto
+);
+
+CREATE TABLE ProductoPedido(
+	idProducto VARCHAR(20),
+	idPedido VARCHAR(20),
+	cantidad NUMERIC(4, 0),
+	
+	FOREIGN KEY(idProducto) REFERENCES Producto,
+	FOREIGN KEY (idPedido) REFERENCES Pedido
+);
+
+CREATE TABLE OrdenTrabajo(
+	idAlmacenero VARCHAR(20),
+	idPedido VARCHAR(20),
+	estado VARCHAR(15) 
+	CHECK (estado IN ('Empaquetada', 'Asignada', 'Incidencia'))
+	FOREIGN KEY (idAlmacenero) REFERENCES almacenero
+	FO
+)
