@@ -5,13 +5,17 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JList;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.border.BevelBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainWindow extends JFrame {
 
@@ -19,6 +23,9 @@ public class MainWindow extends JFrame {
 	 * 
 	 */
 	private ResourceManager manager;
+	
+	private DefaultListModel carritoListaModelo = new DefaultListModel<>();
+	private DefaultListModel productosListaModelo = new DefaultListModel<>();
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -33,22 +40,6 @@ public class MainWindow extends JFrame {
 	private JPanel panelTituloCarrito;
 	private JLabel lblCarritoEnCurso;
 	private JPanel panelTablaProductos;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainWindow frame = new MainWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	private void localizar(){
 		lblCarritoEnCurso.setText(manager.getString("label_carrito"));
@@ -70,6 +61,10 @@ public class MainWindow extends JFrame {
 		
 		manager = ResourceManager.getResourceManager();
 		localizar();
+		
+		carritoListaModelo.addElement("blah");
+		carritoListaModelo.addElement("blah2");
+		carritoListaModelo.addElement("blah3");
 	}
 	private JPanel getPanelProductos() {
 		if (panelProductos == null) {
@@ -100,6 +95,7 @@ public class MainWindow extends JFrame {
 	private JList getListaCarrito() {
 		if (listaCarrito == null) {
 			listaCarrito = new JList();
+			listaCarrito.setModel(carritoListaModelo);
 		}
 		return listaCarrito;
 	}
@@ -114,12 +110,23 @@ public class MainWindow extends JFrame {
 	private JButton getBtnAñadir() {
 		if (btnAñadir == null) {
 			btnAñadir = new JButton("+");
+			btnAñadir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					//carritoLista.add(0, listaProductos.getSelectedValue());
+				}
+			});
 		}
 		return btnAñadir;
 	}
 	private JButton getBtnEliminar() {
 		if (btnEliminar == null) {
 			btnEliminar = new JButton("-");
+			btnEliminar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(listaCarrito.getSelectedIndex() != -1)
+						carritoListaModelo.remove(listaCarrito.getSelectedIndex());
+				}
+			});
 		}
 		return btnEliminar;
 	}
@@ -128,6 +135,7 @@ public class MainWindow extends JFrame {
 			panelLista = new JPanel();
 			panelLista.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			panelLista.setBackground(Color.WHITE);
+			panelLista.setLayout(new BorderLayout(0, 0));
 			panelLista.add(getListaCarrito());
 		}
 		return panelLista;
