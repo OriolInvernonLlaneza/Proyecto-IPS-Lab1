@@ -38,7 +38,7 @@ import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class AlmaceneroTrabajo extends JFrame {
+public class VentanaAlmacenero extends JFrame {
 
 	private JPanel contentPane;
 	private JPanel panelPedidos;
@@ -76,7 +76,7 @@ public class AlmaceneroTrabajo extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AlmaceneroTrabajo frame = new AlmaceneroTrabajo();
+					VentanaAlmacenero frame = new VentanaAlmacenero();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -91,7 +91,7 @@ public class AlmaceneroTrabajo extends JFrame {
 		for(Pedido pedido : pedidos){
 			nuevaFila[0] = pedido.getId();
 			nuevaFila[1] = pedido.getFecha();
-			nuevaFila[2] = pedido.getTamaño();
+			nuevaFila[2] = pedido.getTamano();
 			modeloTPedidos.addRow(nuevaFila);
 		}
 	}
@@ -101,7 +101,7 @@ public class AlmaceneroTrabajo extends JFrame {
 		Object[] nuevaFila = new Object[4];
 		for(Producto producto : pedido.getProductos()){
 			nuevaFila[0] = producto.getId();
-			nuevaFila[1] = producto.getName();
+			nuevaFila[1] = producto.getNombre();
 			nuevaFila[2] = producto.getLocalizacion();
 			nuevaFila[3] = false;
 			modeloTOT.addRow(nuevaFila);
@@ -111,7 +111,7 @@ public class AlmaceneroTrabajo extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AlmaceneroTrabajo() {
+	public VentanaAlmacenero() {
 		setTitle("Zona de trabajo");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1100, 694);
@@ -234,7 +234,7 @@ public class AlmaceneroTrabajo extends JFrame {
 	private JButton getBtnNotificar() {
 		if (btnNotificar == null) {
 			btnNotificar = new JButton("Notificar");
-			AlmaceneroTrabajo aT= this;
+			VentanaAlmacenero aT= this;
 			btnNotificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					List<Producto> productosEnFalta= new ArrayList<Producto>(); //La lista de productos que vamos a notificar en el dialogo.

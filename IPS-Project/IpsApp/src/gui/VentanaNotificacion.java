@@ -17,7 +17,7 @@ import java.util.List;
 
 public class VentanaNotificacion extends JDialog {
 	
-	private AlmaceneroTrabajo aT;
+	private VentanaAlmacenero aT;
 	private  List<Producto> productosEnFalta;
 
 	private final JPanel contentPanel = new JPanel();
@@ -38,6 +38,7 @@ public class VentanaNotificacion extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
+	//Método para redactar el miniinforme del area de texto.
 	private String redactar(){
 		Date fecha = new Date();
 		StringBuilder sb= new StringBuilder();
@@ -49,8 +50,9 @@ public class VentanaNotificacion extends JDialog {
 		for(Producto producto: productosEnFalta){
 			sb.append("Producto: ");
 			sb.append(producto.getId());
+			sb.append(" ");
 			sb.append("Nombre: ");
-			sb.append(producto.getName());
+			sb.append(producto.getNombre());
 			sb.append("\n");
 		}
 		
@@ -58,7 +60,7 @@ public class VentanaNotificacion extends JDialog {
 		
 	}
 	
-	public VentanaNotificacion(AlmaceneroTrabajo aT, List<Producto> productosEnFalta) {
+	public VentanaNotificacion(VentanaAlmacenero aT, List<Producto> productosEnFalta) {
 		this.aT=aT;
 		this.productosEnFalta=productosEnFalta;
 		setTitle("Notificacion");
@@ -71,8 +73,6 @@ public class VentanaNotificacion extends JDialog {
 			TextArea textArea = new TextArea();
 			textArea.setEditable(false);
 			contentPanel.add(textArea);
-			Date fecha = new Date();
-			System.out.println (fecha);
 			textArea.setText(redactar());
 		}
 		{

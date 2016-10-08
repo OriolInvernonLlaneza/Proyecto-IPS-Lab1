@@ -3,13 +3,13 @@ package logica;
 public class Producto {
 	
 	private int id;
-	private String name;
+	private String nombre;
 	private String localizacion;
 	
 	
-	public Producto(int id, String name, String localizacion) {
+	public Producto(int id, String nombre, String localizacion) {
 		this.id = id;
-		this.name = name;
+		this.nombre = nombre;
 		this.localizacion = localizacion;
 	}
 
@@ -19,8 +19,8 @@ public class Producto {
 	}
 
 
-	public String getName() {
-		return name;
+	public String getNombre() {
+		return nombre;
 	}
 
 
