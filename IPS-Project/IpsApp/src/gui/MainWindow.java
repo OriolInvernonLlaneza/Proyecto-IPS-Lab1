@@ -34,22 +34,6 @@ public class MainWindow extends JFrame {
 	private JLabel lblCarritoEnCurso;
 	private JPanel panelTablaProductos;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainWindow frame = new MainWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	private void localizar(){
 		lblCarritoEnCurso.setText(manager.getString("label_carrito"));
 	}
