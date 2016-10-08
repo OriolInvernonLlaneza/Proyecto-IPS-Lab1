@@ -8,6 +8,7 @@ CREATE TABLE Usuario(
 
 CREATE TABLE Pedido(
 	idPedido VARCHAR(20),
+	idUsuario VARCHAR(20),
 	precio_pedido NUMBER(5,2),
 	fecha DATE,
 	FOREIGN KEY(idUsuario) references Usuario
@@ -46,5 +47,5 @@ CREATE TABLE OrdenTrabajo(
 	estado VARCHAR(15) 
 	CHECK (estado IN ('Empaquetada', 'Asignada', 'Incidencia'))
 	FOREIGN KEY (idAlmacenero) REFERENCES almacenero
-	FO
+	FOREIGN KEY (idPedido) REFERENCES pedido
 )
