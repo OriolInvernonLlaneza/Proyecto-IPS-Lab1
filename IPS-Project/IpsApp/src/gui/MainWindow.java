@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JList;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -15,6 +16,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -312,7 +315,7 @@ public class MainWindow extends JFrame {
 					}
 				}
 			});
-			tableProductos.getTableHeader().setReorderingAllowed(true);
+			tableProductos.getTableHeader().setReorderingAllowed(false);
 			tableProductos.setCellSelectionEnabled(false);
 			tableProductos.setRowSelectionAllowed(true);
 		}
@@ -344,6 +347,9 @@ public class MainWindow extends JFrame {
 			scrollPaneDescripcion = new JScrollPane();
 			scrollPaneDescripcion.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			scrollPaneDescripcion.setViewportView(getTaDescripcion());
+			Border aux = BorderFactory.createLineBorder(Color.BLACK);
+			Border borde =  BorderFactory.createTitledBorder(aux,"Descripción:");
+			scrollPaneDescripcion.setBorder(borde);
 		}
 		return scrollPaneDescripcion;
 	}
