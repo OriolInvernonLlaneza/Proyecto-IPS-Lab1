@@ -16,6 +16,9 @@ import java.awt.Color;
 import javax.swing.border.BevelBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame {
 
@@ -32,7 +35,6 @@ public class MainWindow extends JFrame {
 	private JPanel panelProductos;
 	private JPanel panelCarrito;
 	private JPanel panelListaCarrito;
-	private JList listaCarrito;
 	private JPanel panelCarritoBotones;
 	private JButton btnAñadir;
 	private JButton btnEliminar;
@@ -40,6 +42,8 @@ public class MainWindow extends JFrame {
 	private JPanel panelTituloCarrito;
 	private JLabel lblCarritoEnCurso;
 	private JPanel panelTablaProductos;
+	private JScrollPane scPedido;
+	private JList listaCarrito;
 
 	private void localizar(){
 		lblCarritoEnCurso.setText(manager.getString("label_carrito"));
@@ -92,13 +96,6 @@ public class MainWindow extends JFrame {
 		}
 		return panelListaCarrito;
 	}
-	private JList getListaCarrito() {
-		if (listaCarrito == null) {
-			listaCarrito = new JList();
-			listaCarrito.setModel(carritoListaModelo);
-		}
-		return listaCarrito;
-	}
 	private JPanel getPanelCarritoBotones() {
 		if (panelCarritoBotones == null) {
 			panelCarritoBotones = new JPanel();
@@ -136,7 +133,7 @@ public class MainWindow extends JFrame {
 			panelLista.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			panelLista.setBackground(Color.WHITE);
 			panelLista.setLayout(new BorderLayout(0, 0));
-			panelLista.add(getListaCarrito());
+			panelLista.add(getScPedido());
 		}
 		return panelLista;
 	}
@@ -158,5 +155,18 @@ public class MainWindow extends JFrame {
 			panelTablaProductos = new JPanel();
 		}
 		return panelTablaProductos;
+	}
+	private JScrollPane getScPedido() {
+		if (scPedido == null) {
+			scPedido = new JScrollPane();
+			scPedido.setViewportView(getListaCarrito());
+		}
+		return scPedido;
+	}
+	private JList getListaCarrito() {
+		if (listaCarrito == null) {
+			listaCarrito = new JList();
+		}
+		return listaCarrito;
 	}
 }
