@@ -1,25 +1,28 @@
 package logica;
 
 import java.util.Date;
+import java.util.List;
 //Por ahora util, cuando se vincule a la base de datos deberia ser sql?
 
 public class Pedido {
 	
 	//A partir de aqui todo es un esquema para desarollar la interfaz: Almacenero Trabajo.
-    private int id;
+    private String id;
     private Date fecha;
     private float tamano;
-    private Producto[] productos;
+    private double precio;
+    private List<Producto> productos;
     
     
-	public Pedido(int id, Date fecha, float tamano, Producto[] productos) {
+	public Pedido(String id, Date fecha, float tamano,double precio, List<Producto> productos) {
 		this.id=id;
 		this.fecha=fecha;
 		this.tamano=tamano;
+		this.precio=precio;
 		this.productos=productos;
 		
 	}
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 	public Date getFecha() {
@@ -28,7 +31,7 @@ public class Pedido {
 	public float getTamano() {
 		return tamano;
 	}
-	public Producto[] getProductos() {
+	public List<Producto> getProductos() {
 		return productos;
 	}
 	

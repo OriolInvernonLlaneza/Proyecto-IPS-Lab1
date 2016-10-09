@@ -55,10 +55,10 @@ public class VentanaAlmacenero extends JFrame {
 	
 	private Pedido pedidoElegido;
 	
-	private Producto[] productos1={new Producto(25, "Girasol",5.90,"asa", "A2")};
-	private Producto[] productos2={new Producto(25, "Mandarina",0.10,"asa", "B3"),new Producto(18, "Teclado",49.99,"asa", "A3") };
+	private List<Producto> productos1;
+	private List<Producto> productos2;
 	
-	private Pedido[] pedidos={new Pedido(78,new Date(2010, 5, 14),20,productos1), new Pedido(128,new Date(2004,11,20),15,productos2), new Pedido(154,new Date(2018,4,5),78,productos1)};
+	private Pedido[] pedidos={new Pedido("78",new Date(2010, 5, 14),20,20,productos1), new Pedido("128",new Date(2004,11,20),15,15,productos2), new Pedido("154",new Date(2018,4,5),78,18,productos1)};
 	
 	
 	private JPanel panelOT;
@@ -71,6 +71,13 @@ public class VentanaAlmacenero extends JFrame {
 	
 	private VentanaNotificacion vN;
 	
+	
+	private void inicializar(){
+		productos1.add(new Producto("25", "Girasol",5.90,"asa", "A2"));
+		productos2.add(new Producto("25", "Mandarina",0.10,"asa", "B3"));
+		productos2.add(new Producto("18", "Teclado",49.99,"asa", "A3"));
+		
+	}
 	//Método para añadir las filas correspondientes en la tabla de pedidos
 	private void RellenarTablaPedidos(){
 		Object[] nuevaFila = new Object[3];
@@ -92,6 +99,12 @@ public class VentanaAlmacenero extends JFrame {
 			nuevaFila[3] = false;
 			modeloTOT.addRow(nuevaFila);
 		}
+	}
+	
+	//Cuando se refresca se vuelve a llenar tras borrar los contenidos de los pedidos
+	private void refrescarTablaPedidos(){
+		modeloTPedidos.setRowCount(0);
+		RellenarTablaPedidos();
 	}
 
 	/**
@@ -224,9 +237,9 @@ public class VentanaAlmacenero extends JFrame {
 			btnNotificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					List<Producto> productosEnFalta= new ArrayList<Producto>(); //La lista de productos que vamos a notificar en el dialogo.
-					for(int row=0; row<pedidoElegido.getProductos().length;row++){
+					for(int row=0; row<pedidoElegido.getProductos().size();row++){
 						if(tOT.getValueAt(row, 3).toString().equals("false")){//La tabla solo trabaja con String asi que lo apañamos asi
-							productosEnFalta.add(pedidoElegido.getProductos()[row]);//Si no esta cogido lo añadimos para notificar
+							productosEnFalta.add(pedidoElegido.getProductos().get(row));//Si no esta cogido lo añadimos para notificar
 						}
 					}
 					vN= new VentanaNotificacion(aT,productosEnFalta);
