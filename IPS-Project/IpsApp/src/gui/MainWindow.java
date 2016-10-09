@@ -1,8 +1,6 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -27,6 +25,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import Util.ModeloNoEditable;
+import Util.ModeloNoEditableSpinner;
+import Util.SpinnerEditor;
+import Util.SpinnerRenderer;
 import logica.Pedido;
 import logica.Producto;
 
@@ -41,11 +42,11 @@ import java.awt.Insets;
 import javax.swing.JTable;
 import java.awt.TextArea;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.FlowLayout;
-
 
 public class MainWindow extends JFrame {
 
@@ -53,10 +54,10 @@ public class MainWindow extends JFrame {
 	 * 
 	 */
 	private ResourceManager manager;
-	
+
 	private DefaultListModel carritoListaModelo = new DefaultListModel<>();
 	private DefaultListModel productosListaModelo = new DefaultListModel<>();
-	
+
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panelProductos;
@@ -78,16 +79,16 @@ public class MainWindow extends JFrame {
 	private JPanel panelSearch;
 	private JTable tableProductos;
 
-	private ModeloNoEditable modeloTProductos;
+	private ModeloNoEditableSpinner modeloTProductos;
 	private JScrollPane scrollPaneDescripcion;
 	private JTextArea taDescripcion;
 	private JButton btnCalcular;
 
 	private ArrayList<Producto> productos;
 
-	private void localizar(){
+	private void localizar() {
 	}
-	
+
 	/**
 	 * Create the frame.
 	 */
@@ -102,7 +103,7 @@ public class MainWindow extends JFrame {
 		contentPane.add(getPanelProductos(), BorderLayout.CENTER);
 		contentPane.add(getPanelCarrito(), BorderLayout.EAST);
 		contentPane.add(getPanelBotonesPedido(), BorderLayout.SOUTH);
-		
+
 		manager = ResourceManager.getResourceManager();
 		localizar();
 		pedirProductosDatabase();
@@ -111,11 +112,13 @@ public class MainWindow extends JFrame {
 		carritoListaModelo.addElement("blah2");
 		carritoListaModelo.addElement("blah3");
 	}
+
 	private JPanel getPanelProductos() {
 		if (panelProductos == null) {
 			panelProductos = new JPanel();
-			//TODO Nico toma texto pa tu body
-			panelProductos.setBorder(new TitledBorder(null, "Productos:", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
+			// TODO Nico toma texto pa tu body
+			panelProductos.setBorder(
+					new TitledBorder(null, "Productos:", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
 			panelProductos.setLayout(new BorderLayout(0, 0));
 			panelProductos.add(getScrollPaneTabla(), BorderLayout.CENTER);
 			panelProductos.add(getPanelSearch(), BorderLayout.NORTH);
@@ -123,6 +126,7 @@ public class MainWindow extends JFrame {
 		}
 		return panelProductos;
 	}
+
 	private JPanel getPanelCarrito() {
 		if (panelCarrito == null) {
 			panelCarrito = new JPanel();
@@ -133,11 +137,13 @@ public class MainWindow extends JFrame {
 		}
 		return panelCarrito;
 	}
+
 	private JPanel getPanelListaCarrito() {
 		if (panelListaCarrito == null) {
 			panelListaCarrito = new JPanel();
-			//TODO Nico toma texto pa tu body
-			panelListaCarrito.setBorder(new TitledBorder(null, "Carrito en curso:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			// TODO Nico toma texto pa tu body
+			panelListaCarrito.setBorder(
+					new TitledBorder(null, "Carrito en curso:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			panelListaCarrito.setLayout(new BorderLayout(0, 0));
 			panelListaCarrito.add(getScrollPaneCarrito(), BorderLayout.CENTER);
 			panelListaCarrito.add(getPanelBotonesLista(), BorderLayout.SOUTH);
@@ -152,12 +158,15 @@ public class MainWindow extends JFrame {
 		}
 		return scrollPaneCarrito;
 	}
+
 	private JList getListCarrito() {
 		if (listCarrito == null) {
 			listCarrito = new JList<Producto>();
+			listCarrito.setModel(carritoListaModelo);
 		}
 		return listCarrito;
 	}
+
 	private JPanel getPanelBotonesLista() {
 		if (panelBotonesLista == null) {
 			panelBotonesLista = new JPanel();
@@ -166,17 +175,16 @@ public class MainWindow extends JFrame {
 		}
 		return panelBotonesLista;
 	}
+
 	private JButton getBtnAdd() {
 		if (btnAdd == null) {
 			btnAdd = new JButton("+");
 			btnAdd.setToolTipText("a\u00F1adir un producto al carrito");
 			btnAdd.setMnemonic('a');
 			btnAdd.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) 
-				{
+				public void actionPerformed(ActionEvent arg0) {
 					int fila = tableProductos.getSelectedRow();
-					if(fila != -1)
-					{
+					if (fila != -1) {
 						carritoListaModelo.addElement(tableProductos.getValueAt(fila, 0));
 					}
 				}
@@ -184,15 +192,17 @@ public class MainWindow extends JFrame {
 		}
 		return btnAdd;
 	}
+
 	private JButton getBtnRemove() {
 		if (btnRemove == null) {
 			btnRemove = new JButton("-");
-			//TODO Nico toma texto pa tu body
+			// TODO Nico toma texto pa tu body
 			btnRemove.setToolTipText("Eliminar una unidad del carrito");
 			btnRemove.setMnemonic('r');
 		}
 		return btnRemove;
 	}
+
 	private JPanel getPanelPrecio() {
 		if (panelPrecio == null) {
 			panelPrecio = new JPanel();
@@ -202,15 +212,17 @@ public class MainWindow extends JFrame {
 		}
 		return panelPrecio;
 	}
+
 	private JLabel getLblPrecioTotal() {
 		if (lblPrecioTotal == null) {
-			//TODO Nico toma texto pa tu body
+			// TODO Nico toma texto pa tu body
 			lblPrecioTotal = new JLabel("Precio total:");
 			lblPrecioTotal.setLabelFor(getTextFieldPrecioTotal());
 			lblPrecioTotal.setDisplayedMnemonic('p');
 		}
 		return lblPrecioTotal;
 	}
+
 	private JTextField getTextFieldPrecioTotal() {
 		if (textFieldPrecioTotal == null) {
 			textFieldPrecioTotal = new JTextField();
@@ -219,14 +231,16 @@ public class MainWindow extends JFrame {
 		}
 		return textFieldPrecioTotal;
 	}
+
 	private JPanel getPanelBotonesPedido() {
 		if (panelBotonesPedido == null) {
 			panelBotonesPedido = new JPanel();
 			GridBagLayout gbl_panelBotonesPedido = new GridBagLayout();
-			gbl_panelBotonesPedido.columnWidths = new int[]{79, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-			gbl_panelBotonesPedido.rowHeights = new int[]{23, 0};
-			gbl_panelBotonesPedido.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-			gbl_panelBotonesPedido.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+			gbl_panelBotonesPedido.columnWidths = new int[] { 79, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+			gbl_panelBotonesPedido.rowHeights = new int[] { 23, 0 };
+			gbl_panelBotonesPedido.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
+					0.0, 0.0, Double.MIN_VALUE };
+			gbl_panelBotonesPedido.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 			panelBotonesPedido.setLayout(gbl_panelBotonesPedido);
 			GridBagConstraints gbc_panelAux = new GridBagConstraints();
 			gbc_panelAux.insets = new Insets(0, 0, 0, 5);
@@ -249,9 +263,10 @@ public class MainWindow extends JFrame {
 		}
 		return panelBotonesPedido;
 	}
+
 	private JButton getBtnConfirmarPedido() {
 		if (btnConfirmarPedido == null) {
-			//TODO Nico toma texto pa tu body
+			// TODO Nico toma texto pa tu body
 			btnConfirmarPedido = new JButton("Confirmar");
 			btnConfirmarPedido.setToolTipText("Confirmar un pedido con el carrito actual");
 			btnConfirmarPedido.setMnemonic('C');
@@ -259,9 +274,10 @@ public class MainWindow extends JFrame {
 		}
 		return btnConfirmarPedido;
 	}
+
 	private JButton getBtnCancelarPedido() {
 		if (btnCancelarPedido == null) {
-			//TODO Nico toma texto pa tu body
+			// TODO Nico toma texto pa tu body
 			btnCancelarPedido = new JButton("Cancelar");
 			btnCancelarPedido.setToolTipText("Cancelar carrito y salir");
 			btnCancelarPedido.setMnemonic('n');
@@ -276,6 +292,7 @@ public class MainWindow extends JFrame {
 		}
 		return panelAux;
 	}
+
 	private JScrollPane getScrollPaneTabla() {
 		if (scrollPaneTabla == null) {
 			scrollPaneTabla = new JScrollPane();
@@ -283,33 +300,39 @@ public class MainWindow extends JFrame {
 		}
 		return scrollPaneTabla;
 	}
-	
-	
+
 	private JPanel getPanelSearch() {
 		if (panelSearch == null) {
 			panelSearch = new JPanel();
-			//Para cuando nos pidan la busqueda
+			// Para cuando nos pidan la busqueda
 		}
 		return panelSearch;
 	}
+
 	private JTable getTableProductos() {
 		if (tableProductos == null) {
-			String[] nombreColumnas = {"Nombre", "Precio","Cantidad"};
-			modeloTProductos= new ModeloNoEditable(nombreColumnas, 0);
+			final int SPINNER_COLUMN = 2;
+			String[] nombreColumnas = { "Nombre", "Precio", "Cantidad" };
+			modeloTProductos = new ModeloNoEditableSpinner(nombreColumnas, 0);
+
 			tableProductos = new JTable();
 			tableProductos = new JTable(modeloTProductos);
+
+			SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0, 0, 50, 1);
+			tableProductos.getColumnModel().getColumn(SPINNER_COLUMN).setCellRenderer(new SpinnerRenderer());
+			tableProductos.getColumnModel().getColumn(SPINNER_COLUMN).setCellEditor(new SpinnerEditor());
+
 			tableProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			
+			
 			tableProductos.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					int fila = tableProductos.getSelectedRow();
-					if(fila != -1){
-						if(arg0.getClickCount()==2)
-						{
-							carritoListaModelo.addElement(tableProductos.getValueAt(fila, 0));
-						}
-						else
-						{
+					if (fila != -1) {
+						if (arg0.getClickCount() == 2) {
+							//carritoListaModelo.addElement(tableProductos.getValueAt(fila, 0));
+						} else {
 							taDescripcion.setText(getDescripcionProductos(fila));
 						}
 					}
@@ -321,38 +344,38 @@ public class MainWindow extends JFrame {
 		}
 		return tableProductos;
 	}
-	
+
 	private String getDescripcionProductos(int fila) {
 		return productos.get(fila).getDescripcion();
 	}
-	
-	private void pedirProductosDatabase(){
-		ArrayList<Producto> p =new ArrayList<Producto>();
-		p.add(new Producto(25, "Mandarina",0.10,"asa", "B3"));
-		p.add(new Producto(18, "Teclado",49.99,"asa", "A3"));
-		productos =p;
+
+	private void pedirProductosDatabase() {
+		ArrayList<Producto> p = new ArrayList<Producto>();
+		p.add(new Producto("25", "Mandarina", 0.10, "asa", "B3"));
+		p.add(new Producto("18", "Teclado", 49.99, "asasdaa", "A3"));
+		productos = p;
 	}
-	
-	private void rellenarTablaProductos(){
+
+	private void rellenarTablaProductos() {
 		Object[] nuevaFila = new Object[3];
-		for(Producto producto : productos){
+		for (Producto producto : productos) {
 			nuevaFila[0] = producto.getNombre();
 			nuevaFila[1] = producto.getPrecio();
 			modeloTProductos.addRow(nuevaFila);
 		}
 	}
-	
+
 	private JScrollPane getScrollPaneDescripcion() {
 		if (scrollPaneDescripcion == null) {
 			scrollPaneDescripcion = new JScrollPane();
-			scrollPaneDescripcion.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			scrollPaneDescripcion.setViewportView(getTaDescripcion());
 			Border aux = BorderFactory.createLineBorder(Color.BLACK);
-			Border borde =  BorderFactory.createTitledBorder(aux,"Descripción:");
+			Border borde = BorderFactory.createTitledBorder(aux, "Descripción:");
 			scrollPaneDescripcion.setBorder(borde);
 		}
 		return scrollPaneDescripcion;
 	}
+
 	private JTextArea getTaDescripcion() {
 		if (taDescripcion == null) {
 			taDescripcion = new JTextArea();
@@ -360,9 +383,10 @@ public class MainWindow extends JFrame {
 		}
 		return taDescripcion;
 	}
+
 	private JButton getBtnCalcular() {
 		if (btnCalcular == null) {
-			//TODO Nico toma texto pa tu body
+			// TODO Nico toma texto pa tu body
 			btnCalcular = new JButton("Calcular");
 			btnCalcular.setToolTipText("Calcular el precio total del carrito");
 			btnCalcular.setMnemonic('l');
