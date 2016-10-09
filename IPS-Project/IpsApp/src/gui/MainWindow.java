@@ -7,13 +7,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JList;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Color;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 import java.awt.event.ActionListener;
@@ -21,32 +18,21 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
-import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import Util.ModeloNoEditable;
 import Util.ModeloNoEditableSpinner;
 import Util.SpinnerEditor;
 import Util.SpinnerRenderer;
-import logica.Pedido;
 import logica.Producto;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import java.awt.GridLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTable;
-import java.awt.TextArea;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame {
 
@@ -56,7 +42,6 @@ public class MainWindow extends JFrame {
 	private ResourceManager manager;
 
 	private DefaultListModel carritoListaModelo = new DefaultListModel<>();
-	private DefaultListModel productosListaModelo = new DefaultListModel<>();
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -318,7 +303,6 @@ public class MainWindow extends JFrame {
 			tableProductos = new JTable();
 			tableProductos = new JTable(modeloTProductos);
 
-			SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0, 0, 50, 1);
 			tableProductos.getColumnModel().getColumn(SPINNER_COLUMN).setCellRenderer(new SpinnerRenderer());
 			tableProductos.getColumnModel().getColumn(SPINNER_COLUMN).setCellEditor(new SpinnerEditor());
 

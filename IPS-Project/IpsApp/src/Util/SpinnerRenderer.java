@@ -4,7 +4,6 @@ import java.awt.Component;
 
 import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -27,10 +26,13 @@ public class SpinnerRenderer extends JSpinner implements TableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
         
-		if (value != null) {
-			spinner.setValue(value);
+		if (value == null) {
+			spinner.setValue(0);
+		}else{
+			int intValue = ((Integer) value).intValue();
+			spinner.setValue(intValue);
 		}
-		return this;
+		return spinner;
 	}
 	
 	@Override
