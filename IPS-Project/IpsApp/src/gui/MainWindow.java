@@ -331,7 +331,7 @@ public class MainWindow extends JFrame {
 					int fila = tableProductos.getSelectedRow();
 					if (fila != -1) {
 						if (arg0.getClickCount() == 2) {
-							carritoListaModelo.addElement(tableProductos.getValueAt(fila, 0));
+							//carritoListaModelo.addElement(tableProductos.getValueAt(fila, 0));
 						} else {
 							taDescripcion.setText(getDescripcionProductos(fila));
 						}
@@ -351,8 +351,8 @@ public class MainWindow extends JFrame {
 
 	private void pedirProductosDatabase() {
 		ArrayList<Producto> p = new ArrayList<Producto>();
-		p.add(new Producto(25, "Mandarina", 0.10, "asa", "B3"));
-		p.add(new Producto(18, "Teclado", 49.99, "asasdaa", "A3"));
+		p.add(new Producto("25", "Mandarina", 0.10, "asa", "B3"));
+		p.add(new Producto("18", "Teclado", 49.99, "asasdaa", "A3"));
 		productos = p;
 	}
 

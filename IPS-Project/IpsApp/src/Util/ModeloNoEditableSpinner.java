@@ -20,6 +20,9 @@ public class ModeloNoEditableSpinner extends DefaultTableModel {
 
 	@Override
 	public void setValueAt(Object aValue, int row, int column) {
-		super.setValueAt(aValue, row, column);
+		 if (column == 2) {
+			 super.setValueAt(aValue, row, column);
+             this.fireTableCellUpdated(row, column);
+         }
 	}
 }

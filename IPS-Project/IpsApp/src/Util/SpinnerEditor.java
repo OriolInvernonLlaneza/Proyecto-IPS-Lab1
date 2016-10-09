@@ -3,6 +3,7 @@ package Util;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
 import java.util.EventObject;
 
 import javax.swing.AbstractCellEditor;
@@ -28,7 +29,7 @@ public class SpinnerEditor extends AbstractCellEditor implements TableCellEditor
 		spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(0, 0, 50, 1));
 
-		/*spinner.addChangeListener(new ChangeListener() {
+		spinner.addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -41,7 +42,7 @@ public class SpinnerEditor extends AbstractCellEditor implements TableCellEditor
 			public void mousePressed(MouseEvent e) {
 				fireEditingStopped();
 			}
-		});*/
+		});
 	}
 
 	// Prepares the spinner component and returns it.
