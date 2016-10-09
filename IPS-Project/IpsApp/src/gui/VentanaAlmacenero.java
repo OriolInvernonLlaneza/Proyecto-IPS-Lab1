@@ -55,8 +55,8 @@ public class VentanaAlmacenero extends JFrame {
 	
 	private Pedido pedidoElegido;
 	
-	private Producto[] productos1={new Producto(25, "Girasol", "A2")};
-	private Producto[] productos2={new Producto(25, "Mandarina", "B3"),new Producto(18, "Teclado", "A3") };
+	private Producto[] productos1={new Producto(25, "Girasol",5.90,"asa", "A2")};
+	private Producto[] productos2={new Producto(25, "Mandarina",0.10,"asa", "B3"),new Producto(18, "Teclado",49.99,"asa", "A3") };
 	
 	private Pedido[] pedidos={new Pedido(78,new Date(2010, 5, 14),20,productos1), new Pedido(128,new Date(2004,11,20),15,productos2), new Pedido(154,new Date(2018,4,5),78,productos1)};
 	
