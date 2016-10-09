@@ -94,6 +94,11 @@ public class LoginWindow extends JFrame {
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("");
+			btnCancelar.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					windowClosing(true);
+				}
+			});
 		}
 		return btnCancelar;
 	}
@@ -134,6 +139,7 @@ public class LoginWindow extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					MainWindow window = new MainWindow();
 					window.setVisible(true);
+					windowHiding(false);
 				}
 			});
 		}
@@ -148,7 +154,24 @@ public class LoginWindow extends JFrame {
 	private JButton getBtnAlmacenero() {
 		if (btnAlmacenero == null) {
 			btnAlmacenero = new JButton("");
+			btnAlmacenero.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					VentanaAlmacenero windowA = new VentanaAlmacenero();
+					windowA.setVisible(true);
+					windowHiding(false);
+				}
+			});
 		}
 		return btnAlmacenero;
+	}
+
+	private void windowClosing(boolean exit) {
+		this.dispose();
+		if(exit)
+			System.exit(0);
+	}
+	
+	private void windowHiding(boolean hide){
+		this.setVisible(hide);
 	}
 }

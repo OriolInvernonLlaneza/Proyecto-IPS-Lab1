@@ -21,7 +21,7 @@ import javax.swing.table.TableModel;
 
 import Util.ModeloCheckBox;
 import Util.ModeloNoEditable;
-import javafx.scene.control.CheckBox;
+//import javafx.scene.control.CheckBox;
 import logica.Pedido;
 import logica.Producto;
 
@@ -40,6 +40,8 @@ import java.awt.event.ActionEvent;
 
 public class VentanaAlmacenero extends JFrame {
 
+	
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panelPedidos;
 	private JScrollPane spPedidos;
