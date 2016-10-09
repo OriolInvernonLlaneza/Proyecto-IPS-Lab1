@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,7 @@ import javax.swing.table.TableModel;
 
 import Util.ModeloCheckBox;
 import Util.ModeloNoEditable;
+import database.ConsultasMyShop;
 //import javafx.scene.control.CheckBox;
 import logica.Pedido;
 import logica.Producto;
@@ -58,8 +60,7 @@ public class VentanaAlmacenero extends JFrame {
 	private List<Producto> productos1;
 	private List<Producto> productos2;
 	
-	private Pedido[] pedidos={new Pedido("78",new Date(2010, 5, 14),20,20,productos1), new Pedido("128",new Date(2004,11,20),15,15,productos2), new Pedido("154",new Date(2018,4,5),78,18,productos1)};
-	
+	private List<Pedido> pedidos;
 	
 	private JPanel panelOT;
 	private JPanel panelListOT;
@@ -73,11 +74,24 @@ public class VentanaAlmacenero extends JFrame {
 	
 	
 	private void inicializar(){
+		productos1=new ArrayList<Producto>();
+		productos2=new ArrayList<Producto>();
+		
 		productos1.add(new Producto("25", "Girasol",5.90,"asa", "A2"));
 		productos2.add(new Producto("25", "Mandarina",0.10,"asa", "B3"));
 		productos2.add(new Producto("18", "Teclado",49.99,"asa", "A3"));
+		pedidos=new ArrayList<Pedido>();
+		pedidos.add(new Pedido("78",new Date(2010, 5, 14),20,20,productos1));
+		pedidos.add(new Pedido("128",new Date(2004,11,20),15,15,productos2));
+		pedidos.add(new Pedido("154",new Date(2018,4,5),78,18,productos1));
+				//{new Pedido("78",new Date(2010, 5, 14),20,20,productos1), new Pedido("128",new Date(2004,11,20),15,15,productos2), new Pedido("154",new Date(2018,4,5),78,18,productos1)};
 		
 	}
+	
+	private void inicializar2() throws SQLException{
+		pedidos=ConsultasMyShop.getPedidos();
+	}
+	
 	//Método para añadir las filas correspondientes en la tabla de pedidos
 	private void RellenarTablaPedidos(){
 		Object[] nuevaFila = new Object[3];
@@ -121,6 +135,13 @@ public class VentanaAlmacenero extends JFrame {
 		contentPane.add(getPanelPedidos());
 		contentPane.add(getPanelOT(), BorderLayout.EAST);
 		
+		try {
+			inicializar2();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		RellenarTablaPedidos();
 	}
 
@@ -149,7 +170,7 @@ public class VentanaAlmacenero extends JFrame {
 					int elegido=tPedidos.getSelectedRow();
 					if(elegido!=-1){
 						modeloTOT.setRowCount(0);
-						pedidoElegido=pedidos[elegido];
+						pedidoElegido=pedidos.get(elegido);
 						RellenarTablaOT(pedidoElegido);
 					}
 				}
