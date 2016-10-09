@@ -70,22 +70,6 @@ public class VentanaAlmacenero extends JFrame {
 	private JTable tOT;
 	
 	private VentanaNotificacion vN;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaAlmacenero frame = new VentanaAlmacenero();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 	
 	//Método para añadir las filas correspondientes en la tabla de pedidos
 	private void RellenarTablaPedidos(){

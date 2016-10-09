@@ -39,6 +39,10 @@ import javax.swing.JTable;
 import java.awt.TextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import java.awt.FlowLayout;
+
 
 public class MainWindow extends JFrame {
 
@@ -137,6 +141,7 @@ public class MainWindow extends JFrame {
 		}
 		return panelListaCarrito;
 	}
+
 	private JScrollPane getScrollPaneCarrito() {
 		if (scrollPaneCarrito == null) {
 			scrollPaneCarrito = new JScrollPane();
@@ -358,4 +363,5 @@ public class MainWindow extends JFrame {
 		}
 		return btnCalcular;
 	}
+
 }
