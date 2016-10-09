@@ -48,7 +48,7 @@ public class Database {
     public ResultSet executePreparedQuery(String sql, Object... strings) throws SQLException{
     	PreparedStatement prepared = conn.prepareStatement(sql);
     	for(int i = 0; i< strings.length; i++)
-    		prepared.setObject(i, strings[i]);
+    		prepared.setObject(i+1, strings[i]);
     	return prepared.executeQuery();
     }
 }

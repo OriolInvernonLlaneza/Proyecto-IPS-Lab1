@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -11,6 +12,9 @@ import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class LoginWindow extends JFrame {
 
@@ -84,10 +88,26 @@ public class LoginWindow extends JFrame {
 	private JPanel getPanelSeleccion() {
 		if (panelSeleccion == null) {
 			panelSeleccion = new JPanel();
-			panelSeleccion.setLayout(new BoxLayout(panelSeleccion, BoxLayout.X_AXIS));
-			panelSeleccion.add(getPanelUsuario());
-			panelSeleccion.add(getPanelMayorista());
-			panelSeleccion.add(getPanelAlmacenero());
+			GridBagLayout gbl_panelSeleccion = new GridBagLayout();
+			/*gbl_panelSeleccion.columnWidths = new int[]{131, 141, 151, 0};
+			gbl_panelSeleccion.rowHeights = new int[]{209, 0};
+			gbl_panelSeleccion.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gbl_panelSeleccion.rowWeights = new double[]{0.0, Double.MIN_VALUE};*/
+			panelSeleccion.setLayout(gbl_panelSeleccion);
+			GridBagConstraints gbc_panelUsuario = new GridBagConstraints();
+			gbc_panelUsuario.insets = new Insets(0, 0, 10, 0);
+			gbc_panelUsuario.gridx = 1;
+			gbc_panelUsuario.gridy = 0;
+			panelSeleccion.add(getBtnUsuario(), gbc_panelUsuario);
+			GridBagConstraints gbc_panelMayorista = new GridBagConstraints();
+			gbc_panelMayorista.insets = new Insets(0, 0, 10, 0);
+			gbc_panelMayorista.gridx = 1;
+			gbc_panelMayorista.gridy = 1;
+			panelSeleccion.add(getBtnMayorista(), gbc_panelMayorista);
+			GridBagConstraints gbc_panelAlmacenero = new GridBagConstraints();
+			gbc_panelAlmacenero.gridx = 1;
+			gbc_panelAlmacenero.gridy = 2;
+			panelSeleccion.add(getBtnAlmacenero(), gbc_panelAlmacenero);
 		}
 		return panelSeleccion;
 	}
@@ -102,30 +122,6 @@ public class LoginWindow extends JFrame {
 		}
 		return btnCancelar;
 	}
-	private JPanel getPanelUsuario() {
-		if (panelUsuario == null) {
-			panelUsuario = new JPanel();
-			panelUsuario.setLayout(new BorderLayout(0, 0));
-			panelUsuario.add(getBtnUsuario());
-		}
-		return panelUsuario;
-	}
-	private JPanel getPanelMayorista() {
-		if (panelMayorista == null) {
-			panelMayorista = new JPanel();
-			panelMayorista.setLayout(new BorderLayout(0, 0));
-			panelMayorista.add(getBtnMayorista());
-		}
-		return panelMayorista;
-	}
-	private JPanel getPanelAlmacenero() {
-		if (panelAlmacenero == null) {
-			panelAlmacenero = new JPanel();
-			panelAlmacenero.setLayout(new BorderLayout(0, 0));
-			panelAlmacenero.add(getBtnAlmacenero());
-		}
-		return panelAlmacenero;
-	}
 	private JPanel getPanelTitulo() {
 		if (panelTitulo == null) {
 			panelTitulo = new JPanel();
@@ -135,6 +131,7 @@ public class LoginWindow extends JFrame {
 	private JButton getBtnUsuario() {
 		if (btnUsuario == null) {
 			btnUsuario = new JButton("");
+			btnUsuario.setPreferredSize(new Dimension(120,33));
 			btnUsuario.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					MainWindow window = new MainWindow();
@@ -148,12 +145,14 @@ public class LoginWindow extends JFrame {
 	private JButton getBtnMayorista() {
 		if (btnMayorista == null) {
 			btnMayorista = new JButton("");
+			btnMayorista.setPreferredSize(new Dimension(120, 33));
 		}
 		return btnMayorista;
 	}
 	private JButton getBtnAlmacenero() {
 		if (btnAlmacenero == null) {
 			btnAlmacenero = new JButton("");
+			btnAlmacenero.setPreferredSize(new Dimension(120, 33));
 			btnAlmacenero.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					VentanaAlmacenero windowA = new VentanaAlmacenero();
