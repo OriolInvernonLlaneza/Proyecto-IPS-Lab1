@@ -46,14 +46,19 @@ public class VentanaNotificacion extends JDialog {
 		sb.append(fecha);
 		sb.append("\n");
 		sb.append("------------------------------------------------------------------ \n");
+		if(productosEnFalta.size()==0){
+			sb.append("No se ha marcado nigun producto en falta.");
+		}
+		else{
 		sb.append("Productos en falta: \n");
-		for(Producto producto: productosEnFalta){
-			sb.append("Producto: ");
-			sb.append(producto.getId());
-			sb.append(" ");
-			sb.append("Nombre: ");
-			sb.append(producto.getNombre());
-			sb.append("\n");
+			for(Producto producto: productosEnFalta){
+				sb.append("Producto: ");
+				sb.append(producto.getId());
+				sb.append(" ");
+				sb.append("Nombre: ");
+				sb.append(producto.getNombre());
+				sb.append("\n");
+			}
 		}
 		
 		return sb.toString();

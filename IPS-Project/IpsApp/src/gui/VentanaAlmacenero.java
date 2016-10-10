@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -41,6 +42,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class VentanaAlmacenero extends JFrame {
+	
+	private ResourceManager manager;
 
 	
 	private static final long serialVersionUID = 1L;
@@ -71,9 +74,12 @@ public class VentanaAlmacenero extends JFrame {
 	private JTable tOT;
 	
 	private VentanaNotificacion vN;
+	private JPanel panelBotonesGeneral;
+	private JButton btnSalir;
 	
 	
-	private void inicializar(){
+	//Este inicializar es para testear en caso de fallo de la base de datos.
+	private void inicializar2(){
 		productos1=new ArrayList<Producto>();
 		productos2=new ArrayList<Producto>();
 		
@@ -88,9 +94,29 @@ public class VentanaAlmacenero extends JFrame {
 		
 	}
 	
-	private void inicializar2() throws SQLException{
+	//Inicializar teniendo en cuenta la base de datos.
+	private void inicializar() throws SQLException{
 		pedidos=ConsultasMyShop.getPedidos();
 	}
+	
+	//Refresca la informacion de pedidos cancelando la orden de trabajo actual.
+	private void refrescar(){
+		modeloTPedidos.setRowCount(0);
+		modeloTOT.setRowCount(0);
+		try {
+			inicializar();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
+	
+	//Cuando se refresca se vuelve a llenar tras borrar los contenidos de los pedidos
+		private void refrescarTablaPedidos(){
+			refrescar();
+			RellenarTablaPedidos();
+		}
 	
 	//Método para añadir las filas correspondientes en la tabla de pedidos
 	private void RellenarTablaPedidos(){
@@ -115,16 +141,25 @@ public class VentanaAlmacenero extends JFrame {
 		}
 	}
 	
-	//Cuando se refresca se vuelve a llenar tras borrar los contenidos de los pedidos
-	private void refrescarTablaPedidos(){
-		modeloTPedidos.setRowCount(0);
-		RellenarTablaPedidos();
+	
+	//Método usando la estructura de nico que aplica los principios de internacionalizacion a la aplicacion.
+	private void localizar(){
+		this.setTitle(manager.getString("titulo"));
+		
+		
+		//Botones
+		btnSalir.setText(manager.getString("salir"));
+		btnRefrescar.setText(manager.getString("refrescar"));
+		btnEmpezar.setText(manager.getString("empezar"));
+		btnAcabar.setText(manager.getString("acabar"));
+		btnNotificar.setText(manager.getString("notificar"));
 	}
 
 	/**
 	 * Create the frame.
 	 */
 	public VentanaAlmacenero() {
+		manager = ResourceManager.getResourceManager();
 		setTitle("Zona de trabajo");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1100, 694);
@@ -134,13 +169,17 @@ public class VentanaAlmacenero extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(getPanelPedidos());
 		contentPane.add(getPanelOT(), BorderLayout.EAST);
+		contentPane.add(getPanelBotonesGeneral(), BorderLayout.SOUTH);
+		
 		
 		try {
-			inicializar2();
+			inicializar();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		localizar();
 		
 		RellenarTablaPedidos();
 	}
@@ -148,7 +187,7 @@ public class VentanaAlmacenero extends JFrame {
 	private JPanel getPanelPedidos() {
 		if (panelPedidos == null) {
 			panelPedidos = new JPanel();
-			panelPedidos.setBorder(new TitledBorder(null, "Pedidos:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelPedidos.setBorder(new TitledBorder(null, manager.getString("panelPedidos"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			panelPedidos.setLayout(new BorderLayout(0, 0));
 			panelPedidos.add(getSpPedidos());
 			panelPedidos.add(getPanelBotonesPedidos(), BorderLayout.SOUTH);
@@ -189,12 +228,14 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JButton getBtnRefrescar() {
 		if (btnRefrescar == null) {
-			btnRefrescar = new JButton("Refrescar");
+			btnRefrescar = new JButton("asd");
 			btnRefrescar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//Se volvería a realizar la consulta
-					
-					
+				
+					int result = JOptionPane.showConfirmDialog(null,manager.getString("avisoRefrescar"),manager.getString("tituloARefrescar"), JOptionPane.YES_NO_OPTION);
+					if(result== JOptionPane.YES_OPTION){
+						refrescarTablaPedidos();
+					}
 				}
 			});
 		}
@@ -226,7 +267,7 @@ public class VentanaAlmacenero extends JFrame {
 	private JPanel getPanelOT() {
 		if (panelOT == null) {
 			panelOT = new JPanel();
-			panelOT.setBorder(new TitledBorder(null, "Orden de trabajo", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelOT.setBorder(new TitledBorder(null, manager.getString("panelOT"), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			panelOT.setLayout(new BorderLayout(0, 0));
 			panelOT.add(getPanelListOT());
 			panelOT.add(getPanelBotonesOT(), BorderLayout.SOUTH);
@@ -310,5 +351,29 @@ public class VentanaAlmacenero extends JFrame {
 			tOT.getTableHeader().setReorderingAllowed(false);
 		}
 		return tOT;
+	}
+	private JPanel getPanelBotonesGeneral() {
+		if (panelBotonesGeneral == null) {
+			panelBotonesGeneral = new JPanel();
+			panelBotonesGeneral.setLayout(new BorderLayout(0, 0));
+			panelBotonesGeneral.add(getBtnSalir(), BorderLayout.EAST);
+		}
+		return panelBotonesGeneral;
+	}
+	private JButton getBtnSalir() {
+		if (btnSalir == null) {
+			btnSalir = new JButton("Salir");
+			btnSalir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					
+					int result = JOptionPane.showConfirmDialog(null,manager.getString("avisoSalir"),manager.getString("tituloASalir"), JOptionPane.YES_NO_OPTION);
+					if(result== JOptionPane.YES_OPTION){
+						System.exit(0);
+					}
+					
+				}
+			});
+		}
+		return btnSalir;
 	}
 }
