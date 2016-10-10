@@ -1,12 +1,9 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -14,30 +11,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
 import Util.ModeloCheckBox;
 import Util.ModeloNoEditable;
 import database.ConsultasMyShop;
-//import javafx.scene.control.CheckBox;
 import logica.Pedido;
 import logica.Producto;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -83,9 +69,9 @@ public class VentanaAlmacenero extends JFrame {
 		productos1=new ArrayList<Producto>();
 		productos2=new ArrayList<Producto>();
 		
-		productos1.add(new Producto("25", "Girasol",5.90,"asa", "A2"));
-		productos2.add(new Producto("25", "Mandarina",0.10,"asa", "B3"));
-		productos2.add(new Producto("18", "Teclado",49.99,"asa", "A3"));
+		productos1.add(new Producto("25", "Girasol","asa",5.90, 200, "A2"));
+		productos2.add(new Producto("25", "Mandarina","asa", 0.10, 200, "B3"));
+		productos2.add(new Producto("18", "Teclado","asa", 49.99, 200, "A3"));
 		pedidos=new ArrayList<Pedido>();
 		pedidos.add(new Pedido("78",new Date(2010, 5, 14),20,20,productos1));
 		pedidos.add(new Pedido("128",new Date(2004,11,20),15,15,productos2));
@@ -179,7 +165,6 @@ public class VentanaAlmacenero extends JFrame {
 		}
 		
 		localizar();
-		
 		RellenarTablaPedidos();
 	}
 

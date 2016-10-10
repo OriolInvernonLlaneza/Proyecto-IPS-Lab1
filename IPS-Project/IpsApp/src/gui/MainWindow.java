@@ -16,13 +16,16 @@ import javax.swing.border.Border;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.border.TitledBorder;
  
 import Util.ModeloNoEditableSpinner;
 import Util.SpinnerEditor;
 import Util.SpinnerRenderer;
+import database.ConsultasMyShop;
 import logica.Producto;
  
 import javax.swing.JScrollPane;
@@ -34,6 +37,8 @@ import java.awt.Insets;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
+import javax.swing.JTextPane;
  
 public class MainWindow extends JFrame {
  
@@ -43,6 +48,7 @@ public class MainWindow extends JFrame {
     private ResourceManager manager;
  
     private DefaultListModel carritoListaModelo = new DefaultListModel<>();
+    private List<Producto> productos;
  
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
@@ -56,28 +62,25 @@ public class MainWindow extends JFrame {
     private JButton btnRemove;
     private JPanel panelPrecio;
     private JLabel lblPrecioTotal;
-    private JTextField textFieldPrecioTotal;
+    private JTextField txtPrecioTotal;
     private JPanel panelBotonesPedido;
     private JButton btnConfirmarPedido;
     private JButton btnCancelarPedido;
-    private JPanel panelAux;
     private JScrollPane scrollPaneTabla;
     private JPanel panelSearch;
     private JTable tableProductos;
  
     private ModeloNoEditableSpinner modeloTProductos;
-    private JScrollPane scrollPaneDescripcion;
-    private JTextArea taDescripcion;
     private JButton btnCalcular;
- 
-    private ArrayList<Producto> productos;
- 
+    private JTextPane taDescripcion;
+    
     private void localizar() {
     	setTitle(manager.getString("titulo"));
     	
     	//Borders
-    	((TitledBorder)panelProductos.getBorder()).setTitle(manager.getString("producto") + ": ");
-    	((TitledBorder)panelListaCarrito.getBorder()).setTitle(manager.getString("label_carrito"));
+    	manager.formatBorder(panelProductos, "producto");
+    	manager.formatBorder(panelListaCarrito, "label_carrito");
+    	//Descripción:
     	
     	//Botones
     	btnRemove.setToolTipText(manager.getString("btn_eliminarCarrito"));
@@ -102,12 +105,40 @@ public class MainWindow extends JFrame {
     	
     }
  
+    private String getDescripcionProductos(int fila) {
+        return productos.get(fila).getDescripcion();
+    }
+ 
+    private void pedirProductosDatabase() {
+        ArrayList<Producto> p = new ArrayList<Producto>();
+        
+        productos = p;
+    }
+ 
+    private void rellenarTablaProductos() {
+        Object[] nuevaFila = new Object[3];
+        try {
+        	productos = ConsultasMyShop.getProductos();
+			for (Producto producto : productos) {
+			    nuevaFila[0] = producto;
+			    nuevaFila[1] = producto.getPrecio();
+			    modeloTProductos.addRow(nuevaFila);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    
+    //-------------------SWING CODE----------------------------
+    
     /**
      * Create the frame.
      */
     public MainWindow() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 519, 373);
+        setBounds(100, 100, 726, 571);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -120,9 +151,6 @@ public class MainWindow extends JFrame {
         localizar();
         pedirProductosDatabase();
         rellenarTablaProductos();
-        carritoListaModelo.addElement("blah");
-        carritoListaModelo.addElement("blah2");
-        carritoListaModelo.addElement("blah3");
     }
  
     private JPanel getPanelProductos() {
@@ -133,7 +161,7 @@ public class MainWindow extends JFrame {
             panelProductos.setLayout(new BorderLayout(0, 0));
             panelProductos.add(getScrollPaneTabla(), BorderLayout.CENTER);
             panelProductos.add(getPanelSearch(), BorderLayout.NORTH);
-            panelProductos.add(getScrollPaneDescripcion(), BorderLayout.SOUTH);
+            panelProductos.add(getTaDescripcion(), BorderLayout.SOUTH);
         }
         return panelProductos;
     }
@@ -194,7 +222,7 @@ public class MainWindow extends JFrame {
                 public void actionPerformed(ActionEvent arg0) {
                     int fila = tableProductos.getSelectedRow();
                     if (fila != -1) {
-                        carritoListaModelo.addElement(tableProductos.getValueAt(fila, 0));
+                        carritoListaModelo.addElement(modeloTProductos.getValueAt(fila, 0));
                     }
                 }
             });
@@ -205,6 +233,12 @@ public class MainWindow extends JFrame {
     private JButton getBtnRemove() {
         if (btnRemove == null) {
             btnRemove = new JButton("-");
+            btnRemove.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent arg0) {
+            		if(!listCarrito.isSelectionEmpty())
+            			carritoListaModelo.remove(listCarrito.getSelectedIndex());
+            	}
+            });
             btnRemove.setMnemonic('-');
         }
         return btnRemove;
@@ -214,7 +248,7 @@ public class MainWindow extends JFrame {
         if (panelPrecio == null) {
             panelPrecio = new JPanel();
             panelPrecio.add(getLblPrecioTotal());
-            panelPrecio.add(getTextFieldPrecioTotal());
+            panelPrecio.add(getTxtPrecioTotal());
             panelPrecio.add(getBtnCalcular());
         }
         return panelPrecio;
@@ -223,25 +257,24 @@ public class MainWindow extends JFrame {
     private JLabel getLblPrecioTotal() {
         if (lblPrecioTotal == null) {
         	lblPrecioTotal = new JLabel();
-        	lblPrecioTotal.setLabelFor(getTextFieldPrecioTotal());
+        	lblPrecioTotal.setLabelFor(getTxtPrecioTotal());
         }
         return lblPrecioTotal;
     }
  
-    private JTextField getTextFieldPrecioTotal() {
-        if (textFieldPrecioTotal == null) {
-            textFieldPrecioTotal = new JTextField();
-            textFieldPrecioTotal.setEditable(false);
-            textFieldPrecioTotal.setColumns(10);
+    private JTextField getTxtPrecioTotal() {
+        if (txtPrecioTotal == null) {
+            txtPrecioTotal = new JTextField();
+            txtPrecioTotal.setEditable(false);
+            txtPrecioTotal.setColumns(10);
         }
-        return textFieldPrecioTotal;
+        return txtPrecioTotal;
     }
  
     private JPanel getPanelBotonesPedido() {
         if (panelBotonesPedido == null) {
             panelBotonesPedido = new JPanel();
             panelBotonesPedido.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
-            panelBotonesPedido.add(getPanelAux());
             panelBotonesPedido.add(getBtnConfirmarPedido());
             panelBotonesPedido.add(getBtnCancelarPedido());
         }
@@ -251,6 +284,10 @@ public class MainWindow extends JFrame {
     private JButton getBtnConfirmarPedido() {
         if (btnConfirmarPedido == null) {
             btnConfirmarPedido = new JButton();
+            btnConfirmarPedido.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent arg0) {
+            	}
+            });
             btnConfirmarPedido.setAlignmentX(Component.RIGHT_ALIGNMENT);
         }
         return btnConfirmarPedido;
@@ -259,16 +296,14 @@ public class MainWindow extends JFrame {
     private JButton getBtnCancelarPedido() {
         if (btnCancelarPedido == null) {
             btnCancelarPedido = new JButton();
+            btnCancelarPedido.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent arg0) {
+            		System.exit(0);
+            	}
+            });
             btnCancelarPedido.setAlignmentX(Component.RIGHT_ALIGNMENT);
         }
         return btnCancelarPedido;
-    }
- 
-    private JPanel getPanelAux() {
-        if (panelAux == null) {
-            panelAux = new JPanel();
-        }
-        return panelAux;
     }
  
     private JScrollPane getScrollPaneTabla() {
@@ -322,50 +357,27 @@ public class MainWindow extends JFrame {
         return tableProductos;
     }
  
-    private String getDescripcionProductos(int fila) {
-        return productos.get(fila).getDescripcion();
-    }
- 
-    private void pedirProductosDatabase() {
-        ArrayList<Producto> p = new ArrayList<Producto>();
-        p.add(new Producto("25", "Mandarina", 0.10, "asa", "B3"));
-        p.add(new Producto("18", "Teclado", 49.99, "asasdaa", "A3"));
-        productos = p;
-    }
- 
-    private void rellenarTablaProductos() {
-        Object[] nuevaFila = new Object[3];
-        for (Producto producto : productos) {
-            nuevaFila[0] = producto.getNombre();
-            nuevaFila[1] = producto.getPrecio();
-            modeloTProductos.addRow(nuevaFila);
-        }
-    }
- 
-    private JScrollPane getScrollPaneDescripcion() {
-        if (scrollPaneDescripcion == null) {
-            scrollPaneDescripcion = new JScrollPane();
-            scrollPaneDescripcion.setViewportView(getTaDescripcion());
-            Border aux = BorderFactory.createLineBorder(Color.BLACK);
-            Border borde = BorderFactory.createTitledBorder(aux, "Descripción:");
-            scrollPaneDescripcion.setBorder(borde);
-        }
-        return scrollPaneDescripcion;
-    }
- 
-    private JTextArea getTaDescripcion() {
-        if (taDescripcion == null) {
-            taDescripcion = new JTextArea();
-            taDescripcion.setEditable(false);
-        }
-        return taDescripcion;
-    }
- 
     private JButton getBtnCalcular() {
         if (btnCalcular == null) {
             btnCalcular = new JButton();
+            btnCalcular.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent e) {
+            		double precio = 0;
+            		for(Object producto : carritoListaModelo.toArray())
+            			precio+= ((Producto)producto).getPrecio();
+            		txtPrecioTotal.setText(String.valueOf(precio));
+            		
+            	}
+            });
         }
         return btnCalcular;
     }
  
+	private JTextPane getTaDescripcion() {
+		if (taDescripcion == null) {
+			taDescripcion = new JTextPane();
+			taDescripcion.setEditable(false);
+		}
+		return taDescripcion;
+	}
 }

@@ -14,7 +14,7 @@ public class Pedido {
     private List<Producto> productos;
     
     
-	public Pedido(String id, Date fecha, float tamano,double precio, List<Producto> productos) {
+	public Pedido(String id, Date fecha, float tamano, double precio, List<Producto> productos) {
 		this.id=id;
 		this.fecha=fecha;
 		this.tamano=tamano;
@@ -35,6 +35,9 @@ public class Pedido {
 		return productos;
 	}
 	
+	public String toString(){
+		return "#" + id + fecha;
+	}
     
     
 
