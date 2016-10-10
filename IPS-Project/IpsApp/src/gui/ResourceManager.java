@@ -29,5 +29,9 @@ public class ResourceManager {
 	public String getString(String id){
 		return bundle.getString(id);
 	}
+	
+	public char getChar(String id){
+		return bundle.getString(id).toCharArray()[0];
+	}
 
 }

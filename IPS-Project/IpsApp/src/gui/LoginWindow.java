@@ -144,14 +144,14 @@ public class LoginWindow extends JFrame {
 	}
 	private JButton getBtnMayorista() {
 		if (btnMayorista == null) {
-			btnMayorista = new JButton("");
+			btnMayorista = new JButton();
 			btnMayorista.setPreferredSize(new Dimension(120, 33));
 		}
 		return btnMayorista;
 	}
 	private JButton getBtnAlmacenero() {
 		if (btnAlmacenero == null) {
-			btnAlmacenero = new JButton("");
+			btnAlmacenero = new JButton();
 			btnAlmacenero.setPreferredSize(new Dimension(120, 33));
 			btnAlmacenero.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {

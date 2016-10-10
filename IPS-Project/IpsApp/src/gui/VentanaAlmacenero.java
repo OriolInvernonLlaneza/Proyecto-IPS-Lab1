@@ -160,7 +160,6 @@ public class VentanaAlmacenero extends JFrame {
 	 */
 	public VentanaAlmacenero() {
 		manager = ResourceManager.getResourceManager();
-		setTitle("Zona de trabajo");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1100, 694);
 		contentPane = new JPanel();

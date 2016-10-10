@@ -23,7 +23,7 @@ public class Database {
         Properties props;
         try {
             props = new Properties();
-            props.load(new FileInputStream("DB.properties"));
+            props.load(new FileInputStream("IpsApp/DB.properties"));
             conn = DriverManager.getConnection("jdbc:oracle:thin:@156.35.94.99:1521:DESA", props);
             //conn = DriverManager.getConnection("jdbc:h2:./IpsApp/Database/files/DBApp;IFEXISTS=TRUE", "SA", "");
         } catch (SQLException e) {

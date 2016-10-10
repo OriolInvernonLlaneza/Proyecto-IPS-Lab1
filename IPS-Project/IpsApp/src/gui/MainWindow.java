@@ -33,6 +33,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import java.awt.FlowLayout;
  
 public class MainWindow extends JFrame {
  
@@ -72,13 +73,39 @@ public class MainWindow extends JFrame {
     private ArrayList<Producto> productos;
  
     private void localizar() {
+    	setTitle(manager.getString("titulo"));
+    	
+    	//Borders
+    	((TitledBorder)panelProductos.getBorder()).setTitle(manager.getString("producto") + ": ");
+    	((TitledBorder)panelListaCarrito.getBorder()).setTitle(manager.getString("label_carrito"));
+    	
+    	//Botones
+    	btnRemove.setToolTipText(manager.getString("btn_eliminarCarrito"));
+    	btnAdd.setToolTipText(manager.getString("btn_anadirCarrito"));
+        btnConfirmarPedido.setText(manager.getString("confirmar"));
+        btnConfirmarPedido.setToolTipText(manager.getString("btn_confirmarCarrito"));
+        btnCancelarPedido.setText(manager.getString("cancelar"));
+        btnCancelarPedido.setToolTipText(manager.getString("btn_cancelarCarrito"));
+        btnCalcular.setText(manager.getString("btn_calcularCarrito"));
+        btnCalcular.setToolTipText("Calcular el precio total del carrito");
+        
+        btnCalcular.setMnemonic(manager.getChar("mnm_calcular"));
+        btnRemove.setMnemonic(manager.getChar("mnm_eliminar"));
+        btnCancelarPedido.setMnemonic(manager.getChar("mnm_cancelar"));
+        btnConfirmarPedido.setMnemonic(manager.getChar("mnm_confirmar"));
+        
+        modeloTProductos.setColumnIdentifiers(new String[] {manager.getString("nombre"), manager.getString("precio"), manager.getString("cantidad")});
+        
+        //Labels
+        lblPrecioTotal.setDisplayedMnemonic(manager.getChar("mnm_precio"));
+        lblPrecioTotal.setText(manager.getString("label_precioTotal"));
+    	
     }
  
     /**
      * Create the frame.
      */
     public MainWindow() {
-        setTitle("MyShop");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 519, 373);
         contentPane = new JPanel();
@@ -101,9 +128,8 @@ public class MainWindow extends JFrame {
     private JPanel getPanelProductos() {
         if (panelProductos == null) {
             panelProductos = new JPanel();
-            // TODO Nico toma texto pa tu body
             panelProductos.setBorder(
-                    new TitledBorder(null, "Productos:", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
+                    new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
             panelProductos.setLayout(new BorderLayout(0, 0));
             panelProductos.add(getScrollPaneTabla(), BorderLayout.CENTER);
             panelProductos.add(getPanelSearch(), BorderLayout.NORTH);
@@ -126,9 +152,8 @@ public class MainWindow extends JFrame {
     private JPanel getPanelListaCarrito() {
         if (panelListaCarrito == null) {
             panelListaCarrito = new JPanel();
-            // TODO Nico toma texto pa tu body
             panelListaCarrito.setBorder(
-                    new TitledBorder(null, "Carrito en curso:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+                    new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
             panelListaCarrito.setLayout(new BorderLayout(0, 0));
             panelListaCarrito.add(getScrollPaneCarrito(), BorderLayout.CENTER);
             panelListaCarrito.add(getPanelBotonesLista(), BorderLayout.SOUTH);
@@ -164,8 +189,7 @@ public class MainWindow extends JFrame {
     private JButton getBtnAdd() {
         if (btnAdd == null) {
             btnAdd = new JButton("+");
-            btnAdd.setToolTipText("a\u00F1adir un producto al carrito");
-            btnAdd.setMnemonic('a');
+            btnAdd.setMnemonic('+');
             btnAdd.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent arg0) {
                     int fila = tableProductos.getSelectedRow();
@@ -181,9 +205,7 @@ public class MainWindow extends JFrame {
     private JButton getBtnRemove() {
         if (btnRemove == null) {
             btnRemove = new JButton("-");
-            // TODO Nico toma texto pa tu body
-            btnRemove.setToolTipText("Eliminar una unidad del carrito");
-            btnRemove.setMnemonic('r');
+            btnRemove.setMnemonic('-');
         }
         return btnRemove;
     }
@@ -200,10 +222,8 @@ public class MainWindow extends JFrame {
  
     private JLabel getLblPrecioTotal() {
         if (lblPrecioTotal == null) {
-            // TODO Nico toma texto pa tu body
-            lblPrecioTotal = new JLabel("Precio total:");
-            lblPrecioTotal.setLabelFor(getTextFieldPrecioTotal());
-            lblPrecioTotal.setDisplayedMnemonic('p');
+        	lblPrecioTotal = new JLabel();
+        	lblPrecioTotal.setLabelFor(getTextFieldPrecioTotal());
         }
         return lblPrecioTotal;
     }
@@ -220,41 +240,17 @@ public class MainWindow extends JFrame {
     private JPanel getPanelBotonesPedido() {
         if (panelBotonesPedido == null) {
             panelBotonesPedido = new JPanel();
-            GridBagLayout gbl_panelBotonesPedido = new GridBagLayout();
-            gbl_panelBotonesPedido.columnWidths = new int[] { 79, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            gbl_panelBotonesPedido.rowHeights = new int[] { 23, 0 };
-            gbl_panelBotonesPedido.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
-                    0.0, 0.0, Double.MIN_VALUE };
-            gbl_panelBotonesPedido.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
-            panelBotonesPedido.setLayout(gbl_panelBotonesPedido);
-            GridBagConstraints gbc_panelAux = new GridBagConstraints();
-            gbc_panelAux.insets = new Insets(0, 0, 0, 5);
-            gbc_panelAux.fill = GridBagConstraints.BOTH;
-            gbc_panelAux.gridx = 9;
-            gbc_panelAux.gridy = 0;
-            panelBotonesPedido.add(getPanelAux(), gbc_panelAux);
-            GridBagConstraints gbc_btnConfirmarPedido = new GridBagConstraints();
-            gbc_btnConfirmarPedido.anchor = GridBagConstraints.PAGE_END;
-            gbc_btnConfirmarPedido.insets = new Insets(0, 0, 0, 5);
-            gbc_btnConfirmarPedido.gridx = 10;
-            gbc_btnConfirmarPedido.gridy = 0;
-            panelBotonesPedido.add(getBtnConfirmarPedido(), gbc_btnConfirmarPedido);
-            GridBagConstraints gbc_btnCancelarPedido = new GridBagConstraints();
-            gbc_btnCancelarPedido.insets = new Insets(0, 0, 0, 5);
-            gbc_btnCancelarPedido.anchor = GridBagConstraints.LINE_END;
-            gbc_btnCancelarPedido.gridx = 11;
-            gbc_btnCancelarPedido.gridy = 0;
-            panelBotonesPedido.add(getBtnCancelarPedido(), gbc_btnCancelarPedido);
+            panelBotonesPedido.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+            panelBotonesPedido.add(getPanelAux());
+            panelBotonesPedido.add(getBtnConfirmarPedido());
+            panelBotonesPedido.add(getBtnCancelarPedido());
         }
         return panelBotonesPedido;
     }
  
     private JButton getBtnConfirmarPedido() {
         if (btnConfirmarPedido == null) {
-            // TODO Nico toma texto pa tu body
-            btnConfirmarPedido = new JButton("Confirmar");
-            btnConfirmarPedido.setToolTipText("Confirmar un pedido con el carrito actual");
-            btnConfirmarPedido.setMnemonic('C');
+            btnConfirmarPedido = new JButton();
             btnConfirmarPedido.setAlignmentX(Component.RIGHT_ALIGNMENT);
         }
         return btnConfirmarPedido;
@@ -262,10 +258,7 @@ public class MainWindow extends JFrame {
  
     private JButton getBtnCancelarPedido() {
         if (btnCancelarPedido == null) {
-            // TODO Nico toma texto pa tu body
-            btnCancelarPedido = new JButton("Cancelar");
-            btnCancelarPedido.setToolTipText("Cancelar carrito y salir");
-            btnCancelarPedido.setMnemonic('n');
+            btnCancelarPedido = new JButton();
             btnCancelarPedido.setAlignmentX(Component.RIGHT_ALIGNMENT);
         }
         return btnCancelarPedido;
@@ -297,7 +290,7 @@ public class MainWindow extends JFrame {
     private JTable getTableProductos() {
         if (tableProductos == null) {
             final int SPINNER_COLUMN = 2;
-            String[] nombreColumnas = { "Nombre", "Precio", "Cantidad" };
+            String[] nombreColumnas = { "", "", ""};
             modeloTProductos = new ModeloNoEditableSpinner(nombreColumnas, 0);
  
             tableProductos = new JTable();
@@ -370,10 +363,7 @@ public class MainWindow extends JFrame {
  
     private JButton getBtnCalcular() {
         if (btnCalcular == null) {
-            // TODO Nico toma texto pa tu body
-            btnCalcular = new JButton("Calcular");
-            btnCalcular.setToolTipText("Calcular el precio total del carrito");
-            btnCalcular.setMnemonic('l');
+            btnCalcular = new JButton();
         }
         return btnCalcular;
     }
