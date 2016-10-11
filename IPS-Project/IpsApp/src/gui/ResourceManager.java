@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 import javax.swing.JComponent;
 import javax.swing.border.TitledBorder;
 
-public class ResourceManager { //ComentarioP
+public class ResourceManager {
 	
 	private static ResourceManager manager;
 	private final String BUNDLE = "rcs/textos";
@@ -35,7 +35,7 @@ public class ResourceManager { //ComentarioP
 	
 	/**
 	 * Devuelve el recurso identificado por <strong>id</strong>
-	 * @param id La identificaci髇 del recurso
+	 * @param id La identificaci贸n del recurso
 	 * @return La string recurso
 	 */
 	public String getString(String id){
@@ -43,9 +43,9 @@ public class ResourceManager { //ComentarioP
 	}
 	
 	/**
-	 * Devuelve el mnem髇ico identificado por <strong>id</strong>
-	 * @param id La identificaci髇 del mnem髇ico
-	 * @return El mnem髇ico
+	 * Devuelve el mnem贸nico identificado por <strong>id</strong>
+	 * @param id La identificaci贸n del mnem贸nico
+	 * @return El mnem贸nico
 	 */
 	public char getChar(String id){
 		return bundle.getString(id).toCharArray()[0];
