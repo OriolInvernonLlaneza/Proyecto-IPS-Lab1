@@ -5,6 +5,7 @@ bin/
 tmp/
 .idea/
 *.class
+.project
 *.tmp
 *.bak
 *.swp
