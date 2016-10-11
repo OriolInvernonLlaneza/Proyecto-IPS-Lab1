@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 import javax.swing.JComponent;
 import javax.swing.border.TitledBorder;
 
-public class ResourceManager {
+public class ResourceManager { //ComentarioP
 	
 	private static ResourceManager manager;
 	private final String BUNDLE = "rcs/textos";
