@@ -1,6 +1,6 @@
 package logica;
 
-public class Producto { //Comentario de Pedro 
+public class Producto { //Comentario de Pedro en github
 	
 	private String id;
 	private String nombre;
