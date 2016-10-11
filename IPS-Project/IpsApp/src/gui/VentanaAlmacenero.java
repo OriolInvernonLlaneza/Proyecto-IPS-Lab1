@@ -26,6 +26,8 @@ import javax.swing.ListSelectionModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class VentanaAlmacenero extends JFrame {
 	
@@ -73,9 +75,9 @@ public class VentanaAlmacenero extends JFrame {
 		productos2.add(new Producto("25", "Mandarina","asa", 0.10, 200, "B3"));
 		productos2.add(new Producto("18", "Teclado","asa", 49.99, 200, "A3"));
 		pedidos=new ArrayList<Pedido>();
-		pedidos.add(new Pedido("78",new Date(2010, 5, 14),20,20,productos1));
-		pedidos.add(new Pedido("128",new Date(2004,11,20),15,15,productos2));
-		pedidos.add(new Pedido("154",new Date(2018,4,5),78,18,productos1));
+		pedidos.add(new Pedido("78",new Date(2010, 5, 14),20,20, "Calle memes",productos1));
+		pedidos.add(new Pedido("128",new Date(2004,11,20),15,15, "Calle memes 2ª",productos2));
+		pedidos.add(new Pedido("154",new Date(2018,4,5),78,18, "Calle memes 3ª",productos1));
 				//{new Pedido("78",new Date(2010, 5, 14),20,20,productos1), new Pedido("128",new Date(2004,11,20),15,15,productos2), new Pedido("154",new Date(2018,4,5),78,18,productos1)};
 		
 	}
@@ -139,14 +141,25 @@ public class VentanaAlmacenero extends JFrame {
 		btnEmpezar.setText(manager.getString("empezar"));
 		btnAcabar.setText(manager.getString("acabar"));
 		btnNotificar.setText(manager.getString("notificar"));
+		
+		//Tabla
+		modeloTPedidos.setColumnIdentifiers(new String[] {manager.getString("pedidoid"), manager.getString("fecha"), manager.getString("tamano")});
+		modeloTOT.setColumnIdentifiers(new String[] {manager.getString("pedidoid"), manager.getString("nombre"), manager.getString("localizacion"), manager.getString("encontrado")});
+		
 	}
 
 	/**
 	 * Create the frame.
 	 */
 	public VentanaAlmacenero() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				btnSalir.doClick();
+			}
+		});
 		manager = ResourceManager.getResourceManager();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 1100, 694);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -187,7 +200,7 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JButton getBtnEmpezar() {
 		if (btnEmpezar == null) {
-			btnEmpezar = new JButton("Empezar");
+			btnEmpezar = new JButton();
 			btnEmpezar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					int elegido=tPedidos.getSelectedRow();
@@ -212,7 +225,7 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JButton getBtnRefrescar() {
 		if (btnRefrescar == null) {
-			btnRefrescar = new JButton("asd");
+			btnRefrescar = new JButton();
 			btnRefrescar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 				
@@ -227,8 +240,7 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JTable getTPedidos() {
 		if (tPedidos == null) {
-			String[] nombreColumnas = {"PedidoID", "Fecha", "Tamaño"};
-			modeloTPedidos= new ModeloNoEditable(nombreColumnas, 0);
+			modeloTPedidos= new ModeloNoEditable(new String[3], 0);
 			tPedidos = new JTable(modeloTPedidos);
 			tPedidos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tPedidos.addMouseListener(new MouseAdapter() {
@@ -278,13 +290,15 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JButton getBtnNotificar() {
 		if (btnNotificar == null) {
-			btnNotificar = new JButton("Notificar");
+			btnNotificar = new JButton();
 			VentanaAlmacenero aT= this;
 			btnNotificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					if(modeloTOT.getRowCount() == 0)
+						return;
 					List<Producto> productosEnFalta= new ArrayList<Producto>(); //La lista de productos que vamos a notificar en el dialogo.
 					for(int row=0; row<pedidoElegido.getProductos().size();row++){
-						if(tOT.getValueAt(row, 3).toString().equals("false")){//La tabla solo trabaja con String asi que lo apañamos asi
+						if(Boolean.parseBoolean(tOT.getValueAt(row, 3).toString()) == false){//La tabla solo trabaja con String asi que lo apañamos asi
 							productosEnFalta.add(pedidoElegido.getProductos().get(row));//Si no esta cogido lo añadimos para notificar
 						}
 					}
@@ -292,7 +306,7 @@ public class VentanaAlmacenero extends JFrame {
 					vN.setLocationRelativeTo(aT);
 					vN.setVisible(true);
 					
-					//AQUI SE GENERA EL NUEO DIALOGO CON LA INCIDENCIA TENIENDO EN CUANTA LOS OBJETOS QUE FALTAN.
+					//AQUI SE GENERA EL NUEVO DIALOGO CON LA INCIDENCIA TENIENDO EN CUANTA LOS OBJETOS QUE FALTAN.
 				}
 			});
 		}
@@ -300,7 +314,7 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JButton getBtnAcabar() {
 		if (btnAcabar == null) {
-			btnAcabar = new JButton("Acabar");
+			btnAcabar = new JButton();
 			btnAcabar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
@@ -319,8 +333,7 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JTable getTOT() {
 		if (tOT == null) {
-			String[] nombreColumnas = {"ProductoID", "Nombre", "Localizacion","Encontrado"};
-			modeloTOT= new ModeloCheckBox(nombreColumnas, 0);
+			modeloTOT= new ModeloCheckBox(new String[4], 0);
 			tOT = new JTable(modeloTOT);
 			tOT.addMouseListener(new MouseAdapter() {
 				@Override
@@ -346,16 +359,16 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JButton getBtnSalir() {
 		if (btnSalir == null) {
-			btnSalir = new JButton("Salir");
+			btnSalir = new JButton();
+			VentanaAlmacenero ventana = this;
 			btnSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					
 					int result = JOptionPane.showConfirmDialog(null,manager.getString("avisoSalir"),manager.getString("tituloASalir"), JOptionPane.YES_NO_OPTION);
 					if(result== JOptionPane.YES_OPTION){
 						System.exit(0);
 					}
-					
 				}
+
 			});
 		}
 		return btnSalir;

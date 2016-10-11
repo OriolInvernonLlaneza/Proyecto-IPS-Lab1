@@ -1,3 +1,6 @@
+DB.properties
+files/
+
 *.pydevproject
 .metadata
 .gradle

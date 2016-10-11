@@ -13,27 +13,21 @@ import logica.Producto;
 import java.awt.TextArea;
 import java.util.Date;
 import java.util.List;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class VentanaNotificacion extends JDialog {
 	
 	private VentanaAlmacenero aT;
 	private  List<Producto> productosEnFalta;
+	private ResourceManager manager;
 
 	private final JPanel contentPanel = new JPanel();
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		try {
-//			VentanaNotificacion dialog = new VentanaNotificacion();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+	private void localizar(){
+		//Notificación
+	}
 
 	/**
 	 * Create the dialog.
@@ -42,20 +36,20 @@ public class VentanaNotificacion extends JDialog {
 	private String redactar(){
 		Date fecha = new Date();
 		StringBuilder sb= new StringBuilder();
-		sb.append("Día: ");
+		sb.append(manager.getString("dia"));
 		sb.append(fecha);
 		sb.append("\n");
 		sb.append("------------------------------------------------------------------ \n");
 		if(productosEnFalta.size()==0){
-			sb.append("No se ha marcado nigun producto en falta.");
+			sb.append(manager.getString("vacio"));
 		}
 		else{
-		sb.append("Productos en falta: \n");
+		sb.append(manager.getString("productosEnFalta") +  "\n");
 			for(Producto producto: productosEnFalta){
-				sb.append("Producto: ");
+				sb.append(manager.getString("producto") + ": ");
 				sb.append(producto.getId());
 				sb.append(" ");
-				sb.append("Nombre: ");
+				sb.append(manager.getString("nombre") + ": ");
 				sb.append(producto.getNombre());
 				sb.append("\n");
 			}
@@ -68,32 +62,41 @@ public class VentanaNotificacion extends JDialog {
 	public VentanaNotificacion(VentanaAlmacenero aT, List<Producto> productosEnFalta) {
 		this.aT=aT;
 		this.productosEnFalta=productosEnFalta;
-		setTitle("Notificacion");
+		manager = ResourceManager.getResourceManager();
+		setTitle(manager.getString("notificacionTitulo"));
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
-			TextArea textArea = new TextArea();
-			textArea.setEditable(false);
-			contentPanel.add(textArea);
-			textArea.setText(redactar());
+			TextArea txtNotificacion = new TextArea();
+			txtNotificacion.setEditable(false);
+			contentPanel.add(txtNotificacion);
+			txtNotificacion.setText(redactar());
 		}
 		{
-			JPanel panelBotones = new JPanel();
-			panelBotones.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(panelBotones, BorderLayout.SOUTH);
+			JPanel pnBotones = new JPanel();
+			FlowLayout fl_pnBotones = (FlowLayout) pnBotones.getLayout();
+			fl_pnBotones.setAlignment(FlowLayout.RIGHT);
+			contentPanel.add(pnBotones, BorderLayout.SOUTH);
 			{
-				JButton btnOK = new JButton("OK");
-				btnOK.setActionCommand("OK");
-				panelBotones.add(btnOK);
-				getRootPane().setDefaultButton(btnOK);
+				JButton btnAceptar = new JButton(manager.getString("aceptar"));
+				btnAceptar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						dispose();
+					}
+				});
+				pnBotones.add(btnAceptar);
 			}
 			{
-				JButton btnCancelar = new JButton("Cancelar");
-				btnCancelar.setActionCommand("Cancel");
-				panelBotones.add(btnCancelar);
+				JButton btnCancelar = new JButton(manager.getString("cancelar"));
+				btnCancelar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
+				pnBotones.add(btnCancelar);
 			}
 		}
 	}

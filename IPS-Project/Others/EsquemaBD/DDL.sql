@@ -1,18 +1,16 @@
+DROP TABLE Pedido;
+DROP TABLE ProductoPedido;
+DROP TABLE Usuario;
+DROP TABLE Producto;
+DROP TABLE Almacenero;
+DROP TABLE OrdenTrabajo;
+
 CREATE TABLE Usuario(
 	idUsuario VARCHAR(20),
-	contraseña_usuario VARCHAR(30)
+	contraseña_usuario VARCHAR(30),
 	usuario_nombre VARCHAR(100),
 	usuario_apellidos VARCHAR(100),
-	PRIMARY KEY(idUsuario)
-);
-
-CREATE TABLE Pedido(
-	idPedido VARCHAR(20),
-	idUsuario VARCHAR(20),
-	precio_pedido NUMBER(5,2),
-	fecha DATE,
-	FOREIGN KEY(idUsuario) references Usuario
-
+	PRIMARY KEY(idUsuario, contraseña_usuario)
 );
 
 CREATE TABLE Almacenero(
@@ -20,7 +18,7 @@ CREATE TABLE Almacenero(
 	contraseña_almacenero VARCHAR(30),
 	almacenero_nombre VARCHAR(100),
 	almacenero_apellidos VARCHAR(100),
-	PRIMARY KEY (idAlmacenero)
+	PRIMARY KEY (idAlmacenero, contraseña_almacenero)
 );
 
 CREATE TABLE Producto(
@@ -31,6 +29,17 @@ CREATE TABLE Producto(
 	precio DECIMAL (6, 2),
 	
 	PRIMARY KEY(idProducto)
+);
+
+CREATE TABLE Pedido(
+	idPedido VARCHAR(20),
+	idUsuario VARCHAR(20),
+	precio_pedido NUMBER(5,2),
+	direccion VARCHAR(500),
+	fecha DATE,
+	PRIMARY KEY (idPedido),
+	FOREIGN KEY(idUsuario) references Usuario
+
 );
 
 CREATE TABLE ProductoPedido(
@@ -46,10 +55,10 @@ CREATE TABLE OrdenTrabajo(
 	idAlmacenero VARCHAR(20),
 	idPedido VARCHAR(20),
 	estado VARCHAR(15) 
-	CHECK (estado IN ('Empaquetada', 'Asignada', 'Incidencia'))
-	FOREIGN KEY (idAlmacenero) REFERENCES almacenero
+	CHECK (estado IN ('Empaquetada', 'Asignada', 'Incidencia')),
+	FOREIGN KEY (idAlmacenero) REFERENCES almacenero,
 	FOREIGN KEY (idPedido) REFERENCES pedido
-)
+);
 
 
 INSERT INTO Almacenero VALUES ('alm01', 'cntrsAlmacenero01', 'Almacenero01', 'AlmaceneroApellido01');
@@ -69,6 +78,23 @@ INSERT INTO Producto VALUES ('prod09',  'Vilmar silla', 'Gracias a la flexibilid
 INSERT INTO Producto VALUES ('prod10',  'Frode silla', 'Gracias a la flexibilidad del asiento y el respaldo, resulta muy cómoda.', 70, 100.00);
 INSERT INTO Producto VALUES ('prod11',  'Janinge silla', 'Gracias a la flexibilidad del asiento y el respaldo, resulta muy cómoda.', 20, 100.00);
 INSERT INTO Producto VALUES ('prod12',  'Tobias silla', 'It just works!', 50, 100.00);
+
+
+INSERT INTO Usuario VALUES ('us1', 'ps1', 'usuario1', 'apellido1');
+
+INSERT INTO Usuario VALUES ('us2', 'ps2', 'usuario1', 'apellido1');
+
+INSERT INTO Usuario VALUES ('us3', 'ps3', 'usuario1', 'apellido1');
+
+
+INSERT INTO Pedido VALUES ('01', 'us1', 50, 'dsadasdasdasdasdasdaads', 01/01/2016);
+
+INSERT INTO Pedido VALUES ('02', 'us2', 50, 'dsadasdasdasdasdasdaads', 01/01/2016);
+
+INSERT INTO Pedido VALUES ('03', 'us3', 50, 'dsadasdasdasdasdasdaads', 01/01/2016);
+
+INSERT INTO Pedido VALUES ('04', 'us3', 50, 'dsadasdasdasdasdasdaads', 01/01/2016);
+
 
 GRANT ALL PRIVILEGES ON Producto TO UO244928;
 GRANT ALL PRIVILEGES ON Almacenero TO UO244928;
