@@ -41,6 +41,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JTextPane;
  
 public class MainWindow extends JFrame {
+	
+	//Nico pls que funcione (?)
  
     /**
      *
