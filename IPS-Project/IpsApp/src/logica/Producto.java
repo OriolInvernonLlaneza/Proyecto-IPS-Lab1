@@ -58,7 +58,9 @@ public class Producto {
 		return nombre;
 	}
 	
-	
+	public boolean equals(Producto producto){
+		return producto.getId().toLowerCase().equals(this.getId().toLowerCase());
+	}
 	
 
 }

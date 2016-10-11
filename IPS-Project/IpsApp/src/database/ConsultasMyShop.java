@@ -2,6 +2,7 @@ package database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,7 +14,7 @@ import logica.Producto;
 public class ConsultasMyShop {
 	
 	private static Database instance = Database.getInstance();
-	private static int ultimaIDPedido;
+	private static String ultimaIDPedido;
 	
 	/**
 	 * Obtiene los pedidos existentes en la base de datos
@@ -39,7 +40,7 @@ public class ConsultasMyShop {
 				cantidad=cantidad+rsProductos.getInt(3);
 			}
 			//idPedido, idUsuario, preciopedido, direccion, fecha
-			pedidos.add(new Pedido(rs.getString(1),rs.getDate(5),cantidad, rs.getDouble(3), rs.getString(4) ,productos));
+			pedidos.add(new Pedido(rs.getString(1),rs.getDate(5),cantidad, rs.getDouble(3), rs.getString(4), productos));
 		}
 		
 		return pedidos;
@@ -65,19 +66,27 @@ public class ConsultasMyShop {
 		
 	}
 	
-	public static void crearPedido(List<Producto> productos, String clienteID) throws SQLException{
+	public static void crearPedido(Pedido pedido, String clienteID) throws SQLException{
 		double precioTotal = 0;
-		for(Producto producto : productos)
+		for(Producto producto : pedido.getProductos())
 			precioTotal += producto.getPrecio();
 		Date fecha = Calendar.getInstance().getTime();
 		
-		ultimaIDPedido = ultimaID();
-		
 		//pedido, usuario, precio, direccion, fecha
-		//String insertar = "INSERT INTO Pedido VALUES ()"
+		String insertar = String.format("INSERT INTO Pedido VALUES ( %d, %s, %f, %s, " + fecha + ") ", pedido.getId(), clienteID, precioTotal, "direccionBase");
+		instance.executeQuery(insertar);
+		
+		//idProducto, idPedido, cantidad
+		
+		StringBuilder builder = new StringBuilder();
+		for(Producto producto : pedido.getProductos()){
+				//builder.append(String.format(" INSERT INTO ProductosPedido VALUES (%s, %s, %d) ", producto.getId(), pedido.getId(), ) + "\n");
+		}
+		
+		
 	}
 	
-	public static int ultimaID() throws SQLException{
+	public static String ultimaID() throws SQLException{
 		String consulta = " SELECT idPedido FROM "
 				+ " (SELECT idPedido "
 				+ " FROM Pedido "
@@ -86,7 +95,7 @@ public class ConsultasMyShop {
 		//Podríamos estar frente a nuestro primer pedido, así que el resultset devolvería un SELECT vacío
 		//Para evitar eso, pregunto si el cursor del SELECT está detras de la primera fila (como una forma de -1 o 0)
 		ResultSet id = instance.executeQuery(consulta) ;
-		return id.isBeforeFirst() ? id.getInt(1) : 00; 
+		return id.isBeforeFirst() ? id.getString(1) : "00"; 
 	}
 	
 }

@@ -1,16 +1,16 @@
-DROP TABLE Pedido;
 DROP TABLE ProductoPedido;
-DROP TABLE Usuario;
 DROP TABLE Producto;
 DROP TABLE Almacenero;
 DROP TABLE OrdenTrabajo;
+DROP TABLE Pedido;
+DROP TABLE Usuario;
 
 CREATE TABLE Usuario(
 	idUsuario VARCHAR(20),
 	contraseña_usuario VARCHAR(30),
 	usuario_nombre VARCHAR(100),
 	usuario_apellidos VARCHAR(100),
-	PRIMARY KEY(idUsuario, contraseña_usuario)
+	PRIMARY KEY(idUsuario)
 );
 
 CREATE TABLE Almacenero(
@@ -18,7 +18,7 @@ CREATE TABLE Almacenero(
 	contraseña_almacenero VARCHAR(30),
 	almacenero_nombre VARCHAR(100),
 	almacenero_apellidos VARCHAR(100),
-	PRIMARY KEY (idAlmacenero, contraseña_almacenero)
+	PRIMARY KEY (idAlmacenero)
 );
 
 CREATE TABLE Producto(
@@ -36,7 +36,7 @@ CREATE TABLE Pedido(
 	idUsuario VARCHAR(20),
 	precio_pedido NUMBER(5,2),
 	direccion VARCHAR(500),
-	fecha DATE,
+	fecha TIMESTAMP,
 	PRIMARY KEY (idPedido),
 	FOREIGN KEY(idUsuario) references Usuario
 
@@ -87,13 +87,13 @@ INSERT INTO Usuario VALUES ('us2', 'ps2', 'usuario1', 'apellido1');
 INSERT INTO Usuario VALUES ('us3', 'ps3', 'usuario1', 'apellido1');
 
 
-INSERT INTO Pedido VALUES ('01', 'us1', 50, 'dsadasdasdasdasdasdaads', 01/01/2016);
+INSERT INTO Pedido VALUES ('01', 'us1', 50, 'dsadasdasdasdasdasdaads', SYSDATE);
 
-INSERT INTO Pedido VALUES ('02', 'us2', 50, 'dsadasdasdasdasdasdaads', 01/01/2016);
+INSERT INTO Pedido VALUES ('02', 'us2', 50, 'dsadasdasdasdasdasdaads', SYSDATE);
 
-INSERT INTO Pedido VALUES ('03', 'us3', 50, 'dsadasdasdasdasdasdaads', 01/01/2016);
+INSERT INTO Pedido VALUES ('03', 'us3', 50, 'dsadasdasdasdasdasdaads', SYSDATE);
 
-INSERT INTO Pedido VALUES ('04', 'us3', 50, 'dsadasdasdasdasdasdaads', 01/01/2016);
+INSERT INTO Pedido VALUES ('04', 'us3', 50, 'dsadasdasdasdasdasdaads', SYSDATE);
 
 
 GRANT ALL PRIVILEGES ON Producto TO UO244928;
