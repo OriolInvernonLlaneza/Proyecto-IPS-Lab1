@@ -301,6 +301,7 @@ public class MainWindow extends JFrame {
             btnCancelarPedido.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent arg0) {
             		System.exit(0);
+            		//Deberia cerrar esta ventana y hacer visible la de login. sys exit no bueno ser
             	}
             });
             btnCancelarPedido.setAlignmentX(Component.RIGHT_ALIGNMENT);
