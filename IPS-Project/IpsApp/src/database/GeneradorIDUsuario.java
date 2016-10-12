@@ -20,7 +20,7 @@ public class GeneradorIDUsuario implements GeneradorID{
 	public String generarID() {
 		String nombreCorto = nombre.substring(0, 2);
 		String apellidoCorto = apellido.substring(0, 2);
-		String code = Double.toString((rng.nextDouble() * ID_LENGTH) + 1);
+		String code = Double.toString((rng.nextInt() * ID_LENGTH) + 1);
 		return nombreCorto + apellidoCorto + "#" + code;
 	}
 

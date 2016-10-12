@@ -1,7 +1,9 @@
 package database;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,15 +30,13 @@ public class ConsultasMyShop {
 		List<Pedido> pedidos= new ArrayList<Pedido>();
 		List<Producto> productos= new ArrayList<Producto>();
 		int cantidad = 0;
-		ResultSet rs= instance.executeQuery("SELECT * "+
-														" FROM pedido "+
-														" ORDER BY Fecha ");
+		ResultSet rs= instance.executeQuery("SELECT * FROM Pedido ORDER BY Fecha ");
 		while(rs.next()){
-			String consulta="SELECT * "+
-						" FROM productoPedido, Producto "+
-						" WHERE productoPedido.idproducto=producto.idproducto "+
-						" AND productoPedido.idpedido=? ";
-			ResultSet rsProductos=Database.getInstance().executePreparedQuery(consulta, rs.getString(1));
+			String consulta=" SELECT DISTINCT * "+
+						" FROM ProductoPedido, Producto "+
+						" WHERE ProductoPedido.idproducto = Producto.idproducto "+
+						" AND ProductoPedido.idpedido = ? ";
+			ResultSet rsProductos = Database.getInstance().executePreparedQuery(consulta, rs.getString(1).trim());
 			while(rsProductos.next()){
 				// idProducto, idPedido, cantidad -- idProducto, producto_nombre, descripcion_producto, stock, precio
 				productos.add(new Producto(rsProductos.getString(1),rsProductos.getString(5), rsProductos.getString(6), rsProductos.getDouble(7),rsProductos.getDouble(8),"A3"));
@@ -69,25 +69,28 @@ public class ConsultasMyShop {
 		
 	}
 	
-	public static void crearPedido(Pedido pedido, String clienteID) throws SQLException{
+	public static void crearPedido(Pedido pedido) throws SQLException{
 		double precioTotal = 0;
 		for(Producto producto : pedido.getProductos())
 			precioTotal += producto.getPrecio();
 		Date fecha = Calendar.getInstance().getTime();
 		
 		//pedido, usuario, precio, direccion, fecha
-		String insertar = String.format("INSERT INTO Pedido VALUES ( %d, %s, %f, %s, " + fecha + ") ", pedido.getId(), clienteID, precioTotal, "direccionBase");
+		String insertar = String.format("INSERT INTO Pedido VALUES ( %s, %s, %f, %s, " + fecha + ") ", pedido.getId(), pedido.getIdUsuario(), precioTotal, "direccionBase");
 		instance.executeQuery(insertar);
 		
 		//idProducto, idPedido, cantidad
-		
-		StringBuilder builder = new StringBuilder();
-		
+
 		HashMap<String, UnidadProducto> agrupacion = pedido.getAgrupacion();
+		Statement statement = instance.returnStatement();
 		
 		for(Producto producto : pedido.getProductos()){
-				builder.append(String.format(" INSERT INTO ProductosPedido VALUES (%s, %s, %d) ", producto.getId(), pedido.getId(), agrupacion.get(producto.getId()).getCantidad()) + "\n");
+				String sql = "INSERT INTO ProductosPedido VALUES (" + producto.getId() + ", " + pedido.getId() + ", " + agrupacion.get(producto.getId()).getCantidad() + ")"; 
+				statement.addBatch(sql);
+				//builder.append(" INSERT INTO ProductosPedido VALUES (" + producto.getId() + ", " + pedido.getId() + ", " + agrupacion.get(producto.getId()).getCantidad() + "); \n");
 		}
+		
+		statement.executeBatch();
 		
 		
 	}
@@ -98,15 +101,15 @@ public class ConsultasMyShop {
 				+ " FROM Pedido "
 				+ " ORDER BY idPedido DESC) "
 						+ "WHERE rownum = 1 ";
-		//Podríamos estar frente a nuestro primer pedido, así que el resultset devolvería un SELECT vacío
-		//Para evitar eso, pregunto si el cursor del SELECT está detras de la primera fila (como una forma de -1 o 0)
+		//Podrï¿½amos estar frente a nuestro primer pedido, asï¿½ que el resultset devolverï¿½a un SELECT vacï¿½o
+		//Para evitar eso, pregunto si el cursor del SELECT estï¿½ detras de la primera fila (como una forma de -1 o 0)
 		ResultSet id = instance.executeQuery(consulta) ;
 		return id.isBeforeFirst() ? "0" : id.getString(1);
 	}
 	
 	public static String getSiguienteIDPedido() throws SQLException{
 		String id;
-		if(ultimaIDPedido != null)
+		if(ultimaIDPedido == null)
 			id = ultimaID();
 		else
 			id = ultimaIDPedido;

@@ -1,39 +1,41 @@
 package gui;
 
-import java.awt.EventQueue;
-
-import javax.swing.JDialog;
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 
 import database.ConsultasMyShop;
 import database.GeneradorIDUsuario;
 import logica.Pedido;
 import logica.Producto;
-
-import java.awt.Color;
-import javax.swing.JButton;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.util.Calendar;
-
-import javax.swing.border.BevelBorder;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import javax.swing.BoxLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import logica.UnidadProducto;
+import javax.swing.JScrollPane;
 
 public class DialogoPedido extends JDialog {
 	
 	private Pedido pedido;
 	private ResourceManager manager;
+	private List<Producto> productos;
 	
 	private JPanel pnDialogo;
 	private JPanel panel_1;
@@ -48,19 +50,25 @@ public class DialogoPedido extends JDialog {
 	private JLabel lblApellidos;
 	private JTextField txApellidos;
 	private JTextArea txtResumen;
+	private JScrollPane scResumenText;
 
 	
 	private String escribirResumen(){
+		double precio = 0;
+		HashMap<String, UnidadProducto> agrupacion = Pedido.convertirAgrupacion(productos);
+		
 		StringBuilder str = new StringBuilder(manager.cambiarFechaAZona(Calendar.getInstance().getTime()));
 		str.append("\n");
 		str.append("---------------------------");
 		str.append("\n");
 		str.append(manager.getString("pedido") + ": ");
 		str.append("\n");
-		for(Producto producto : pedido.getProductos())
-			str.append("\t" + producto.getNombre() + " - " + producto.getPrecio() + " - " + manager.getString("unidades") + ": " + pedido.getCantidad(producto.getId()) + "\n");
+		for(Producto producto : productos){
+			precio+= producto.getPrecio();
+			str.append("\t" + producto.getNombre() + " - " + producto.getPrecio() + " - " + manager.getString("unidades") + ": " + agrupacion.get(producto.getId()).getCantidad() + "\n");
+		}
 		str.append("\n");
-		str.append(manager.getString("precioTotal") + ": " + pedido.getPrecio());
+		str.append(manager.getString("precioTotal") + ": " + precio);
 		return str.toString();
 	}
 	
@@ -77,9 +85,9 @@ public class DialogoPedido extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DialogoPedido() {
+	public DialogoPedido(List<Producto> productos) {
 		manager = ResourceManager.getResourceManager();
-		localizar();
+		this.productos = productos;
 		
 		setModal(true);
 		setBounds(100, 100, 536, 394);
@@ -88,6 +96,8 @@ public class DialogoPedido extends JDialog {
 		
 		txtResumen.setText(escribirResumen());
 		txtResumen.setCaretPosition(0);
+		
+		localizar();
 
 	}
 	
@@ -139,10 +149,22 @@ public class DialogoPedido extends JDialog {
 						JOptionPane.showMessageDialog(null, manager.getString("camposVacios"), manager.getString("error"), JOptionPane.ERROR_MESSAGE);
 						return;
 					}else{
-//						String idUsuario = new GeneradorIDUsuario(txNombre.getText(), txApellidos.getText()).generarID();
-//						Pedido pedido = new Pedido(
-//								ConsultasMyShop.getSiguienteIDPedido(), idUsuario, Calendar.getInstance().getTime()
-//								, )
+						String idUsuario = new GeneradorIDUsuario(txNombre.getText(), txApellidos.getText()).generarID();
+						double precio = 0;
+						for(Producto producto : productos)
+							precio+=producto.getPrecio();
+						String idPedido = "idFalloBase";
+						try {
+							idPedido = ConsultasMyShop.getSiguienteIDPedido();
+							Pedido pedido = new Pedido(idPedido, idUsuario, Calendar.getInstance().getTime(),productos.size(),precio,"direccionPrueba", productos);
+							ConsultasMyShop.crearPedido(pedido);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						JOptionPane.showMessageDialog(null, "Pedido creado correctamente");
+						dispose();
+						
 					}
 				}
 			});
@@ -160,7 +182,7 @@ public class DialogoPedido extends JDialog {
 			pnResumen = new JPanel();
 			pnResumen.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			pnResumen.setLayout(new BoxLayout(pnResumen, BoxLayout.X_AXIS));
-			pnResumen.add(getTxtResumen());
+			pnResumen.add(getScResumenText());
 		}
 		return pnResumen;
 	}
@@ -170,19 +192,19 @@ public class DialogoPedido extends JDialog {
 			pnCampos.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			GridBagLayout gbl_pnCampos = new GridBagLayout();
 			gbl_pnCampos.columnWidths = new int[]{245, 10, 225, 0};
-			gbl_pnCampos.rowHeights = new int[]{10, 0, 0};
+			gbl_pnCampos.rowHeights = new int[]{10, 0, 0, 0, 0};
 			gbl_pnCampos.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-			gbl_pnCampos.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+			gbl_pnCampos.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 			pnCampos.setLayout(gbl_pnCampos);
 			GridBagConstraints gbc_pnNombre = new GridBagConstraints();
 			gbc_pnNombre.fill = GridBagConstraints.BOTH;
-			gbc_pnNombre.insets = new Insets(0, 0, 0, 5);
+			gbc_pnNombre.insets = new Insets(0, 0, 5, 5);
 			gbc_pnNombre.gridx = 0;
 			gbc_pnNombre.gridy = 1;
 			pnCampos.add(getPnNombre(), gbc_pnNombre);
 			GridBagConstraints gbc_pnApellidos = new GridBagConstraints();
+			gbc_pnApellidos.insets = new Insets(0, 0, 5, 0);
 			gbc_pnApellidos.gridwidth = 2;
-			gbc_pnApellidos.insets = new Insets(0, 0, 0, 5);
 			gbc_pnApellidos.fill = GridBagConstraints.BOTH;
 			gbc_pnApellidos.gridx = 1;
 			gbc_pnApellidos.gridy = 1;
@@ -239,7 +261,15 @@ public class DialogoPedido extends JDialog {
 	private JTextArea getTxtResumen() {
 		if (txtResumen == null) {
 			txtResumen = new JTextArea();
+			txtResumen.setEditable(false);
 		}
 		return txtResumen;
+	}
+	private JScrollPane getScResumenText() {
+		if (scResumenText == null) {
+			scResumenText = new JScrollPane();
+			scResumenText.setViewportView(getTxtResumen());
+		}
+		return scResumenText;
 	}
 }

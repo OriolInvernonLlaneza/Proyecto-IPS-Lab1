@@ -18,10 +18,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.border.TitledBorder;
- 
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import Util.ModeloNoEditableSpinner;
 import Util.SpinnerEditor;
 import Util.SpinnerRenderer;
@@ -82,7 +85,7 @@ public class MainWindow extends JFrame {
     	//Borders
     	manager.formatBorder(panelProductos, "producto");
     	manager.formatBorder(panelListaCarrito, "label_carrito");
-    	//Descripción:
+    	//Descripciï¿½n:
     	
     	//Botones
     	btnRemove.setToolTipText(manager.getString("btn_eliminarCarrito"));
@@ -109,12 +112,6 @@ public class MainWindow extends JFrame {
  
     private String getDescripcionProductos(int fila) {
         return productos.get(fila).getDescripcion();
-    }
- 
-    private void pedirProductosDatabase() {
-        ArrayList<Producto> p = new ArrayList<Producto>();
-        
-        productos = p;
     }
  
     private void rellenarTablaProductos() {
@@ -151,7 +148,6 @@ public class MainWindow extends JFrame {
  
         manager = ResourceManager.getResourceManager();
         localizar();
-        pedirProductosDatabase();
         rellenarTablaProductos();
     }
  
@@ -288,7 +284,10 @@ public class MainWindow extends JFrame {
             btnConfirmarPedido = new JButton();
             btnConfirmarPedido.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent arg0) {
-            		DialogoPedido dialogo = new DialogoPedido();
+            		List<Producto> carrito = new ArrayList<Producto>();
+            		for(Object object : carritoListaModelo.toArray())
+            			carrito.add((Producto)object);
+            		DialogoPedido dialogo = new DialogoPedido(carrito);
             		dialogo.setVisible(true);
             	}
             });

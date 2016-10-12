@@ -33,17 +33,11 @@ public class Pedido {
 		this.idUsuario = idUsuario;
 		
 		//Necesitamos una construcción que guarde los productos y sus cantidades, de momento dejaremos "productos" por aqu�, pero no creo que la necesitemos mucho más
-		agrupacion = new HashMap<String, UnidadProducto>();
+		agrupacion = convertirAgrupacion(productos);
 		
-		for(Producto producto : productos){
-			if(agrupacion.containsKey(producto.getId())){
-				agrupacion.get(producto.getId()).anadirProducto();
-			}
-			else{
-				agrupacion.put(producto.getId(), new UnidadProducto(producto, 1));
-			}	
-		}
-		
+	}
+	public String getIdUsuario() {
+		return idUsuario;
 	}
 	public HashMap<String, UnidadProducto> getAgrupacion() {
 		return agrupacion;
@@ -82,7 +76,19 @@ public class Pedido {
 		else return 0;
 	}
 	
-    
+    public static HashMap<String, UnidadProducto> convertirAgrupacion(List<Producto> productos){
+    	HashMap<String, UnidadProducto> agrupacion = new HashMap<String, UnidadProducto>();
+    	for(Producto producto : productos){
+			if(agrupacion.containsKey(producto.getId())){
+				agrupacion.get(producto.getId()).anadirProducto();
+			}
+			else{
+				agrupacion.put(producto.getId(), new UnidadProducto(producto, 1));
+			}	
+		}
+    	return agrupacion;
+    	
+    }
     
 
 }

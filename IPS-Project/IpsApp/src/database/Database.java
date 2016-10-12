@@ -49,4 +49,12 @@ public class Database {
     		prepared.setObject(i+1, strings[i]);
     	return prepared.executeQuery();
     }
+    
+    public PreparedStatement getPreparedStatement(String sql) throws SQLException{
+    	return conn.prepareStatement(sql);
+    }
+    
+    public Statement returnStatement() throws SQLException{
+    	return conn.createStatement();
+    }
 }
