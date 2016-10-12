@@ -116,6 +116,8 @@ public class VentanaAlmacenero extends JFrame {
 		}
 	}
 	
+	//Probando
+	
 	//M�todo para a�adir las filas correspondientes al producto elegido en la tabla de pedidos.
 	private void RellenarTablaOT(Pedido pedido){
 		Object[] nuevaFila = new Object[4];
