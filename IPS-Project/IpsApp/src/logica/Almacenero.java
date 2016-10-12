@@ -15,9 +15,16 @@ public class Almacenero {
 		boolean incidencia = prepararPaquete(ordenDeTrabajo);
 		if(!incidencia) {
 			ordenDeTrabajo.marcarParaEmpaquetar();
+			boolean coincidenProductosRecogidos = ordenDeTrabajo.comprobarProductosRecogidos();
+			if(coincidenProductosRecogidos) {
+				ordenDeTrabajo.empaquetar(); // Todo ha ido bien
+			}
+			else {
+				ordenDeTrabajo.anotarIncidencia(); // Incidencia: No coinciden los productos recogidos con los de la OT
+			}
 		}
 		else {
-			ordenDeTrabajo.anotarIncidencia();
+			ordenDeTrabajo.anotarIncidencia(); // Incidencia: Problema al intentar preparar el paquete
 		}
 	}
 	
@@ -27,7 +34,7 @@ public class Almacenero {
 	 * @return true si ha habido incidencia, false si todo ha ido bien
 	 */
 	public boolean prepararPaquete(OrdenDeTrabajo ordenDeTrabajo) {
-		
+		//Floyd, anotar los productos que recoge el almacenero
 		return false;
 	}
 	
