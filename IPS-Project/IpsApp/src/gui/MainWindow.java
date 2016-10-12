@@ -288,6 +288,8 @@ public class MainWindow extends JFrame {
             btnConfirmarPedido = new JButton();
             btnConfirmarPedido.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent arg0) {
+            		DialogoPedido dialogo = new DialogoPedido();
+            		dialogo.setVisible(true);
             	}
             });
             btnConfirmarPedido.setAlignmentX(Component.RIGHT_ALIGNMENT);

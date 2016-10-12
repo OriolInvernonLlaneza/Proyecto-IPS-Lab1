@@ -1,6 +1,6 @@
 package logica;
 
-public class Producto {
+public class Producto implements Comparable<Producto>{
 	
 	private String id;
 	private String nombre;
@@ -58,8 +58,9 @@ public class Producto {
 		return nombre;
 	}
 	
-	public boolean equals(Producto producto){
-		return producto.getId().toLowerCase().equals(this.getId().toLowerCase());
+	@Override
+	public int compareTo(Producto producto){
+		return producto.getId().toLowerCase().compareTo(this.getId().toLowerCase());
 	}
 	
 

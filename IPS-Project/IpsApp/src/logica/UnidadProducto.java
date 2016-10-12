@@ -1,6 +1,6 @@
 package logica;
 
-public class UnidadProducto {
+public class UnidadProducto implements Comparable<UnidadProducto>{
 	
 	private Producto producto;
 	private int cantidad;
@@ -25,6 +25,17 @@ public class UnidadProducto {
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
+
+	public void anadirProducto(){
+		this.cantidad += 1;
+	}
+	
+	@Override
+	public int compareTo(UnidadProducto arg0) {
+		return this.producto.compareTo(arg0.getProducto());
+	}
+	
+	
 	
 	
 

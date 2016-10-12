@@ -10,7 +10,8 @@ CREATE TABLE Usuario(
 	contraseña_usuario VARCHAR(30),
 	usuario_nombre VARCHAR(100),
 	usuario_apellidos VARCHAR(100),
-	PRIMARY KEY(idUsuario)
+	PRIMARY KEY(idUsuario),
+	UNIQUE (usuario_nombre, usuario_apellidos)
 );
 
 CREATE TABLE Almacenero(
@@ -18,7 +19,8 @@ CREATE TABLE Almacenero(
 	contraseña_almacenero VARCHAR(30),
 	almacenero_nombre VARCHAR(100),
 	almacenero_apellidos VARCHAR(100),
-	PRIMARY KEY (idAlmacenero)
+	PRIMARY KEY (idAlmacenero),
+	UNIQUE (almacenero_nombre, almacenero_apellidos)
 );
 
 CREATE TABLE Producto(
@@ -88,12 +90,26 @@ INSERT INTO Usuario VALUES ('us3', 'ps3', 'usuario1', 'apellido1');
 
 
 INSERT INTO Pedido VALUES ('01', 'us1', 50, 'dsadasdasdasdasdasdaads', SYSDATE);
-
 INSERT INTO Pedido VALUES ('02', 'us2', 50, 'dsadasdasdasdasdasdaads', SYSDATE);
-
 INSERT INTO Pedido VALUES ('03', 'us3', 50, 'dsadasdasdasdasdasdaads', SYSDATE);
-
 INSERT INTO Pedido VALUES ('04', 'us3', 50, 'dsadasdasdasdasdasdaads', SYSDATE);
+
+//idproducto, idpedido, cantidad
+INSERT INTO ProductoPedido VALUES ('prod01', '01', 2);
+INSERT INTO ProductoPedido VALUES ('prod02', '01', 2);
+INSERT INTO ProductoPedido VALUES ('prod03', '01', 2);
+
+INSERT INTO ProductoPedido VALUES ('prod01', '02', 2);
+INSERT INTO ProductoPedido VALUES ('prod02', '02', 7);
+INSERT INTO ProductoPedido VALUES ('prod03', '02', 2);
+
+INSERT INTO ProductoPedido VALUES ('prod01', '03', 2);
+INSERT INTO ProductoPedido VALUES ('prod02', '03', 1);
+INSERT INTO ProductoPedido VALUES ('prod12', '03', 7);
+
+INSERT INTO ProductoPedido VALUES ('prod01', '04', 2);
+INSERT INTO ProductoPedido VALUES ('prod06', '04', 2);
+INSERT INTO ProductoPedido VALUES ('prod11', '04', 2);
 
 
 GRANT ALL PRIVILEGES ON Producto TO UO244928;

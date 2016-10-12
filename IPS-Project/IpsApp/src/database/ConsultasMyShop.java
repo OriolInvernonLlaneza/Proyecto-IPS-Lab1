@@ -6,15 +6,18 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import logica.Pedido;
 import logica.Producto;
+import logica.UnidadProducto;
 
 public class ConsultasMyShop {
 	
 	private static Database instance = Database.getInstance();
 	private static String ultimaIDPedido;
+	
 	
 	/**
 	 * Obtiene los pedidos existentes en la base de datos
@@ -40,7 +43,7 @@ public class ConsultasMyShop {
 				cantidad=cantidad+rsProductos.getInt(3);
 			}
 			//idPedido, idUsuario, preciopedido, direccion, fecha
-			pedidos.add(new Pedido(rs.getString(1),rs.getDate(5),cantidad, rs.getDouble(3), rs.getString(4), productos));
+			pedidos.add(new Pedido(rs.getString(1), rs.getString(2),rs.getDate(5),cantidad, rs.getDouble(3), rs.getString(4), productos));
 		}
 		
 		return pedidos;
@@ -79,23 +82,39 @@ public class ConsultasMyShop {
 		//idProducto, idPedido, cantidad
 		
 		StringBuilder builder = new StringBuilder();
+		
+		HashMap<String, UnidadProducto> agrupacion = pedido.getAgrupacion();
+		
 		for(Producto producto : pedido.getProductos()){
-				//builder.append(String.format(" INSERT INTO ProductosPedido VALUES (%s, %s, %d) ", producto.getId(), pedido.getId(), ) + "\n");
+				builder.append(String.format(" INSERT INTO ProductosPedido VALUES (%s, %s, %d) ", producto.getId(), pedido.getId(), agrupacion.get(producto.getId()).getCantidad()) + "\n");
 		}
 		
 		
 	}
 	
-	public static String ultimaID() throws SQLException{
+	private static String ultimaID() throws SQLException{
 		String consulta = " SELECT idPedido FROM "
 				+ " (SELECT idPedido "
 				+ " FROM Pedido "
 				+ " ORDER BY idPedido DESC) "
-				+ " WHERE rownum = 1 ";
+						+ "WHERE rownum = 1 ";
 		//Podríamos estar frente a nuestro primer pedido, así que el resultset devolvería un SELECT vacío
 		//Para evitar eso, pregunto si el cursor del SELECT está detras de la primera fila (como una forma de -1 o 0)
 		ResultSet id = instance.executeQuery(consulta) ;
-		return id.isBeforeFirst() ? id.getString(1) : "00"; 
+		return id.isBeforeFirst() ? "0" : id.getString(1);
 	}
+	
+	public static String getSiguienteIDPedido() throws SQLException{
+		String id;
+		if(ultimaIDPedido != null)
+			id = ultimaID();
+		else
+			id = ultimaIDPedido;
+		
+		int intId = Integer.parseInt(id);
+		return String.valueOf(intId + 1);
+		
+	}
+	
 	
 }

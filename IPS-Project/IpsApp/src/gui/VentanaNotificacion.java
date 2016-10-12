@@ -26,18 +26,18 @@ public class VentanaNotificacion extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 
 	private void localizar(){
-		//Notificación
+		//Notificaciï¿½n
 	}
 
 	/**
 	 * Create the dialog.
 	 */
-	//Método para redactar el miniinforme del area de texto.
+	//Mï¿½todo para redactar el miniinforme del area de texto.
 	private String redactar(){
 		Date fecha = new Date();
 		StringBuilder sb= new StringBuilder();
 		sb.append(manager.getString("dia"));
-		sb.append(fecha);
+		sb.append(manager.cambiarFechaAZona(fecha));
 		sb.append("\n");
 		sb.append("------------------------------------------------------------------ \n");
 		if(productosEnFalta.size()==0){
