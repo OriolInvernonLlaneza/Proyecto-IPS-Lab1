@@ -105,7 +105,7 @@ public class VentanaAlmacenero extends JFrame {
 			RellenarTablaPedidos();
 		}
 	
-	//Mï¿½todo para aï¿½adir las filas correspondientes en la tabla de pedidos
+	//Metodo para  añadir las filas correspondientes en la tabla de pedidos
 	private void RellenarTablaPedidos(){
 		Object[] nuevaFila = new Object[3];
 		for(Pedido pedido : pedidos){
@@ -118,7 +118,7 @@ public class VentanaAlmacenero extends JFrame {
 	
 	//Probando
 	
-	//Mï¿½todo para aï¿½adir las filas correspondientes al producto elegido en la tabla de pedidos.
+	//Método para añadir las filas correspondientes al producto elegido en la tabla de pedidos.
 	private void RellenarTablaOT(Pedido pedido){
 		Object[] nuevaFila = new Object[4];
 		for(Producto producto : pedido.getProductos()){

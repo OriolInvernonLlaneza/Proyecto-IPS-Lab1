@@ -1,7 +1,7 @@
 DROP TABLE ProductoPedido;
 DROP TABLE Producto;
-DROP TABLE Almacenero;
 DROP TABLE OrdenTrabajo;
+DROP TABLE Almacenero;
 DROP TABLE Pedido;
 DROP TABLE Usuario;
 
@@ -57,7 +57,8 @@ CREATE TABLE OrdenTrabajo(
 	idAlmacenero VARCHAR(20),
 	idPedido VARCHAR(20),
 	estado VARCHAR(15) 
-	CHECK (estado IN ('Empaquetada', 'Asignada', 'Incidencia')),
+	CHECK (estado IN ('Empaquetada', 'Asignada', 'Incidencia', 'Marcada para empaquetar')),
+	PRIMARY KEY (idPedido)
 	FOREIGN KEY (idAlmacenero) REFERENCES almacenero,
 	FOREIGN KEY (idPedido) REFERENCES pedido
 );
