@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import logica.OrdenDeTrabajo;
 import logica.Pedido;
 import logica.Producto;
 import logica.UnidadProducto;
@@ -116,6 +117,12 @@ public class ConsultasMyShop {
 		
 		int intId = Integer.parseInt(id);
 		return String.valueOf(intId + 1);
+		
+	}
+	
+	public static void cambiarEstadoOrdenDeTrabajo(String nuevoEstado, String idPedido) throws SQLException {
+		String consulta = "UPDATE OrdenTrabajo set estado = ? where idAlmacenero = ? and idPedido = ?";
+		instance.executePreparedQuery(consulta, nuevoEstado, idPedido);
 		
 	}
 	

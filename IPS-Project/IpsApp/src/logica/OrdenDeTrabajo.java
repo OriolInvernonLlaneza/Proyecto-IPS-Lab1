@@ -1,7 +1,8 @@
 package logica;
-
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class OrdenDeTrabajo {
 	
@@ -9,25 +10,37 @@ public class OrdenDeTrabajo {
 	private Pedido pedido;
 	private String estado;
 	private List<UnidadProducto> productosRecogidos = new ArrayList<UnidadProducto>();
-	
-	public void marcarParaEmpaquetar() {
-		/* Se marca para empaquetar, lo cual no significa que se vaya a empaquetar, primero hay que comprobar
-		que los productos recogidos son los que había en la OT*/
+
+	public Almacenero getAlmacenero() {
+		return almacenero;
 	}
-	
-	public void anotarIncidencia() {
-		//Poner en la base de datos que ha habido una incidencia con esa OT
+
+	public void setAlmacenero(Almacenero almacenero) {
+		this.almacenero = almacenero;
 	}
-	
-	public boolean comprobarProductosRecogidos() {
-		// ¿Son los productos que recogió el almacenero los que había en la orden de trabajo?
-		return false;
+
+	public Pedido getPedido() {
+		return pedido;
 	}
-	
-	public void empaquetar() {
-		//Generar el paquete final con su etiqueta y albarán, y añadirlo a la base de datos
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
 	}
-	
-	
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public List<UnidadProducto> getProductosRecogidos() {
+		return productosRecogidos;
+	}
+
+	public void setProductosRecogidos(List<UnidadProducto> productosRecogidos) {
+		this.productosRecogidos = productosRecogidos;
+	}
 
 }
