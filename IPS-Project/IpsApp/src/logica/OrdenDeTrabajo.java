@@ -8,7 +8,7 @@ public class OrdenDeTrabajo {
 	private Almacenero almacenero;
 	private Pedido pedido;
 	private String estado;
-	private List<Producto> productosRecogidos = new ArrayList<Producto>();
+	private List<UnidadProducto> productosRecogidos = new ArrayList<UnidadProducto>();
 	
 	public void marcarParaEmpaquetar() {
 		/* Se marca para empaquetar, lo cual no significa que se vaya a empaquetar, primero hay que comprobar
