@@ -56,13 +56,21 @@ CREATE TABLE ProductoPedido(
 CREATE TABLE OrdenTrabajo(
 	idAlmacenero VARCHAR(20),
 	idPedido VARCHAR(20),
-	estado VARCHAR(15) 
+	estado VARCHAR(15),
 	CHECK (estado IN ('Empaquetada', 'Asignada', 'Incidencia', 'Marcada para empaquetar')),
-	PRIMARY KEY (idPedido)
+	PRIMARY KEY (idPedido),
 	FOREIGN KEY (idAlmacenero) REFERENCES almacenero,
 	FOREIGN KEY (idPedido) REFERENCES pedido
 );
 
+
+CREATE TABLE Paquete(
+	idPaquete VARCHAR(20),
+	idPedido VARCHAR(20),
+	fechaEnvoltura TIMESTAMP,
+	PRIMARY KEY (idPaquete),
+	FOREIGN KEY(idPedido) REFERENCES PEDIDO
+);
 
 INSERT INTO Almacenero VALUES ('alm01', 'cntrsAlmacenero01', 'Almacenero01', 'AlmaceneroApellido01');
 INSERT INTO Almacenero VALUES ('alm02', 'cntrsAlmacenero02', 'Almacenero02', 'AlmaceneroApellido02');
@@ -85,9 +93,9 @@ INSERT INTO Producto VALUES ('prod12',  'Tobias silla', 'It just works!', 50, 10
 
 INSERT INTO Usuario VALUES ('us1', 'ps1', 'usuario1', 'apellido1');
 
-INSERT INTO Usuario VALUES ('us2', 'ps2', 'usuario1', 'apellido1');
+INSERT INTO Usuario VALUES ('us2', 'ps2', 'usuario2', 'apellido2');
 
-INSERT INTO Usuario VALUES ('us3', 'ps3', 'usuario1', 'apellido1');
+INSERT INTO Usuario VALUES ('us3', 'ps3', 'usuario3', 'apellido3');
 
 
 INSERT INTO Pedido VALUES ('01', 'us1', 50, 'dsadasdasdasdasdasdaads', SYSDATE);
@@ -133,3 +141,5 @@ GRANT ALL PRIVILEGES ON Ordentrabajo TO UO245303;
 GRANT ALL PRIVILEGES ON Pedido TO UO245303;
 GRANT ALL PRIVILEGES ON ProductoPedido TO UO245303;
 GRANT ALL PRIVILEGES ON Usuario TO UO245303;
+
+COMMIT;

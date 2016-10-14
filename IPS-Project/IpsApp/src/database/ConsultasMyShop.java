@@ -29,22 +29,24 @@ public class ConsultasMyShop {
 	 */
 	public static List<Pedido> getPedidos() throws SQLException{
 		List<Pedido> pedidos= new ArrayList<Pedido>();
-		List<Producto> productos= new ArrayList<Producto>();
-		int cantidad = 0;
 		ResultSet rs= instance.executeQuery("SELECT * FROM Pedido ORDER BY Fecha ");
 		while(rs.next()){
+			List<Producto> productos= new ArrayList<Producto>();
+			int cantidad = 0;
+			//idPedido, idUsuario, preciopedido, direccion, fecha
+			
 			String consulta=" SELECT DISTINCT * "+
 						" FROM ProductoPedido, Producto "+
 						" WHERE ProductoPedido.idproducto = Producto.idproducto "+
 						" AND ProductoPedido.idpedido = ? ";
-			ResultSet rsProductos = Database.getInstance().executePreparedQuery(consulta, rs.getString(1).trim());
+			ResultSet rsProductos = Database.getInstance().executePreparedQuery(consulta, rs.getString(1));
 			while(rsProductos.next()){
 				// idProducto, idPedido, cantidad -- idProducto, producto_nombre, descripcion_producto, stock, precio
 				productos.add(new Producto(rsProductos.getString(1),rsProductos.getString(5), rsProductos.getString(6), rsProductos.getDouble(7),rsProductos.getDouble(8),"A3"));
 				cantidad=cantidad+rsProductos.getInt(3);
 			}
 			//idPedido, idUsuario, preciopedido, direccion, fecha
-			pedidos.add(new Pedido(rs.getString(1), rs.getString(2),rs.getDate(5),cantidad, rs.getDouble(3), rs.getString(4), productos));
+			pedidos.add(new Pedido(rs.getString(1), rs.getString(2), rs.getDate(5),cantidad, rs.getDouble(3), rs.getString(4), productos));
 		}
 		
 		return pedidos;
@@ -71,6 +73,16 @@ public class ConsultasMyShop {
 	}
 	
 	public static void crearPedido(Pedido pedido) throws SQLException{
+		/*
+		 * JORGE SOLUCIONA ESTO
+		 * JORGE SOLUCIONA ESTO
+		 * JORGE SOLUCIONA ESTO
+		 * JORGE SOLUCIONA ESTO
+		 * JORGE SOLUCIONA ESTO
+		 * JORGE SOLUCIONA ESTO
+		 *
+		 * 
+		 * */
 		double precioTotal = 0;
 		for(Producto producto : pedido.getProductos())
 			precioTotal += producto.getPrecio();
