@@ -14,7 +14,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
+
+import Util.CambiarCodigo;
 import Util.ModeloCheckBox;
+import Util.ModeloEditableUnaCelda;
 import Util.ModeloNoEditable;
 import database.ConsultasMyShop;
 import logica.Pedido;
@@ -44,7 +47,7 @@ public class VentanaAlmacenero extends JFrame {
 	private JTable tPedidos;
 	
 	private ModeloNoEditable modeloTPedidos;
-	private ModeloCheckBox modeloTOT;
+	private ModeloEditableUnaCelda modeloTOT;
 	
 	private Pedido pedidoElegido;
 	
@@ -335,8 +338,11 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JTable getTOT() {
 		if (tOT == null) {
-			modeloTOT= new ModeloCheckBox(new String[5], 0);
+			modeloTOT= new ModeloEditableUnaCelda(new String[5], 0,4);
 			tOT = new JTable(modeloTOT);
+			List<String> codigos = new ArrayList<String>();
+			//Cambiar aqui para que procese los codigos buenos.
+			tOT.getModel().addTableModelListener(new CambiarCodigo(codigos,modeloTOT)); 
 			tOT.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
