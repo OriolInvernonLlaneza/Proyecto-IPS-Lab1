@@ -332,14 +332,12 @@ public class MainWindow extends JFrame {
             String[] nombreColumnas = { "", "", ""};
             modeloTProductos = new ModeloNoEditableSpinner(nombreColumnas, 0);
  
-            tableProductos = new JTable();
             tableProductos = new JTable(modeloTProductos);
  
             tableProductos.getColumnModel().getColumn(SPINNER_COLUMN).setCellRenderer(new SpinnerRenderer());
             tableProductos.getColumnModel().getColumn(SPINNER_COLUMN).setCellEditor(new SpinnerEditor());
  
             tableProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-           
            
             tableProductos.addMouseListener(new MouseAdapter() {
                 @Override
@@ -381,6 +379,9 @@ public class MainWindow extends JFrame {
 		if (taDescripcion == null) {
 			taDescripcion = new JTextPane();
 			taDescripcion.setEditable(false);
+			Border border = BorderFactory.createLineBorder(Color.BLACK);
+			border = BorderFactory.createTitledBorder(border, "Descripción:");
+			taDescripcion.setBorder(border);
 		}
 		return taDescripcion;
 	}
