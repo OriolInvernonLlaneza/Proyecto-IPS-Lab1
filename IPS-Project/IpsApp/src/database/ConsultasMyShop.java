@@ -134,6 +134,12 @@ public class ConsultasMyShop {
 		
 	}
 	
+	public static void crearUnaOrdenDeTrabajo(String idAlmacenero, String idPedido) throws SQLException{
+		String consulta = "INSERT INTO OrdenTrabajo VALUES (?,? , Procesando)";
+		instance.executePreparedQuery(idAlmacenero, idPedido);
+		
+	}
+	
 	public static void cambiarEstadoOrdenDeTrabajo(String nuevoEstado, String idPedido) throws SQLException {
 		String consulta = "UPDATE OrdenTrabajo set estado = ? where idAlmacenero = ? and idPedido = ?";
 		instance.executePreparedQuery(consulta, nuevoEstado, idPedido);

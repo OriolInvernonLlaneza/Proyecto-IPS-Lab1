@@ -1,9 +1,17 @@
 package Util;
 
+
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
-public class ModeloEditableUnaCelda extends DefaultTableModel {
 
+public class ModeloEditableUnaCelda extends DefaultTableModel{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	int celda;
 	@Override
 	public boolean isCellEditable(int row, int col) {
@@ -14,4 +22,8 @@ public class ModeloEditableUnaCelda extends DefaultTableModel {
 		super(columnNames, rowCount);
 		this.celda=celda;
 	}
+
+
 }
+
+
