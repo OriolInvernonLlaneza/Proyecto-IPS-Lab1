@@ -29,24 +29,26 @@ public class ConsultasMyShop {
 	 */
 	public static List<Pedido> getPedidos() throws SQLException{
 		List<Pedido> pedidos= new ArrayList<Pedido>();
-		ResultSet rs= instance.executeQuery("SELECT * FROM Pedido ORDER BY Fecha ");
+		ResultSet rs= instance.executeQuery("SELECT pedido.idpedido,pedido.idusuario,fecha,sum(cantidad),precio_pedido,direccion"+
+												" FROM pedido, productoPedido " +
+												" WHERE pedido.idpedido= productoPedido.idpedido "
+												+" GROUP BY pedido.idpedido,pedido.idusuario,fecha,precio_pedido,direccion "+
+												" ORDER BY fecha ");
 		while(rs.next()){
 			List<Producto> productos= new ArrayList<Producto>();
-			int cantidad = 0;
 			//idPedido, idUsuario, preciopedido, direccion, fecha
 			
-			String consulta=" SELECT DISTINCT * "+
-						" FROM ProductoPedido, Producto "+
-						" WHERE ProductoPedido.idproducto = Producto.idproducto "+
-						" AND ProductoPedido.idpedido = ? ";
+			String consulta=" SELECT DISTINCT producto.idproducto,producto.producto_nombre, producto.descripcion_producto,producto.stock, producto.precio "+
+						" FROM ProductoPedido, Producto "+ 
+						 " WHERE ProductoPedido.idproducto = Producto.idproducto "+ 
+						 " AND ProductoPedido.idpedido =  ?";
 			ResultSet rsProductos = Database.getInstance().executePreparedQuery(consulta, rs.getString(1));
 			while(rsProductos.next()){
 				// idProducto, idPedido, cantidad -- idProducto, producto_nombre, descripcion_producto, stock, precio
-				productos.add(new Producto(rsProductos.getString(1),rsProductos.getString(5), rsProductos.getString(6), rsProductos.getDouble(7),rsProductos.getDouble(8),"A3"));
-				cantidad=cantidad+rsProductos.getInt(3);
+				productos.add(new Producto(rsProductos.getString(1),rsProductos.getString(2), rsProductos.getString(3), rsProductos.getDouble(4),rsProductos.getDouble(5),"A3"));
 			}
 			//idPedido, idUsuario, preciopedido, direccion, fecha
-			pedidos.add(new Pedido(rs.getString(1), rs.getString(2), rs.getDate(5),cantidad, rs.getDouble(3), rs.getString(4), productos));
+			pedidos.add(new Pedido(rs.getString(1), rs.getString(2), rs.getDate(3),rs.getInt(4), rs.getDouble(5), rs.getString(6), productos));
 		}
 		
 		return pedidos;

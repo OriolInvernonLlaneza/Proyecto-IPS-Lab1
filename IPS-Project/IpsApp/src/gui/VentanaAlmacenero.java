@@ -120,11 +120,12 @@ public class VentanaAlmacenero extends JFrame {
 	
 	//Método para añadir las filas correspondientes al producto elegido en la tabla de pedidos.
 	private void RellenarTablaOT(Pedido pedido){
-		Object[] nuevaFila = new Object[4];
+		Object[] nuevaFila = new Object[5];
 		for(Producto producto : pedido.getProductos()){
 			nuevaFila[0] = producto.getId();
 			nuevaFila[1] = producto.getNombre();
 			nuevaFila[2] = producto.getLocalizacion();
+			//nuevaFila[3] = producto.g
 			nuevaFila[3] = false;
 			modeloTOT.addRow(nuevaFila);
 		}
@@ -145,7 +146,7 @@ public class VentanaAlmacenero extends JFrame {
 		
 		//Tabla
 		modeloTPedidos.setColumnIdentifiers(new String[] {manager.getString("pedidoid"), manager.getString("fecha"), manager.getString("tamano")});
-		modeloTOT.setColumnIdentifiers(new String[] {manager.getString("pedidoid"), manager.getString("nombre"), manager.getString("localizacion"), manager.getString("encontrado")});
+		modeloTOT.setColumnIdentifiers(new String[] {manager.getString("productoid"), manager.getString("nombre"), manager.getString("localizacion"), manager.getString("cantidad"), manager.getString("encontrado")});
 		
 	}
 
@@ -334,7 +335,7 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JTable getTOT() {
 		if (tOT == null) {
-			modeloTOT= new ModeloCheckBox(new String[4], 0);
+			modeloTOT= new ModeloCheckBox(new String[5], 0);
 			tOT = new JTable(modeloTOT);
 			tOT.addMouseListener(new MouseAdapter() {
 				@Override
