@@ -28,14 +28,15 @@ import database.ConsultasMyShop;
 import database.GeneradorIDUsuario;
 import logica.Pedido;
 import logica.Producto;
-import logica.UnidadProducto;
+import logica.GrupoProducto;
 import javax.swing.JScrollPane;
 
 public class DialogoPedido extends JDialog {
 	
 	private Pedido pedido;
 	private ResourceManager manager;
-	private List<Producto> productos;
+	private List<GrupoProducto> productos;
+	private HashMap<String, GrupoProducto> agrupacion;
 	
 	private JPanel pnDialogo;
 	private JPanel panel_1;
@@ -55,7 +56,6 @@ public class DialogoPedido extends JDialog {
 	
 	private String escribirResumen(){
 		double precio = 0;
-		HashMap<String, UnidadProducto> agrupacion = Pedido.convertirAgrupacion(productos);
 		
 		StringBuilder str = new StringBuilder(manager.cambiarFechaAZona(Calendar.getInstance().getTime()));
 		str.append("\n");
@@ -63,9 +63,10 @@ public class DialogoPedido extends JDialog {
 		str.append("\n");
 		str.append(manager.getString("pedido") + ": ");
 		str.append("\n");
-		for(Producto producto : productos){
+		for(GrupoProducto unidad : pedido.getAgrupacion().values()){
+			Producto producto = unidad.getProducto();
 			precio+= producto.getPrecio();
-			str.append("\t" + producto.getNombre() + " - " + producto.getPrecio() + " - " + manager.getString("unidades") + ": " + agrupacion.get(producto.getId()).getCantidad() + "\n");
+			str.append("\t" + producto.getNombre() + " - " + producto.getPrecio() + " - " + manager.getString("unidades") + ": " + unidad.getCantidad() + "\n");
 		}
 		str.append("\n");
 		str.append(manager.getString("precioTotal") + ": " + precio);
@@ -85,7 +86,7 @@ public class DialogoPedido extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DialogoPedido(List<Producto> productos) {
+	public DialogoPedido(List<GrupoProducto> productos) {
 		manager = ResourceManager.getResourceManager();
 		this.productos = productos;
 		
@@ -145,14 +146,17 @@ public class DialogoPedido extends JDialog {
 			btnAceptar = new JButton();
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					if(txApellidos.getText() == "" && txNombre.getText() == ""){
+					if(txApellidos.getText() == "" && txApellidos.getText().length() >=3 && txNombre.getText().length() >=3 && txNombre.getText() == ""){
 						JOptionPane.showMessageDialog(null, manager.getString("camposVacios"), manager.getString("error"), JOptionPane.ERROR_MESSAGE);
 						return;
 					}else{
 						String idUsuario = new GeneradorIDUsuario(txNombre.getText(), txApellidos.getText()).generarID();
 						double precio = 0;
-						for(Producto producto : productos)
-							precio+=producto.getPrecio();
+						int cantidad = 0;
+						for(GrupoProducto producto : productos){
+							precio+=producto.getProducto().getPrecio();
+							cantidad += producto.getCantidad();
+						}
 						String idPedido = "idFalloBase";
 						try {
 							idPedido = ConsultasMyShop.getSiguienteIDPedido();

@@ -27,7 +27,8 @@ import Util.SpinnerEditor;
 import Util.SpinnerRenderer;
 import database.ConsultasMyShop;
 import logica.Producto;
- 
+import logica.GrupoProducto;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.awt.Component;
@@ -44,8 +45,10 @@ public class MainWindow extends JFrame {
      */
     private ResourceManager manager;
  
-    private DefaultListModel carritoListaModelo = new DefaultListModel<>();
+    private DefaultListModel<GrupoProducto> carritoListaModelo = new DefaultListModel<GrupoProducto>();
     private List<Producto> productos;
+    
+    private final int SPINNER_COLUMN = 2;
  
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
@@ -213,7 +216,19 @@ public class MainWindow extends JFrame {
                 public void actionPerformed(ActionEvent arg0) {
                     int fila = tableProductos.getSelectedRow();
                     if (fila != -1) {
-                        carritoListaModelo.addElement(modeloTProductos.getValueAt(fila, 0));
+                    	Producto producto = (Producto)modeloTProductos.getValueAt(fila, 0);
+                    	int cantidad = (int) modeloTProductos.getValueAt(fila, SPINNER_COLUMN);
+                    	GrupoProducto unidad = new GrupoProducto(producto, cantidad);
+                    	if(carritoListaModelo.contains(unidad)){
+                    		for(Object objeto : carritoListaModelo.toArray()){
+                    			GrupoProducto encontrado = (GrupoProducto) objeto;
+                    			if(encontrado.equals(unidad))
+                    				encontrado.setCantidad(encontrado.getCantidad() + unidad.getCantidad());
+                    		}
+                    	}
+                    	else
+                    		carritoListaModelo.addElement(unidad);
+                    	listCarrito.repaint();
                     }
                 }
             });
@@ -226,8 +241,15 @@ public class MainWindow extends JFrame {
             btnRemove = new JButton("-");
             btnRemove.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent arg0) {
-            		if(!listCarrito.isSelectionEmpty())
-            			carritoListaModelo.remove(listCarrito.getSelectedIndex());
+            		if(!listCarrito.isSelectionEmpty()){
+            			GrupoProducto unidad = (GrupoProducto) listCarrito.getSelectedValue();
+            			if(unidad.getCantidad() > 1){
+            				unidad.quitarProducto();
+            				listCarrito.repaint();
+            			}
+            			else
+            				carritoListaModelo.remove(listCarrito.getSelectedIndex());
+            		}
             	}
             });
             btnRemove.setMnemonic('-');

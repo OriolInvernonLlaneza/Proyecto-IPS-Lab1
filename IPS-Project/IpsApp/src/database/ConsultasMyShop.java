@@ -14,7 +14,7 @@ import java.util.List;
 import logica.OrdenDeTrabajo;
 import logica.Pedido;
 import logica.Producto;
-import logica.UnidadProducto;
+import logica.GrupoProducto;
 
 public class ConsultasMyShop {
 	
@@ -35,7 +35,7 @@ public class ConsultasMyShop {
 												+" GROUP BY pedido.idpedido,pedido.idusuario,fecha,precio_pedido,direccion "+
 												" ORDER BY fecha ");
 		while(rs.next()){
-			List<Producto> productos= new ArrayList<Producto>();
+			List<GrupoProducto> productos= new ArrayList<GrupoProducto>();
 			//idPedido, idUsuario, preciopedido, direccion, fecha
 			
 			String consulta=" SELECT DISTINCT producto.idproducto,producto.producto_nombre, producto.descripcion_producto,producto.stock, producto.precio "+
@@ -45,7 +45,9 @@ public class ConsultasMyShop {
 			ResultSet rsProductos = Database.getInstance().executePreparedQuery(consulta, rs.getString(1));
 			while(rsProductos.next()){
 				// idProducto, idPedido, cantidad -- idProducto, producto_nombre, descripcion_producto, stock, precio
-				productos.add(new Producto(rsProductos.getString(1),rsProductos.getString(2), rsProductos.getString(3), rsProductos.getDouble(4),rsProductos.getDouble(5),"A3"));
+				Producto producto = new Producto(rsProductos.getString(1),rsProductos.getString(2), rsProductos.getString(3), rsProductos.getDouble(4),rsProductos.getDouble(5),"A3");
+				GrupoProducto grupo = new GrupoProducto(producto, rsProductos.getInt(3));
+				productos.add(grupo);
 			}
 			//idPedido, idUsuario, preciopedido, direccion, fecha
 			pedidos.add(new Pedido(rs.getString(1), rs.getString(2), rs.getDate(3),rs.getInt(4), rs.getDouble(5), rs.getString(6), productos));
@@ -75,19 +77,7 @@ public class ConsultasMyShop {
 	}
 	
 	public static void crearPedido(Pedido pedido) throws SQLException{
-		/*
-		 * JORGE SOLUCIONA ESTO
-		 * JORGE SOLUCIONA ESTO
-		 * JORGE SOLUCIONA ESTO
-		 * JORGE SOLUCIONA ESTO
-		 * JORGE SOLUCIONA ESTO
-		 * JORGE SOLUCIONA ESTO
-		 *
-		 * 
-		 * */
-		double precioTotal = 0;
-		for(Producto producto : pedido.getProductos())
-			precioTotal += producto.getPrecio();
+		double precioTotal = pedido.getPrecio();
 		Date fecha = Calendar.getInstance().getTime();
 		
 		//pedido, usuario, precio, direccion, fecha
@@ -96,13 +86,12 @@ public class ConsultasMyShop {
 		
 		//idProducto, idPedido, cantidad
 
-		HashMap<String, UnidadProducto> agrupacion = pedido.getAgrupacion();
+		HashMap<String, GrupoProducto> agrupacion = pedido.getAgrupacion();
 		Statement statement = instance.returnStatement();
 		
-		for(Producto producto : pedido.getProductos()){
-				String sql = "INSERT INTO ProductosPedido VALUES (" + producto.getId() + ", " + pedido.getId() + ", " + agrupacion.get(producto.getId()).getCantidad() + ")"; 
+		for(GrupoProducto producto : pedido.getAgrupacion().values()){
+				String sql = "INSERT INTO ProductosPedido VALUES (" + producto.getID() + ", " + pedido.getId() + ", " + producto.getCantidad() + ")"; 
 				statement.addBatch(sql);
-				//builder.append(" INSERT INTO ProductosPedido VALUES (" + producto.getId() + ", " + pedido.getId() + ", " + agrupacion.get(producto.getId()).getCantidad() + "); \n");
 		}
 		
 		statement.executeBatch();

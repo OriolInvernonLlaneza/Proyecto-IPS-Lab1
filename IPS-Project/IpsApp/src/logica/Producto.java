@@ -63,5 +63,10 @@ public class Producto implements Comparable<Producto>{
 		return producto.getId().toLowerCase().compareTo(this.getId().toLowerCase());
 	}
 	
+	public boolean equals(Producto producto){
+		return this.id.toLowerCase().equals(producto.getId().toLowerCase());
+	}
+	
+	
 
 }
