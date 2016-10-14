@@ -23,8 +23,6 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.border.TitledBorder;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import Util.ModeloNoEditableSpinner;
 import Util.SpinnerEditor;
 import Util.SpinnerRenderer;
