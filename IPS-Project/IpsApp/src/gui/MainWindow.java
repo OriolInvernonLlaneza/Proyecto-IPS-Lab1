@@ -18,12 +18,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.border.TitledBorder;
-
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import Util.ModeloNoEditableSpinner;
 import Util.SpinnerEditor;
@@ -34,13 +31,8 @@ import logica.Producto;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.awt.Component;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
 import javax.swing.JTextPane;
  
 public class MainWindow extends JFrame {
@@ -102,7 +94,7 @@ public class MainWindow extends JFrame {
         btnCancelarPedido.setMnemonic(manager.getChar("mnm_cancelar"));
         btnConfirmarPedido.setMnemonic(manager.getChar("mnm_confirmar"));
         
-        modeloTProductos.setColumnIdentifiers(new String[] {manager.getString("nombre"), manager.getString("precio"), manager.getString("cantidad")});
+        //modeloTProductos.setColumnIdentifiers(new String[] {manager.getString("nombre"), manager.getString("precio"), manager.getString("cantidad")});
         
         //Labels
         lblPrecioTotal.setDisplayedMnemonic(manager.getChar("mnm_precio"));
@@ -136,6 +128,7 @@ public class MainWindow extends JFrame {
      * Create the frame.
      */
     public MainWindow() {
+    	manager = ResourceManager.getResourceManager();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 726, 571);
         contentPane = new JPanel();
@@ -146,7 +139,7 @@ public class MainWindow extends JFrame {
         contentPane.add(getPanelCarrito(), BorderLayout.EAST);
         contentPane.add(getPanelBotonesPedido(), BorderLayout.SOUTH);
  
-        manager = ResourceManager.getResourceManager();
+        
         localizar();
         rellenarTablaProductos();
     }
@@ -329,7 +322,7 @@ public class MainWindow extends JFrame {
     private JTable getTableProductos() {
         if (tableProductos == null) {
             final int SPINNER_COLUMN = 2;
-            String[] nombreColumnas = { "", "", ""};
+            String[] nombreColumnas = {manager.getString("nombre"), manager.getString("precio"), manager.getString("cantidad")};
             modeloTProductos = new ModeloNoEditableSpinner(nombreColumnas, 0);
  
             tableProductos = new JTable(modeloTProductos);
