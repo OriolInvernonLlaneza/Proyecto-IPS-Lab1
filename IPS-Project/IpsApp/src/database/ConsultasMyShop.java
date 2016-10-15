@@ -38,14 +38,14 @@ public class ConsultasMyShop {
 			List<GrupoProducto> productos= new ArrayList<GrupoProducto>();
 			//idPedido, idUsuario, preciopedido, direccion, fecha
 			
-			String consulta=" SELECT DISTINCT producto.idproducto,producto.producto_nombre, producto.descripcion_producto,producto.stock, producto.precio "+
+			String consulta=" SELECT DISTINCT producto.idproducto, producto.producto_nombre, producto.descripcion_producto, producto.codigo_barras, producto.stock, producto.precio,  "+
 						" FROM ProductoPedido, Producto "+ 
 						 " WHERE ProductoPedido.idproducto = Producto.idproducto "+ 
 						 " AND ProductoPedido.idpedido =  ?";
 			ResultSet rsProductos = Database.getInstance().executePreparedQuery(consulta, rs.getString(1));
 			while(rsProductos.next()){
 				// idProducto, idPedido, cantidad -- idProducto, producto_nombre, descripcion_producto, stock, precio
-				Producto producto = new Producto(rsProductos.getString(1),rsProductos.getString(2), rsProductos.getString(3), rsProductos.getDouble(4),rsProductos.getDouble(5),"A3");
+				Producto producto = new Producto(rsProductos.getString(1),rsProductos.getString(2), rsProductos.getString(3), rsProductos.getDouble(5),rsProductos.getDouble(6),"A3", rsProductos.getString(4));
 				GrupoProducto grupo = new GrupoProducto(producto, rsProductos.getInt(3));
 				productos.add(grupo);
 			}
@@ -69,8 +69,8 @@ public class ConsultasMyShop {
 		ResultSet set = instance.executeQuery(consulta);
 		
 		while (set.next()){
-			//idProducto, producto_nombre, descripcion_producto, stock, precio
-			productos.add(new Producto(set.getString(1), set.getString(2), set.getString(3), set.getDouble(4), set.getDouble(5), "A3"));
+			//idProducto, producto_nombre, descripcion_producto, codigo_barras, stock, precio, 
+			productos.add(new Producto(set.getString(1), set.getString(2), set.getString(3), set.getDouble(5), set.getDouble(6), "A3", set.getString(4)));
 		}
 		return productos;
 		

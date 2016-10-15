@@ -299,9 +299,9 @@ public class MainWindow extends JFrame {
             btnConfirmarPedido = new JButton();
             btnConfirmarPedido.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent arg0) {
-            		List<Producto> carrito = new ArrayList<Producto>();
+            		List<GrupoProducto> carrito = new ArrayList<GrupoProducto>();
             		for(Object object : carritoListaModelo.toArray())
-            			carrito.add((Producto)object);
+            			carrito.add((GrupoProducto)object);
             		DialogoPedido dialogo = new DialogoPedido(carrito);
             		dialogo.setVisible(true);
             	}

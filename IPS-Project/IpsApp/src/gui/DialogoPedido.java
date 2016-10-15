@@ -63,7 +63,7 @@ public class DialogoPedido extends JDialog {
 		str.append("\n");
 		str.append(manager.getString("pedido") + ": ");
 		str.append("\n");
-		for(GrupoProducto unidad : pedido.getAgrupacion().values()){
+		for(GrupoProducto unidad : productos){
 			Producto producto = unidad.getProducto();
 			precio+= producto.getPrecio();
 			str.append("\t" + producto.getNombre() + " - " + producto.getPrecio() + " - " + manager.getString("unidades") + ": " + unidad.getCantidad() + "\n");

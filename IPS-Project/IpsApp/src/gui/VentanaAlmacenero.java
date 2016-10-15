@@ -20,6 +20,7 @@ import Util.ModeloCheckBox;
 import Util.ModeloEditableUnaCelda;
 import Util.ModeloNoEditable;
 import database.ConsultasMyShop;
+import logica.GrupoProducto;
 import logica.Pedido;
 import logica.Producto;
 
@@ -74,13 +75,25 @@ public class VentanaAlmacenero extends JFrame {
 		productos1=new ArrayList<Producto>();
 		productos2=new ArrayList<Producto>();
 		
-		productos1.add(new Producto("25", "Girasol","asa",5.90, 200, "A2"));
-		productos2.add(new Producto("25", "Mandarina","asa", 0.10, 200, "B3"));
-		productos2.add(new Producto("18", "Teclado","asa", 49.99, 200, "A3"));
+		Producto prod1 = new Producto("25", "Girasol","asa",5.90, 200, "A2", "cod1");
+		Producto prod2 = new Producto("25", "Mandarina","asa", 0.10, 200, "B3", "cod2");
+		Producto prod3 = new Producto("18", "Teclado","asa", 49.99, 200, "A3", "cod3");
+		
+		Producto prod4 = new Producto("233", "Teclado3","asa1", 49.99, 200, "A3", "cod5");
+		Producto prod5 = new Producto("233", "Teclado2","asa1", 49.99, 200, "A3", "cod4");
+		
+		List<GrupoProducto> grupo = new ArrayList<GrupoProducto>();
+		grupo.add(new GrupoProducto(prod1, 1));
+		grupo.add(new GrupoProducto(prod2, 1));
+		grupo.add(new GrupoProducto(prod3, 1));
+		
+		List<GrupoProducto> grupo2 = new ArrayList<GrupoProducto>();
+		grupo.add(new GrupoProducto(prod4, 1));
+		grupo.add(new GrupoProducto(prod5, 2));
+		
 		pedidos=new ArrayList<Pedido>();
-		pedidos.add(new Pedido("78", "us1",new Date(2010, 5, 14),20,20, "Calle memes",productos1));
-		pedidos.add(new Pedido("128", "us2",new Date(2004,11,20),15,15, "Calle memes 2",productos2));
-		pedidos.add(new Pedido("154", "us3",new Date(2018,4,5),78,18, "Calle memes 3",productos1));
+		pedidos.add(new Pedido("78", "us1",new Date(2010, 5, 14),20,20, "Calle memes",grupo));
+		pedidos.add(new Pedido("128", "us2",new Date(2004,11,20),15,15, "Calle memes 2",grupo2));
 		
 	}
 	
@@ -124,7 +137,8 @@ public class VentanaAlmacenero extends JFrame {
 	//Método para añadir las filas correspondientes al producto elegido en la tabla de pedidos.
 	private void RellenarTablaOT(Pedido pedido){
 		Object[] nuevaFila = new Object[5];
-		for(Producto producto : pedido.getProductos()){
+		for(GrupoProducto grupo : pedido.getAgrupacion().values()){
+			Producto producto = grupo.getProducto();
 			nuevaFila[0] = producto.getId();
 			nuevaFila[1] = producto.getNombre();
 			nuevaFila[2] = producto.getLocalizacion();
@@ -299,17 +313,19 @@ public class VentanaAlmacenero extends JFrame {
 			VentanaAlmacenero aT= this;
 			btnNotificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(modeloTOT.getRowCount() == 0)
-						return;
-					List<Producto> productosEnFalta= new ArrayList<Producto>(); //La lista de productos que vamos a notificar en el dialogo.
-					for(int row=0; row<pedidoElegido.getProductos().size();row++){
-						if(Boolean.parseBoolean(tOT.getValueAt(row, 3).toString()) == false){//La tabla solo trabaja con String asi que lo apaï¿½amos asi
-							productosEnFalta.add(pedidoElegido.getProductos().get(row));//Si no esta cogido lo aï¿½adimos para notificar
-						}
-					}
-					vN= new VentanaNotificacion(aT,productosEnFalta);
-					vN.setLocationRelativeTo(aT);
-					vN.setVisible(true);
+					// Hay que solucionarlo
+					
+//					if(modeloTOT.getRowCount() == 0)
+//						return;
+//					List<GrupoProducto> productosEnFalta= new ArrayList<Producto>(); //La lista de productos que vamos a notificar en el dialogo.
+//					for(int row=0; row<pedidoElegido.getTamano();row++){
+//						if(Boolean.parseBoolean(tOT.getValueAt(row, 3).toString()) == false){//La tabla solo trabaja con String asi que lo apaï¿½amos asi
+//							productosEnFalta.add(pedidoElegido.getProductos().get(row));//Si no esta cogido lo aï¿½adimos para notificar
+//						}
+//					}
+//					vN= new VentanaNotificacion(aT,productosEnFalta);
+//					vN.setLocationRelativeTo(aT);
+//					vN.setVisible(true);
 					
 					//AQUI SE GENERA EL NUEVO DIALOGO CON LA INCIDENCIA TENIENDO EN CUANTA LOS OBJETOS QUE FALTAN.
 				}
