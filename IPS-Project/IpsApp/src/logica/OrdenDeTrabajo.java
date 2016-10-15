@@ -9,7 +9,13 @@ public class OrdenDeTrabajo {
 	private Almacenero almacenero;
 	private Pedido pedido;
 	private String estado;
-	private List<GrupoProducto> productosRecogidos = new ArrayList<GrupoProducto>();
+	private List<GrupoProducto> productosRecogidos = new ArrayList<GrupoProducto>(); // Simula el carrito que lleva el almacenero para recoger los productos
+	
+	public OrdenDeTrabajo(Almacenero almacenero, Pedido pedido, String estado) {
+		this.almacenero = almacenero;
+		this.pedido = pedido;
+		this.estado = estado;
+	}
 
 	public Almacenero getAlmacenero() {
 		return almacenero;
