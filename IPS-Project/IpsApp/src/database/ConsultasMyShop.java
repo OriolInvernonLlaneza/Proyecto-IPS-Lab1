@@ -45,7 +45,9 @@ public class ConsultasMyShop {
 			ResultSet rsProductos = Database.getInstance().executePreparedQuery(consulta, rs.getString(1));
 			while(rsProductos.next()){
 				// idProducto, idPedido, cantidad -- idProducto, producto_nombre, descripcion_producto, stock, precio
+
 				Producto producto = new Producto(rsProductos.getString(1),rsProductos.getString(2), rsProductos.getString(3), rsProductos.getDouble(5),rsProductos.getDouble(6),"A3", rsProductos.getString(4));
+
 				GrupoProducto grupo = new GrupoProducto(producto, rsProductos.getInt(3));
 				productos.add(grupo);
 			}
