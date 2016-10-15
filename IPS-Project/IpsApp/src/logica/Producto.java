@@ -1,6 +1,6 @@
 package logica;
 
-public class Producto implements Comparable<Producto>{
+public class Producto implements Comparable<Producto>, Almacenado{
 	
 	private String id;
 	private String nombre;
@@ -8,20 +8,27 @@ public class Producto implements Comparable<Producto>{
 	private double precio;
 	private double stock;
 	private String descripcion;
+	private String codigoBarras;
 	
 	
-	public Producto(String id, String nombre, String descripcion, double precio, double stock, String localizacion) {
+	public Producto(String id, String nombre, String descripcion, double precio, double stock, String localizacion, String codigoBarras) {
 		this.id = id;
 		this.precio = precio;
 		this.nombre = nombre;
 		this.descripcion=descripcion;
 		this.localizacion = localizacion;
 		this.stock = stock;
+		this.codigoBarras = codigoBarras;
 	}
 
 
 	public String getId() {
 		return id;
+	}
+
+
+	public String getCodigoBarras() {
+		return codigoBarras;
 	}
 
 
@@ -65,6 +72,12 @@ public class Producto implements Comparable<Producto>{
 	
 	public boolean equals(Producto producto){
 		return this.id.toLowerCase().equals(producto.getId().toLowerCase());
+	}
+
+
+	@Override
+	public String getPosicion() {
+		return getLocalizacion();
 	}
 	
 	

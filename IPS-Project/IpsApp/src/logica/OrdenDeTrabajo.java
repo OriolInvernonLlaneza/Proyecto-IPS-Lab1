@@ -9,7 +9,7 @@ public class OrdenDeTrabajo {
 	private Almacenero almacenero;
 	private Pedido pedido;
 	private String estado;
-	private List<UnidadProducto> productosRecogidos = new ArrayList<UnidadProducto>();
+	private List<GrupoProducto> productosRecogidos = new ArrayList<GrupoProducto>();
 
 	public Almacenero getAlmacenero() {
 		return almacenero;
@@ -35,11 +35,11 @@ public class OrdenDeTrabajo {
 		this.estado = estado;
 	}
 
-	public List<UnidadProducto> getProductosRecogidos() {
+	public List<GrupoProducto> getProductosRecogidos() {
 		return productosRecogidos;
 	}
 
-	public void setProductosRecogidos(List<UnidadProducto> productosRecogidos) {
+	public void setProductosRecogidos(List<GrupoProducto> productosRecogidos) {
 		this.productosRecogidos = productosRecogidos;
 	}
 
