@@ -2,11 +2,8 @@ package Util;
 
 import java.util.List;
 
-import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-
-import gui.VentanaAlmacenero;
 
 	
 public class CambiarCodigo implements TableModelListener{

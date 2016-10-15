@@ -3,18 +3,12 @@ package database;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
-import logica.OrdenDeTrabajo;
+import logica.GrupoProducto;
 import logica.Pedido;
 import logica.Producto;
-import logica.GrupoProducto;
 
 public class ConsultasMyShop {
 	

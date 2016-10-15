@@ -2,6 +2,11 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.TextArea;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -10,13 +15,8 @@ import javax.swing.border.EmptyBorder;
 
 import logica.Producto;
 
-import java.awt.TextArea;
-import java.util.Date;
-import java.util.List;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
-
+@SuppressWarnings("serial")
 public class VentanaNotificacion extends JDialog {
 	
 	private VentanaAlmacenero aT;
@@ -26,7 +26,7 @@ public class VentanaNotificacion extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 
 	private void localizar(){
-		//Notificaci�n
+		
 	}
 
 	/**

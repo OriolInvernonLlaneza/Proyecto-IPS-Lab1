@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.Component;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
