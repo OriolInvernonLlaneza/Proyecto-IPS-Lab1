@@ -20,7 +20,9 @@ import Util.ModeloCheckBox;
 import Util.ModeloEditableUnaCelda;
 import Util.ModeloNoEditable;
 import database.ConsultasMyShop;
+import logica.Almacenero;
 import logica.GrupoProducto;
+import logica.OrdenDeTrabajo;
 import logica.Pedido;
 import logica.Producto;
 
@@ -68,6 +70,8 @@ public class VentanaAlmacenero extends JFrame {
 	private VentanaNotificacion vN;
 	private JPanel panelBotonesGeneral;
 	private JButton btnSalir;
+	
+	private Almacenero almacenero;
 	
 	
 	//Este inicializar es para testear en caso de fallo de la base de datos.
@@ -134,7 +138,7 @@ public class VentanaAlmacenero extends JFrame {
 	
 	//Probando
 	
-	//Método para añadir las filas correspondientes al producto elegido en la tabla de pedidos.
+	//Metodo para añadir las filas correspondientes al producto elegido en la tabla de pedidos.
 	private void RellenarTablaOT(Pedido pedido){
 		Object[] nuevaFila = new Object[5];
 		for(GrupoProducto grupo : pedido.getAgrupacion().values()){
@@ -149,7 +153,7 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	
 	
-	//Mï¿½todo usando la estructura de nico que aplica los principios de internacionalizacion a la aplicacion.
+	//Metodo usando la estructura de nico que aplica los principios de internacionalizacion a la aplicacion.
 	private void localizar(){
 		this.setTitle(manager.getString("titulo"));
 		
@@ -187,6 +191,9 @@ public class VentanaAlmacenero extends JFrame {
 		contentPane.add(getPanelPedidos());
 		contentPane.add(getPanelOT(), BorderLayout.EAST);
 		contentPane.add(getPanelBotonesGeneral(), BorderLayout.SOUTH);
+		
+		//Por ahora funcionaremos solo con este almacenero.
+		almacenero= new Almacenero("alm01", "cntrsAlmacenero01", "Almacenero01", "AlmaceneroApellido01");
 		
 		
 		try {
@@ -227,6 +234,7 @@ public class VentanaAlmacenero extends JFrame {
 						modeloTOT.setRowCount(0);
 						pedidoElegido=pedidos.get(elegido);
 						RellenarTablaOT(pedidoElegido);
+						almacenero.setOrdenDeTrabajoActual(new OrdenDeTrabajo(almacenero, pedidoElegido, "En curso"));
 						tOT.getModel().addTableModelListener(new CambiarCodigo(pedidoElegido.getCodigos(),modeloTOT)); 
 					}
 				}
@@ -357,7 +365,8 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JTable getTOT() {
 		if (tOT == null) {
-			modeloTOT= new ModeloEditableUnaCelda(new String[5], 0,4);
+			//Cambiar este 10
+			modeloTOT= new ModeloEditableUnaCelda(new String[5],0,10);
 			tOT = new JTable(modeloTOT);
 			tOT.addMouseListener(new MouseAdapter() {
 				@Override
