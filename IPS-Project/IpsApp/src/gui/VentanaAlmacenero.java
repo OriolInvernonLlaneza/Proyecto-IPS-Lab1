@@ -143,7 +143,7 @@ public class VentanaAlmacenero extends JFrame {
 			nuevaFila[1] = producto.getNombre();
 			nuevaFila[2] = producto.getLocalizacion();
 			//nuevaFila[3] = producto.g
-			nuevaFila[3] = false;
+			nuevaFila[3] = grupo.getCantidad();
 			modeloTOT.addRow(nuevaFila);
 		}
 	}
@@ -227,6 +227,7 @@ public class VentanaAlmacenero extends JFrame {
 						modeloTOT.setRowCount(0);
 						pedidoElegido=pedidos.get(elegido);
 						RellenarTablaOT(pedidoElegido);
+						tOT.getModel().addTableModelListener(new CambiarCodigo(pedidoElegido.getCodigos(),modeloTOT)); 
 					}
 				}
 			});
@@ -313,6 +314,8 @@ public class VentanaAlmacenero extends JFrame {
 			VentanaAlmacenero aT= this;
 			btnNotificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					
+					
 					// Hay que solucionarlo
 					
 //					if(modeloTOT.getRowCount() == 0)
@@ -356,9 +359,6 @@ public class VentanaAlmacenero extends JFrame {
 		if (tOT == null) {
 			modeloTOT= new ModeloEditableUnaCelda(new String[5], 0,4);
 			tOT = new JTable(modeloTOT);
-			List<String> codigos = new ArrayList<String>();
-			//Cambiar aqui para que procese los codigos buenos.
-			tOT.getModel().addTableModelListener(new CambiarCodigo(codigos,modeloTOT)); 
 			tOT.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
