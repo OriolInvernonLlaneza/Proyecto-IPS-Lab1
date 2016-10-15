@@ -65,7 +65,7 @@ public class DialogoPedido extends JDialog {
 		str.append("\n");
 		for(GrupoProducto unidad : productos){
 			Producto producto = unidad.getProducto();
-			precio+= producto.getPrecio();
+			precio+= producto.getPrecio() * unidad.getCantidad();
 			str.append("\t" + producto.getNombre() + " - " + producto.getPrecio() + " - " + manager.getString("unidades") + ": " + unidad.getCantidad() + "\n");
 		}
 		str.append("\n");
@@ -151,16 +151,19 @@ public class DialogoPedido extends JDialog {
 						return;
 					}else{
 						String idUsuario = new GeneradorIDUsuario(txNombre.getText(), txApellidos.getText()).generarID();
+						String nombre = txNombre.getText();
+						String apellido = txApellidos.getText();
 						double precio = 0;
 						int cantidad = 0;
 						for(GrupoProducto producto : productos){
-							precio+=producto.getProducto().getPrecio();
+							precio+=producto.getProducto().getPrecio() * producto.getCantidad();
 							cantidad += producto.getCantidad();
 						}
 						String idPedido = "idFalloBase";
 						try {
 							idPedido = ConsultasMyShop.getSiguienteIDPedido();
 							Pedido pedido = new Pedido(idPedido, idUsuario, Calendar.getInstance().getTime(),productos.size(),precio,"direccionPrueba", productos);
+							ConsultasMyShop.crearUsuario(idUsuario, nombre, apellido);
 							ConsultasMyShop.crearPedido(pedido);
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block

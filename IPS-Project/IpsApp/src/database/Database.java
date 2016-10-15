@@ -39,10 +39,23 @@ public class Database {
         }
     }
 
+    /**
+     * Ejecuta una consulta simple
+     * @param sql La consulta
+     * @return Un ResultSet con los resultados
+     * @throws SQLException
+     */
     public ResultSet executeQuery(String sql) throws SQLException{
     	return conn.createStatement().executeQuery(sql);
     }
     
+    /**
+     * Prepara y ejecuta una consulta con parametros preparados
+     * @param sql La consulta
+     * @param strings En orden, los parametros que se quieran preparar
+     * @return Un ResultSet con los resultados
+     * @throws SQLException
+     */
     public ResultSet executePreparedQuery(String sql, Object... strings) throws SQLException{
     	PreparedStatement prepared = conn.prepareStatement(sql);
     	for(int i = 0; i< strings.length; i++)
@@ -50,11 +63,31 @@ public class Database {
     	return prepared.executeQuery();
     }
     
-    public PreparedStatement getPreparedStatement(String sql) throws SQLException{
+    /**
+     * Devuelve un Statement simple
+     * @return Un Statement simple
+     * @throws SQLException
+     */
+    public Statement returnStatement() throws SQLException{
+    	return conn.createStatement();
+    }
+    
+    /**
+     * Devuelve un statement preparado. Este metodo deberia usarse cuando queramos realizar la misma consulta varias veces pero con diferentes parametros. Aprovechando
+     * el statement.addBatch()
+     * @param sql La String base con la que operará este Statement
+     * @return
+     * @throws SQLException
+     */
+    public PreparedStatement returnPreparedStatement(String sql) throws SQLException{
     	return conn.prepareStatement(sql);
     }
     
-    public Statement returnStatement() throws SQLException{
-    	return conn.createStatement();
+    public void cambiarAutoCommit(boolean valor) throws SQLException{
+    	conn.setAutoCommit(valor);
+    }
+    
+    public void commit() throws SQLException{
+    	conn.commit();
     }
 }

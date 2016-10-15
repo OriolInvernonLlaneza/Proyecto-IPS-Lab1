@@ -380,8 +380,10 @@ public class MainWindow extends JFrame {
             btnCalcular.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent e) {
             		double precio = 0;
-            		for(Object producto : carritoListaModelo.toArray())
-            			precio+= ((Producto)producto).getPrecio();
+            		for(Object producto : carritoListaModelo.toArray()){
+            			GrupoProducto grupo = (GrupoProducto)producto;
+            			precio+= grupo.getCantidad() * grupo.getProducto().getPrecio();
+            		}
             		txtPrecioTotal.setText(String.valueOf(precio));
             		
             	}

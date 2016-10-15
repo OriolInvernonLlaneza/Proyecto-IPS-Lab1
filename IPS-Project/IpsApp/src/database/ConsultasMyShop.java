@@ -29,26 +29,26 @@ public class ConsultasMyShop {
 	 */
 	public static List<Pedido> getPedidos() throws SQLException{
 		List<Pedido> pedidos= new ArrayList<Pedido>();
-		ResultSet rs= instance.executeQuery("SELECT pedido.idpedido,pedido.idusuario,fecha,sum(cantidad),precio_pedido,direccion"+
+		ResultSet rs= instance.executeQuery(" SELECT pedido.idpedido, pedido.idusuario, fecha, sum(cantidad), precio_pedido, direccion "+
 												" FROM pedido, productoPedido " +
-												" WHERE pedido.idpedido= productoPedido.idpedido "
-												+" GROUP BY pedido.idpedido,pedido.idusuario,fecha,precio_pedido,direccion "+
+												" WHERE pedido.idpedido = productoPedido.idpedido " +
+												" GROUP BY pedido.idpedido, pedido.idusuario, fecha, precio_pedido,direccion " +
 												" ORDER BY fecha ");
 		while(rs.next()){
 			List<GrupoProducto> productos= new ArrayList<GrupoProducto>();
 			//idPedido, idUsuario, preciopedido, direccion, fecha
 			
-			String consulta=" SELECT DISTINCT producto.idproducto, producto.producto_nombre, producto.descripcion_producto, producto.codigo_barras, producto.stock, producto.precio,  "+
+			String consulta=" SELECT DISTINCT producto.idproducto, producto.producto_nombre, producto.descripcion_producto, producto.codigo_barras, producto.stock, producto.precio, productopedido.cantidad "+
 						" FROM ProductoPedido, Producto "+ 
 						 " WHERE ProductoPedido.idproducto = Producto.idproducto "+ 
-						 " AND ProductoPedido.idpedido =  ?";
-			ResultSet rsProductos = Database.getInstance().executePreparedQuery(consulta, rs.getString(1));
+						 " AND ProductoPedido.idpedido =  ? ";
+			ResultSet rsProductos = instance.executePreparedQuery(consulta, rs.getString(1));
 			while(rsProductos.next()){
-				// idProducto, idPedido, cantidad -- idProducto, producto_nombre, descripcion_producto, stock, precio
+				// idProducto, producto_nombre, descripcion_producto, codigo_barras, stock, precio -- cantidad
 
 				Producto producto = new Producto(rsProductos.getString(1),rsProductos.getString(2), rsProductos.getString(3), rsProductos.getDouble(5),rsProductos.getDouble(6),"A3", rsProductos.getString(4));
 
-				GrupoProducto grupo = new GrupoProducto(producto, rsProductos.getInt(3));
+				GrupoProducto grupo = new GrupoProducto(producto, rsProductos.getInt(7));
 				productos.add(grupo);
 			}
 			//idPedido, idUsuario, preciopedido, direccion, fecha
@@ -77,27 +77,42 @@ public class ConsultasMyShop {
 		return productos;
 		
 	}
+
+	public static void crearUsuario(String id, String nombre, String apellido) throws SQLException{
+		String insertar = " INSERT INTO Usuario VALUES (?, ?, ?, ?)";
+		//id, contraseña, nombre, apellido
+		instance.executePreparedQuery(insertar, id, new GeneradorContrasena(nombre).generarID(), nombre, apellido);
+	}
 	
+	/**
+	 * Dado un contenedor de los datos para un Pedido. Procesarlo e introducirlo en la base de datos. Añadiendo las cantidades asociadas a cada producto
+	 * @param pedido El pedido en cuestion
+	 * @throws SQLException Podria darse que el usuario especificado por este pedido no se encuentre en la base de datos
+	 */
 	public static void crearPedido(Pedido pedido) throws SQLException{
 		double precioTotal = pedido.getPrecio();
-		Date fecha = Calendar.getInstance().getTime();
 		
 		//pedido, usuario, precio, direccion, fecha
-		String insertar = String.format("INSERT INTO Pedido VALUES ( %s, %s, %f, %s, " + fecha + ") ", pedido.getId(), pedido.getIdUsuario(), precioTotal, "direccionBase");
-		instance.executeQuery(insertar);
+		String insertar = " INSERT INTO Pedido VALUES ( ? , ? , ? , ? , ? ) ";
+		instance.executePreparedQuery(insertar, pedido.getId(), pedido.getIdUsuario(), precioTotal, "direccionBase", new java.sql.Timestamp(System.currentTimeMillis()));
 		
 		//idProducto, idPedido, cantidad
 
-		HashMap<String, GrupoProducto> agrupacion = pedido.getAgrupacion();
-		Statement statement = instance.returnStatement();
+		//Statement statement = instance.returnStatement();
+		String sql = "INSERT INTO ProductoPedido VALUES (?, ?, ?)";
+		PreparedStatement statement = instance.returnPreparedStatement(sql);
 		
+		instance.cambiarAutoCommit(false);
 		for(GrupoProducto producto : pedido.getAgrupacion().values()){
-				String sql = "INSERT INTO ProductosPedido VALUES (" + producto.getID() + ", " + pedido.getId() + ", " + producto.getCantidad() + ")"; 
-				statement.addBatch(sql);
+				statement.setString(1, producto.getID());
+				statement.setString(2, pedido.getId());
+				statement.setInt(3, producto.getCantidad());
+				statement.addBatch();
 		}
 		
 		statement.executeBatch();
-		
+		instance.commit();
+		instance.cambiarAutoCommit(true);
 		
 	}
 	
@@ -107,10 +122,13 @@ public class ConsultasMyShop {
 				+ " FROM Pedido "
 				+ " ORDER BY idPedido DESC) "
 						+ "WHERE rownum = 1 ";
-		//Podrï¿½amos estar frente a nuestro primer pedido, asï¿½ que el resultset devolverï¿½a un SELECT vacï¿½o
-		//Para evitar eso, pregunto si el cursor del SELECT estï¿½ detras de la primera fila (como una forma de -1 o 0)
+		//Podriamos estar frente a nuestro primer pedido, asi que el resultset devolveria un SELECT vacï¿½o
+		//Para evitar eso, pregunto si el cursor del SELECT esta detras de la primera fila (como una forma de -1 o 0)
 		ResultSet id = instance.executeQuery(consulta) ;
-		return id.isBeforeFirst() ? "0" : id.getString(1);
+		if(id.next())
+			return id.getString(1);
+		else
+			return "0";
 	}
 	
 	public static String getSiguienteIDPedido() throws SQLException{
@@ -127,7 +145,7 @@ public class ConsultasMyShop {
 	
 	public static void crearUnaOrdenDeTrabajo(String idAlmacenero, String idPedido) throws SQLException{
 		String consulta = "INSERT INTO OrdenTrabajo VALUES (?,? , Procesando)";
-		instance.executePreparedQuery(idAlmacenero, idPedido);
+		instance.executePreparedQuery(consulta, idAlmacenero, idPedido);
 		
 	}
 	
