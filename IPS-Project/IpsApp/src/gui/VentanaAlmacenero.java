@@ -21,6 +21,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.TableModelListener;
 
 import Util.CambiarCodigo;
 import Util.ModeloEditableUnaCelda;
@@ -63,6 +64,8 @@ public class VentanaAlmacenero extends JFrame {
 	private JButton btnAcabar;
 	private JScrollPane spOT;
 	private JTable tOT;
+	
+	TableModelListener cambiarCodigo;
 	
 	private VentanaNotificacion vN;
 	private JPanel panelBotonesGeneral;
@@ -228,11 +231,16 @@ public class VentanaAlmacenero extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					int elegido=tPedidos.getSelectedRow();
 					if(elegido!=-1){
+						tOT.getModel().removeTableModelListener(cambiarCodigo);
 						modeloTOT.setRowCount(0);
 						pedidoElegido=pedidos.get(elegido);
 						RellenarTablaOT(pedidoElegido);
 						almacenero.setOrdenDeTrabajoActual(new OrdenDeTrabajo(almacenero, pedidoElegido, "En curso"));
-						tOT.getModel().addTableModelListener(new CambiarCodigo(pedidoElegido.getCodigos(),modeloTOT)); 
+						cambiarCodigo=new CambiarCodigo(pedidoElegido.getCodigos(),modeloTOT);
+						//El modelo debe cambiar las celdas no editables por todas editables
+						modeloTOT.restart();
+						//El modelo debe añadir de nuevo el listener con la nueva informacion.
+						tOT.getModel().addTableModelListener(cambiarCodigo); 
 					}
 				}
 			});
