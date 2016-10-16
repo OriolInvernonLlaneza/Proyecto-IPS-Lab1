@@ -38,7 +38,6 @@ public class ClasificadorPorRutas<T extends Almacenado> implements Clasificador<
 	 */
 	public ClasificadorPorRutas(Almacen<T> almacen, int tamano) {
 		this.almacen = almacen;
-		tamano += 1;
 		this.costes = new double[tamano][tamano];
 		this.pd = new int[tamano];
 		this.caminos = new boolean[tamano][tamano];
@@ -91,6 +90,7 @@ public class ClasificadorPorRutas<T extends Almacenado> implements Clasificador<
 	}
 	
 	private void hamiltonPath(){
+		//Conseguir el nodo más cercano a almacen.getInicio()
 		int start = -1;
 		NodoAlmacen<T> origen = new NodoAlmacen<T>(null, almacen.getInicio());
 		double coste = Double.MAX_VALUE;
@@ -101,13 +101,17 @@ public class ClasificadorPorRutas<T extends Almacenado> implements Clasificador<
 				start = elementos.indexOf(elemento);
 			}
 		}
-		
+		//Encontrado, marcarlo como visitado, empezar desde ahí
+		elementos.get(start).setVisited(true);
 		int actual = start;
 		int size = getSize();
+		pd[0] = start;
 		int paso = 1;
+		
+		//Por cada iteracion, hasta que todos los nodos hayan sido tocados, buscamos el camino menos costoso
 		while(!allVisited()){
 			double min = Double.MAX_VALUE;
-			int posible = 0;
+			int posible = actual;
 			for(int i = 0; i < size; i++){
 				if(i == actual || elementos.get(i).isVisited())
 					continue;
@@ -117,10 +121,10 @@ public class ClasificadorPorRutas<T extends Almacenado> implements Clasificador<
 					posible = i;
 				}
 			}
+			elementos.get(posible).setVisited(true);
 			actual = posible;
 			pd[paso] = actual;
 			paso++;
-			elementos.get(actual).setVisited(true);
 		}
 		
 	}
@@ -169,10 +173,7 @@ public class ClasificadorPorRutas<T extends Almacenado> implements Clasificador<
 		int index = getNode(element);
 		if(index != INDEX_NOT_FOUND)
 			throw new IllegalArgumentException("Elemento ya existente");
-		if(element == null)
-			elementos.add(new NodoAlmacen<T>(element, almacen.getInicio()));
-		else
-			elementos.add(new NodoAlmacen<T>(element, almacen.traducirIdentificador(element)));
+		elementos.add(new NodoAlmacen<T>(element, almacen.traducirIdentificador(element)));
 		for(int i = 0; i<getSize(); i++)
 		{
 			caminos[size][i] = false;
@@ -191,7 +192,7 @@ public class ClasificadorPorRutas<T extends Almacenado> implements Clasificador<
 	 * @param costes Coste para atravesar el camino
 	 * @throws Exception En caso de que el enlace ya exista
 	 */
-	public void addEdge(T origin, T destination, double costes)
+	private void addEdge(T origin, T destination, double costes)
 	{
 		if(!existsEdge(origin, destination))
 		{
@@ -211,7 +212,7 @@ public class ClasificadorPorRutas<T extends Almacenado> implements Clasificador<
 	 * @param element El elemento a eliminar
 	 * @throws Exception En el caso de que el nodo no exista
 	 */
-	public void removeNode(T element) 
+	private void removeNode(T element) 
 	{
 		int pos = getNode(element);
 		int size = getSize();
@@ -248,7 +249,7 @@ public class ClasificadorPorRutas<T extends Almacenado> implements Clasificador<
 	 * @param destination El nodo de destino
 	 * @throws Exception Si el camino no existe entre esos dos nodos
 	 */
-	public void removeEdge(T origin, T destination) 
+	private void removeEdge(T origin, T destination) 
 	{
 		if(existsEdge(origin, destination))
 		{
@@ -268,7 +269,7 @@ public class ClasificadorPorRutas<T extends Almacenado> implements Clasificador<
 	 * @return Verdadero si existe, falso en caso contrario
 	 * @throws Exception En caso de que alguno de los nodos no exista
 	 */
-	public boolean existsEdge(T origin, T destination) 
+	private boolean existsEdge(T origin, T destination) 
 	{
 		int start = getNode(origin);
 		int end = getNode(destination);
