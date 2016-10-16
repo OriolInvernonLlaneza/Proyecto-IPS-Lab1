@@ -34,6 +34,12 @@ public class ModeloEditableUnaCelda extends DefaultTableModel{
 	        //this.fireTableCellUpdated(row, col);
 	    
 	    }
+	    
+	    public void restart(){
+	    	for(int i=0; i<editable_cells.length;i++){
+	        	editable_cells[i]=true;
+	        }
+	    }
 
 
 }

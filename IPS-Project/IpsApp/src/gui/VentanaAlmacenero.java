@@ -2,12 +2,13 @@ package gui;
 
 import java.awt.BorderLayout;
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -18,14 +19,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.TableModelListener;
 
 import Util.CambiarCodigo;
 import Util.ModeloEditableUnaCelda;
@@ -68,6 +67,8 @@ public class VentanaAlmacenero extends JFrame {
 	private JButton btnAcabar;
 	private JScrollPane spOT;
 	private JTable tOT;
+	
+	TableModelListener cambiarCodigo;
 	
 	private VentanaNotificacion vN;
 	private JPanel panelBotonesGeneral;
@@ -245,11 +246,16 @@ public class VentanaAlmacenero extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					int elegido=tPedidos.getSelectedRow();
 					if(elegido!=-1){
+						tOT.getModel().removeTableModelListener(cambiarCodigo);
 						modeloTOT.setRowCount(0);
 						pedidoElegido=pedidos.get(elegido);
 						RellenarTablaOT(pedidoElegido);
 						almacenero.setOrdenDeTrabajoActual(new OrdenDeTrabajo(almacenero, pedidoElegido, "En curso"));
-						tOT.getModel().addTableModelListener(new CambiarCodigo(pedidoElegido.getCodigos(),modeloTOT)); 
+						cambiarCodigo=new CambiarCodigo(pedidoElegido.getCodigos(),modeloTOT);
+						//El modelo debe cambiar las celdas no editables por todas editables
+						modeloTOT.restart();
+						//El modelo debe añadir de nuevo el listener con la nueva informacion.
+						tOT.getModel().addTableModelListener(cambiarCodigo); 
 					}
 				}
 			});
