@@ -1,7 +1,5 @@
 package database;
 
-import java.util.Random;
-
 public class GeneradorIDUsuario extends GeneradorID{
 
 	private String nombre;

@@ -19,6 +19,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
@@ -26,10 +27,9 @@ import javax.swing.border.LineBorder;
 
 import database.ConsultasMyShop;
 import database.GeneradorIDUsuario;
+import logica.GrupoProducto;
 import logica.Pedido;
 import logica.Producto;
-import logica.GrupoProducto;
-import javax.swing.JScrollPane;
 
 public class DialogoPedido extends JDialog {
 	
@@ -162,7 +162,7 @@ public class DialogoPedido extends JDialog {
 						String idPedido = "idFalloBase";
 						try {
 							idPedido = ConsultasMyShop.getSiguienteIDPedido();
-							Pedido pedido = new Pedido(idPedido, idUsuario, Calendar.getInstance().getTime(),productos.size(),precio,"direccionPrueba", productos);
+							Pedido pedido = new Pedido(idPedido, idUsuario, Calendar.getInstance().getTime(),cantidad,precio,"direccionPrueba", productos);
 							ConsultasMyShop.crearUsuario(idUsuario, nombre, apellido);
 							ConsultasMyShop.crearPedido(pedido);
 						} catch (SQLException e) {

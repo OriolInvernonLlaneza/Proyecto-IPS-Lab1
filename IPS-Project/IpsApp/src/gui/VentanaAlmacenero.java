@@ -1,24 +1,36 @@
 package gui;
 
 import java.awt.BorderLayout;
+<<<<<<< HEAD
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+=======
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+>>>>>>> master
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import Util.CambiarCodigo;
-import Util.ModeloCheckBox;
 import Util.ModeloEditableUnaCelda;
 import Util.ModeloNoEditable;
 import database.ConsultasMyShop;
@@ -27,15 +39,6 @@ import logica.GrupoProducto;
 import logica.OrdenDeTrabajo;
 import logica.Pedido;
 import logica.Producto;
-
-import javax.swing.JButton;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class VentanaAlmacenero extends JFrame {
 	
@@ -73,6 +76,7 @@ public class VentanaAlmacenero extends JFrame {
 	private JPanel panelBotonesGeneral;
 	private JButton btnSalir;
 	
+
 	private Almacenero almacenero; 
 	DialogoUltimaComprobacion dialogoUltimaComprobacion;
 	
@@ -146,7 +150,7 @@ public class VentanaAlmacenero extends JFrame {
 	
 	//Probando
 	
-	//Método para añadir las filas correspondientes al producto elegido en la tabla de pedidos.
+	//Metodo para añadir las filas correspondientes al producto elegido en la tabla de pedidos.
 	private void RellenarTablaOT(Pedido pedido){
 		Object[] nuevaFila = new Object[5];
 		for(GrupoProducto grupo : pedido.getAgrupacion().values()){
@@ -161,7 +165,7 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	
 	
-	//Mï¿½todo usando la estructura de nico que aplica los principios de internacionalizacion a la aplicacion.
+	//Metodo usando la estructura de nico que aplica los principios de internacionalizacion a la aplicacion.
 	private void localizar(){
 		this.setTitle(manager.getString("titulo"));
 		
@@ -199,6 +203,9 @@ public class VentanaAlmacenero extends JFrame {
 		contentPane.add(getPanelPedidos());
 		contentPane.add(getPanelOT(), BorderLayout.EAST);
 		contentPane.add(getPanelBotonesGeneral(), BorderLayout.SOUTH);
+		
+		//Por ahora funcionaremos solo con este almacenero.
+		almacenero= new Almacenero("alm01", "cntrsAlmacenero01", "Almacenero01", "AlmaceneroApellido01");
 		
 		
 		try {
@@ -239,6 +246,7 @@ public class VentanaAlmacenero extends JFrame {
 						modeloTOT.setRowCount(0);
 						pedidoElegido=pedidos.get(elegido);
 						RellenarTablaOT(pedidoElegido);
+						almacenero.setOrdenDeTrabajoActual(new OrdenDeTrabajo(almacenero, pedidoElegido, "En curso"));
 						tOT.getModel().addTableModelListener(new CambiarCodigo(pedidoElegido.getCodigos(),modeloTOT)); 
 					}
 				}
@@ -385,7 +393,8 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JTable getTOT() {
 		if (tOT == null) {
-			modeloTOT= new ModeloEditableUnaCelda(new String[5], 0,4);
+			//Cambiar este 10
+			modeloTOT= new ModeloEditableUnaCelda(new String[5],0,10);
 			tOT = new JTable(modeloTOT);
 			tOT.addMouseListener(new MouseAdapter() {
 				@Override

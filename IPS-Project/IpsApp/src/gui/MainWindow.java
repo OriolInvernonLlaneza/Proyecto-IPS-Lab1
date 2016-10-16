@@ -1,40 +1,39 @@
 package gui;
  
 import java.awt.BorderLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JList;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import java.awt.Color;
-import javax.swing.border.Border;
- 
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.event.ActionEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import Util.ModeloNoEditableSpinner;
 import Util.SpinnerEditor;
 import Util.SpinnerRenderer;
 import database.ConsultasMyShop;
-import logica.Producto;
 import logica.GrupoProducto;
-
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import java.awt.Component;
-import javax.swing.JTable;
-import java.awt.FlowLayout;
-import javax.swing.JTextPane;
+import logica.Producto;
  
 public class MainWindow extends JFrame {
 	

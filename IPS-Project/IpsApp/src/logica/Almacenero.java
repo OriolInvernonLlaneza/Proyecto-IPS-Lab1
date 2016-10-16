@@ -140,9 +140,9 @@ public class Almacenero {
 	 * @throws SQLException
 	 */
 	public void empaquetar(OrdenDeTrabajo ot) throws SQLException {
-		Paquete paquete = new Paquete(ot);
-		ConsultasMyShop.addPaquete(paquete);
-		ConsultasMyShop.cambiarEstadoOrdenDeTrabajo("Empaquetada", ot.getPedido().getId());
+		//Paquete paquete = new Paquete(ot);
+		//ConsultasMyShop.addPaquete(paquete);
+		//ConsultasMyShop.cambiarEstadoOrdenDeTrabajo("Empaquetada", ot.getPedido().getId());
 	}
 	
 	

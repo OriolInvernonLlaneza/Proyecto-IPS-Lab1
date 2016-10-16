@@ -1,7 +1,5 @@
 package Util;
 
-import java.util.Vector;
-
 import javax.swing.table.DefaultTableModel;
 
 public class ModeloCheckBox extends DefaultTableModel {
