@@ -1,16 +1,13 @@
 package gui;
 
 import java.awt.BorderLayout;
-<<<<<<< HEAD
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-=======
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
->>>>>>> master
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -79,6 +76,9 @@ public class VentanaAlmacenero extends JFrame {
 
 	private Almacenero almacenero; 
 	DialogoUltimaComprobacion dialogoUltimaComprobacion;
+
+
+	private LoginWindow login;
 	
 	
 	
@@ -186,11 +186,13 @@ public class VentanaAlmacenero extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaAlmacenero() {
+	public VentanaAlmacenero(LoginWindow login) {
+		this.login = login;
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				btnSalir.doClick();
+				
 			}
 		});
 		manager = ResourceManager.getResourceManager();
@@ -426,7 +428,8 @@ public class VentanaAlmacenero extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					int result = JOptionPane.showConfirmDialog(null,manager.getString("avisoSalir"),manager.getString("tituloASalir"), JOptionPane.YES_NO_OPTION);
 					if(result== JOptionPane.YES_OPTION){
-						System.exit(0);
+						ventana.setVisible(false);
+						login.windowVisible(true);
 					}
 				}
 

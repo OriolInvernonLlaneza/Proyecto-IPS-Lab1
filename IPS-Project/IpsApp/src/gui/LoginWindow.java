@@ -31,6 +31,7 @@ public class LoginWindow extends JFrame {
 	private JButton btnMayorista;
 	private JButton btnAlmacenero;
 
+	
 	/**
 	 * Launch the application.
 	 */
@@ -130,12 +131,13 @@ public class LoginWindow extends JFrame {
 	private JButton getBtnUsuario() {
 		if (btnUsuario == null) {
 			btnUsuario = new JButton("");
+			LoginWindow login = this;
 			btnUsuario.setPreferredSize(new Dimension(120,33));
 			btnUsuario.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					MainWindow window = new MainWindow();
+					VentanaUsuario window = new VentanaUsuario(login);
 					window.setVisible(true);
-					windowHiding(false);
+					windowVisible(false);
 				}
 			});
 		}
@@ -148,28 +150,30 @@ public class LoginWindow extends JFrame {
 		}
 		return btnMayorista;
 	}
+	
 	private JButton getBtnAlmacenero() {
 		if (btnAlmacenero == null) {
 			btnAlmacenero = new JButton();
 			btnAlmacenero.setPreferredSize(new Dimension(120, 33));
+			LoginWindow login = this;
 			btnAlmacenero.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					VentanaAlmacenero windowA = new VentanaAlmacenero();
+					VentanaAlmacenero windowA = new VentanaAlmacenero(login);
 					windowA.setVisible(true);
-					windowHiding(false);
+					windowVisible(false);
 				}
 			});
 		}
 		return btnAlmacenero;
 	}
 
-	private void windowClosing(boolean exit) {
+	protected void windowClosing(boolean exit) {
 		this.dispose();
 		if(exit)
 			System.exit(0);
 	}
 	
-	private void windowHiding(boolean hide){
+	protected void windowVisible(boolean hide){
 		this.setVisible(hide);
 	}
 }

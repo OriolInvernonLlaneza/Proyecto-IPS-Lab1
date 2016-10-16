@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -34,8 +35,10 @@ import Util.SpinnerRenderer;
 import database.ConsultasMyShop;
 import logica.GrupoProducto;
 import logica.Producto;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
  
-public class MainWindow extends JFrame {
+public class VentanaUsuario extends JFrame {
 	
 	//Nico pls que funcione (?)
  
@@ -48,6 +51,7 @@ public class MainWindow extends JFrame {
     private List<Producto> productos;
     
     private final int SPINNER_COLUMN = 2;
+    private LoginWindow login;
  
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
@@ -72,6 +76,7 @@ public class MainWindow extends JFrame {
     private ModeloNoEditableSpinner modeloTProductos;
     private JButton btnCalcular;
     private JTextPane taDescripcion;
+    private JButton btnSalir;
     
     private void localizar() {
     	setTitle(manager.getString("titulo"));
@@ -79,7 +84,6 @@ public class MainWindow extends JFrame {
     	//Borders
     	manager.formatBorder(panelProductos, "producto");
     	manager.formatBorder(panelListaCarrito, "label_carrito");
-    	//Descripci�n:
     	
     	//Botones
     	btnRemove.setToolTipText(manager.getString("btn_eliminarCarrito"));
@@ -96,7 +100,7 @@ public class MainWindow extends JFrame {
         btnCancelarPedido.setMnemonic(manager.getChar("mnm_cancelar"));
         btnConfirmarPedido.setMnemonic(manager.getChar("mnm_confirmar"));
         
-        //modeloTProductos.setColumnIdentifiers(new String[] {manager.getString("nombre"), manager.getString("precio"), manager.getString("cantidad")});
+        txtPrecioTotal.setText(manager.formatearNumeros(0.0));
         
         //Labels
         lblPrecioTotal.setDisplayedMnemonic(manager.getChar("mnm_precio"));
@@ -110,6 +114,7 @@ public class MainWindow extends JFrame {
  
     private void rellenarTablaProductos() {
         Object[] nuevaFila = new Object[3];
+        modeloTProductos.setRowCount(0);
         try {
         	productos = ConsultasMyShop.getProductos();
 			for (Producto producto : productos) {
@@ -124,14 +129,33 @@ public class MainWindow extends JFrame {
     }
     
     
+    private void reconstruir(){
+    	rellenarTablaProductos();
+    	txtPrecioTotal.setText(manager.formatearNumeros(0.0));
+    	carritoListaModelo.clear();
+    	taDescripcion.setText("");
+    }
+    
+    private int advertenciaReconstruccion(){
+    	int resultado = JOptionPane.showConfirmDialog(this, manager.getString("advertencia_perdida"), manager.getString("advertencia"), JOptionPane.YES_NO_OPTION);
+    	return resultado;
+    }
+    
     //-------------------SWING CODE----------------------------
     
     /**
      * Create the frame.
      */
-    public MainWindow() {
+    public VentanaUsuario(LoginWindow login) {
+    	addWindowListener(new WindowAdapter() {
+    		@Override
+    		public void windowClosing(WindowEvent arg0) {
+    			btnSalir.doClick();
+    		}
+    	});
+    	this.login = login;
     	manager = ResourceManager.getResourceManager();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setBounds(100, 100, 726, 571);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -216,7 +240,10 @@ public class MainWindow extends JFrame {
                     int fila = tableProductos.getSelectedRow();
                     if (fila != -1) {
                     	Producto producto = (Producto)modeloTProductos.getValueAt(fila, 0);
-                    	int cantidad = (int) modeloTProductos.getValueAt(fila, SPINNER_COLUMN);
+                    	Object spinner = modeloTProductos.getValueAt(fila, SPINNER_COLUMN);
+                    	if(spinner == null)
+                    		return;
+                    	int cantidad = (int) spinner;
                     	GrupoProducto unidad = new GrupoProducto(producto, cantidad);
                     	if(carritoListaModelo.contains(unidad)){
                     		for(Object objeto : carritoListaModelo.toArray()){
@@ -289,6 +316,7 @@ public class MainWindow extends JFrame {
             panelBotonesPedido.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
             panelBotonesPedido.add(getBtnConfirmarPedido());
             panelBotonesPedido.add(getBtnCancelarPedido());
+            panelBotonesPedido.add(getBtnSalir());
         }
         return panelBotonesPedido;
     }
@@ -298,11 +326,15 @@ public class MainWindow extends JFrame {
             btnConfirmarPedido = new JButton();
             btnConfirmarPedido.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent arg0) {
-            		List<GrupoProducto> carrito = new ArrayList<GrupoProducto>();
-            		for(Object object : carritoListaModelo.toArray())
-            			carrito.add((GrupoProducto)object);
-            		DialogoPedido dialogo = new DialogoPedido(carrito);
-            		dialogo.setVisible(true);
+            		if(carritoListaModelo.isEmpty())
+            			JOptionPane.showMessageDialog(null, manager.getString("pedido_vacio"), manager.getString("advertencia"), JOptionPane.ERROR_MESSAGE);
+            		else{
+	            		List<GrupoProducto> carrito = new ArrayList<GrupoProducto>();
+	            		for(Object object : carritoListaModelo.toArray())
+	            			carrito.add((GrupoProducto)object);
+	            		DialogoPedido dialogo = new DialogoPedido(carrito);
+	            		dialogo.setVisible(true);
+            		}
             	}
             });
             btnConfirmarPedido.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -315,8 +347,8 @@ public class MainWindow extends JFrame {
             btnCancelarPedido = new JButton();
             btnCancelarPedido.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent arg0) {
-            		System.exit(0);
-            		//Deberia cerrar esta ventana y hacer visible la de login. sys exit no bueno ser
+            		if(advertenciaReconstruccion() == JOptionPane.YES_OPTION)
+            			reconstruir();
             	}
             });
             btnCancelarPedido.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -383,7 +415,7 @@ public class MainWindow extends JFrame {
             			GrupoProducto grupo = (GrupoProducto)producto;
             			precio+= grupo.getCantidad() * grupo.getProducto().getPrecio();
             		}
-            		txtPrecioTotal.setText(String.valueOf(precio));
+            		txtPrecioTotal.setText(manager.formatearNumeros(precio));
             		
             	}
             });
@@ -400,5 +432,21 @@ public class MainWindow extends JFrame {
 			taDescripcion.setBorder(border);
 		}
 		return taDescripcion;
+	}
+	private JButton getBtnSalir() {
+		if (btnSalir == null) {
+			btnSalir = new JButton("Salir");
+            VentanaUsuario usuario = this;
+			btnSalir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(advertenciaReconstruccion() == JOptionPane.YES_OPTION){
+						reconstruir();
+						usuario.setVisible(false);
+	            		login.windowVisible(true);
+					}
+				}
+			});
+		}
+		return btnSalir;
 	}
 }

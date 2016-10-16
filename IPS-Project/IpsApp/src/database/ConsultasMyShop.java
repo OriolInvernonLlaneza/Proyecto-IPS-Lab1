@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logica.GrupoProducto;
+import logica.Paquete;
 import logica.Pedido;
 import logica.Producto;
 
