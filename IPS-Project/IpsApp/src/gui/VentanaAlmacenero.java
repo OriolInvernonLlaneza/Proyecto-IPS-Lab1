@@ -1,8 +1,16 @@
 package gui;
 
 import java.awt.BorderLayout;
+
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -71,7 +79,10 @@ public class VentanaAlmacenero extends JFrame {
 	private JPanel panelBotonesGeneral;
 	private JButton btnSalir;
 	
-	private Almacenero almacenero;
+
+	private Almacenero almacenero; 
+	DialogoUltimaComprobacion dialogoUltimaComprobacion;
+	
 	
 	
 	//Este inicializar es para testear en caso de fallo de la base de datos.
@@ -98,6 +109,10 @@ public class VentanaAlmacenero extends JFrame {
 		pedidos=new ArrayList<Pedido>();
 		pedidos.add(new Pedido("78", "us1",new Date(2010, 5, 14),20,20, "Calle memes",grupo));
 		pedidos.add(new Pedido("128", "us2",new Date(2004,11,20),15,15, "Calle memes 2",grupo2));
+		
+		//Mio
+		almacenero.setOrdenDeTrabajoActual(new OrdenDeTrabajo(almacenero,
+				new Pedido("78", "us1",new Date(2010, 5, 14),20,20, "Calle memes",grupo) , "Asignada"));
 		
 	}
 	
@@ -354,6 +369,22 @@ public class VentanaAlmacenero extends JFrame {
 			btnAcabar = new JButton();
 			btnAcabar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					if(false) {
+						//Si todos los checkboxes no estan completos => dialogo informativo
+					}
+					else {
+						try {
+							casoPruebaPedro();
+							//OrdenDeTrabajo ot = almacenero.getOrdenDeTrabajoActual();
+							//almacenero.marcarParaEmpaquetar(ot);
+							dialogoUltimaComprobacion = new DialogoUltimaComprobacion(almacenero);
+							dialogoUltimaComprobacion.setLocationRelativeTo(null);
+							dialogoUltimaComprobacion.setVisible(true);
+							
+						} catch (SQLException e1) {
+							JOptionPane.showMessageDialog(null, "Ha habido un problema al marcar para empaquetar");
+						}
+					}
 					
 					//AQUI SE PASA A ENVIO EL PAQUETE.
 				}
@@ -410,5 +441,28 @@ public class VentanaAlmacenero extends JFrame {
 			});
 		}
 		return btnSalir;
+	}
+	
+	private void casoPruebaPedro() throws SQLException {
+		almacenero = new Almacenero("alm01", "cont233", "Nombre", "Apellido1 Apellido2");
+		productos1=new ArrayList<Producto>();
+		productos2=new ArrayList<Producto>();
+		
+		Producto prod1 = new Producto("25", "Girasol","asa",5.90, 200, "A2", "cod1");
+		Producto prod2 = new Producto("25", "Mandarina","asa", 0.10, 200, "B3", "cod2");
+		Producto prod3 = new Producto("18", "Teclado","asa", 49.99, 200, "A3", "cod3");
+		
+		
+		List<GrupoProducto> grupo = new ArrayList<GrupoProducto>();
+		grupo.add(new GrupoProducto(prod1, 1));
+		grupo.add(new GrupoProducto(prod2, 1));
+		grupo.add(new GrupoProducto(prod3, 1));
+		
+		
+		almacenero.setOrdenDeTrabajoActual(new OrdenDeTrabajo(almacenero,
+				new Pedido("2", "us1",new Date(2010, 5, 14),20,20, "Calle memes",grupo) , "Asignada"));
+		
+		//almacenero.insertarOrdenDeTrabajo(almacenero.getOrdenDeTrabajoActual());
+		
 	}
 }

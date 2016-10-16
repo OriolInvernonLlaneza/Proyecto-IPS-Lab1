@@ -65,7 +65,7 @@ public class PosicionEstanteria {
 	 * @return Verdadero si una estan en la misma cara. Falso si una esta en la cara anterior y la otra en la posterior, o viceversa
 	 */
 	public boolean estanteriaContraria(PosicionEstanteria pos){
-		return pos.cara.equals(this.cara);
+		return !pos.cara.equals(this.cara);
 	}
 	
 	/**

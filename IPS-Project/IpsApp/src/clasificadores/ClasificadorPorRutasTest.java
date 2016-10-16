@@ -26,12 +26,14 @@ public class ClasificadorPorRutasTest {
 		prod2 = new Producto("25", "Mandarina","asa", 0.10, 200, "314", "cod2");
 		prod3 = new Producto("18", "Teclado","asa", 49.99, 200, "209", "cod3");
 		
-		prod4 = new Producto("233", "Teclado3","asa1", 49.99, 200, "A3", "cod5");
-		prod5 = new Producto("233", "Teclado2","asa1", 49.99, 200, "A3", "cod4");
+		prod4 = new Producto("233", "Teclado3","asa1", 49.99, 200, "110", "cod5");
+		prod5 = new Producto("233", "Teclado2","asa1", 49.99, 200, "210", "cod4");
 		
 		productos.add(prod1);
 		productos.add(prod2);
 		productos.add(prod3);
+		productos.add(prod5);
+		productos.add(prod4);
 	}
 	
 	
@@ -41,11 +43,11 @@ public class ClasificadorPorRutasTest {
 		ClasificadorPorRutas<Producto> clas = new ClasificadorPorRutas<>(almacen, productos.size());
 		List<Producto> resultado = clas.ordenar(productos);
 		
-		assertEquals(prod1, resultado.get(0));
-		assertEquals(prod3, resultado.get(1));
-		assertEquals(prod2, resultado.get(2));
-//		assertEquals(prod4, resultado.get(3));
-//		assertEquals(prod5, resultado.get(4));
+		assertEquals(prod4, resultado.get(0));
+		assertEquals(prod1, resultado.get(1));
+		assertEquals(prod3, resultado.get(2));
+		assertEquals(prod5, resultado.get(3));
+		assertEquals(prod2, resultado.get(4));
 		
 	}
 

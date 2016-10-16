@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logica.GrupoProducto;
+import logica.Paquete;
 import logica.Pedido;
 import logica.Producto;
 
@@ -137,16 +138,34 @@ public class ConsultasMyShop {
 		
 	}
 	
+	/**Insertar una orden de trabajo en la base de datos
+	 * @param idAlmacenero
+	 * @param idPedido
+	 * @throws SQLException
+	 */
 	public static void crearUnaOrdenDeTrabajo(String idAlmacenero, String idPedido) throws SQLException{
-		String consulta = "INSERT INTO OrdenTrabajo VALUES (?,? , Procesando)";
-		instance.executePreparedQuery(consulta, idAlmacenero, idPedido);
+		String insertar = " INSERT INTO OrdenTrabajo VALUES ( ? , ? , ?) ";
+		instance.executePreparedQuery(insertar, idAlmacenero, idPedido, "Asignada");	
+	}
+	
+	/**Cambiar el estado de una orden de trabajo
+	 * @param nuevoEstado
+	 * @param idPedido
+	 * @throws SQLException
+	 */
+	public static void cambiarEstadoOrdenDeTrabajo(String nuevoEstado, String idPedido) throws SQLException {
+		String consulta = "UPDATE OrdenTrabajo set estado = ? where idPedido = ?";
+		instance.executePreparedQuery(consulta, nuevoEstado, idPedido);
 		
 	}
 	
-	public static void cambiarEstadoOrdenDeTrabajo(String nuevoEstado, String idPedido) throws SQLException {
-		String consulta = "UPDATE OrdenTrabajo set estado = ? where idAlmacenero = ? and idPedido = ?";
-		instance.executePreparedQuery(consulta, nuevoEstado, idPedido);
-		
+	/**Insertar un paquete a la base de datos
+	 * @param paquete
+	 * @throws SQLException
+	 */
+	public static void addPaquete(Paquete paquete) throws SQLException {
+		String consulta = "INSERT into Paquete values(?,?,?)";
+		instance.executePreparedQuery(consulta, paquete.getId(), paquete.getIdPedido(), paquete.getFechaEnvoltura());
 	}
 	
 	
