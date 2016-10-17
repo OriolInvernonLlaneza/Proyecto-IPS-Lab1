@@ -343,6 +343,18 @@ public class VentanaAlmacenero extends JFrame {
 			btnNotificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
+					if(modeloTOT.getRowCount() == 0)
+						return;
+					List<GrupoProducto> productosEnFalta= new ArrayList<GrupoProducto>(); //La lista de productos que vamos a notificar en el dialogo.
+					for(int row=0; row<pedidoElegido.getAgrupacion().size();row++){
+						if(Integer.parseInt(tOT.getValueAt(row, 3).toString())!=0){//La tabla solo trabaja con String asi que mejor hacerlo asi
+							productosEnFalta.add(pedidoElegido.getAgrupacion().get(tOT.getValueAt(row, 0).toString()));//Si no esta cogido lo a�adimos para notificar
+						}
+					}
+					vN= new VentanaNotificacion(aT,productosEnFalta,pedidoElegido.getId(),almacenero.getId());
+					vN.setLocationRelativeTo(aT);
+					vN.setModal(true);//Que no s epeuda tocar el resto del programa hasta que se acabe.
+					vN.setVisible(true);
 					
 					// Hay que solucionarlo
 					
@@ -350,7 +362,7 @@ public class VentanaAlmacenero extends JFrame {
 //						return;
 //					List<GrupoProducto> productosEnFalta= new ArrayList<Producto>(); //La lista de productos que vamos a notificar en el dialogo.
 //					for(int row=0; row<pedidoElegido.getTamano();row++){
-//						if(Boolean.parseBoolean(tOT.getValueAt(row, 3).toString()) == false){//La tabla solo trabaja con String asi que lo apa�amos asi
+//						if(Boolean.parseBoolean(tOT.getValueAt(row, 3).toString()) == false){//La tabla solo trabaja con String asi que mejor hacerlo asi
 //							productosEnFalta.add(pedidoElegido.getProductos().get(row));//Si no esta cogido lo a�adimos para notificar
 //						}
 //					}
@@ -401,8 +413,8 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	private JTable getTOT() {
 		if (tOT == null) {
-			//Cambiar este 10
-			modeloTOT= new ModeloEditableUnaCelda(new String[5],0,10);
+			//Cambiar este 100
+			modeloTOT= new ModeloEditableUnaCelda(new String[5],0,100);
 			tOT = new JTable(modeloTOT);
 			tOT.addMouseListener(new MouseAdapter() {
 				@Override

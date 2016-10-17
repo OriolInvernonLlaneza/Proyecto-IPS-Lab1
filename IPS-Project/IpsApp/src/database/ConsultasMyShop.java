@@ -168,5 +168,10 @@ public class ConsultasMyShop {
 		instance.executePreparedQuery(consulta, paquete.getId(), paquete.getIdPedido(), paquete.getFechaEnvoltura());
 	}
 	
+	public static void crearIncidencia(String idPedido, String idAlmacenero, String descripcion) throws SQLException{
+		String consulta="INSERT INTO incidencia VALUES(?,?,?)";
+		instance.executePreparedQuery(consulta, idPedido,idAlmacenero,descripcion);
+	}
+	
 	
 }

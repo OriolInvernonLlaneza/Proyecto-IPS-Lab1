@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -13,17 +14,24 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import database.ConsultasMyShop;
+import logica.Almacenero;
+import logica.GrupoProducto;
 import logica.Producto;
+import javax.swing.JCheckBox;
+import javax.swing.ButtonGroup;
 
 
 @SuppressWarnings("serial")
 public class VentanaNotificacion extends JDialog {
 	
 	private VentanaAlmacenero aT;
-	private  List<Producto> productosEnFalta;
+	private  List<GrupoProducto> productosEnFalta;
 	private ResourceManager manager;
 
 	private final JPanel contentPanel = new JPanel();
+	private final ButtonGroup grupoNotificacion = new ButtonGroup();
+	private TextArea txtNotificacion;
 
 	private void localizar(){
 		
@@ -45,12 +53,12 @@ public class VentanaNotificacion extends JDialog {
 		}
 		else{
 		sb.append(manager.getString("productosEnFalta") +  "\n");
-			for(Producto producto: productosEnFalta){
+			for(GrupoProducto producto: productosEnFalta){
 				sb.append(manager.getString("producto") + ": ");
-				sb.append(producto.getId());
+				sb.append(producto.getID());
 				sb.append(" ");
 				sb.append(manager.getString("nombre") + ": ");
-				sb.append(producto.getNombre());
+				sb.append(producto.getProducto().getNombre());
 				sb.append("\n");
 			}
 		}
@@ -59,7 +67,7 @@ public class VentanaNotificacion extends JDialog {
 		
 	}
 	
-	public VentanaNotificacion(VentanaAlmacenero aT, List<Producto> productosEnFalta) {
+	public VentanaNotificacion(VentanaAlmacenero aT, List<GrupoProducto> productosEnFalta,String idPedido, String idAlmacenero) {
 		this.aT=aT;
 		this.productosEnFalta=productosEnFalta;
 		manager = ResourceManager.getResourceManager();
@@ -70,7 +78,7 @@ public class VentanaNotificacion extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
-			TextArea txtNotificacion = new TextArea();
+			txtNotificacion = new TextArea();
 			txtNotificacion.setEditable(false);
 			contentPanel.add(txtNotificacion);
 			txtNotificacion.setText(redactar());
@@ -84,6 +92,12 @@ public class VentanaNotificacion extends JDialog {
 				JButton btnAceptar = new JButton(manager.getString("aceptar"));
 				btnAceptar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
+						try {
+							ConsultasMyShop.crearIncidencia(idPedido, idAlmacenero, txtNotificacion.getText());
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						dispose();
 					}
 				});
@@ -97,6 +111,33 @@ public class VentanaNotificacion extends JDialog {
 					}
 				});
 				pnBotones.add(btnCancelar);
+			}
+		}
+		{
+			JPanel panelOpciones = new JPanel();
+			contentPanel.add(panelOpciones, BorderLayout.NORTH);
+			{
+				JCheckBox checkFaltaProd = new JCheckBox("Falta de Productos");
+				checkFaltaProd.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						txtNotificacion.setText(redactar());
+						txtNotificacion.setEditable(false);
+					}
+				});
+				grupoNotificacion.add(checkFaltaProd);
+				checkFaltaProd.setSelected(true);
+				panelOpciones.add(checkFaltaProd);
+			}
+			{
+				JCheckBox checkOtrosMotiv = new JCheckBox("Otros Motivos");
+				checkOtrosMotiv.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						txtNotificacion.setEditable(true);
+						txtNotificacion.setText("Por favor, escriba aquí los motivos por los cuales no se peude acabar la orden de trabajo.");
+					}
+				});
+				grupoNotificacion.add(checkOtrosMotiv);
+				panelOpciones.add(checkOtrosMotiv);
 			}
 		}
 	}
