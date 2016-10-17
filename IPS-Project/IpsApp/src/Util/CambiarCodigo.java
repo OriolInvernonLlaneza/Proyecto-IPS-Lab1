@@ -21,7 +21,7 @@ public class CambiarCodigo implements TableModelListener{
 
 	@Override
 	public void tableChanged(TableModelEvent e) {
-		if(e.UPDATE==e.getType() && !(modelo.getValueAt(e.getFirstRow(), e.getColumn()).toString().equals(""))&& e.getColumn()==4){
+		if(e.UPDATE==e.getType() && !(modelo.getValueAt(e.getFirstRow(), e.getColumn()).toString().equals(""))&& !(modelo.getValueAt(e.getFirstRow(), e.getColumn()).toString().equals("Completado"))&& e.getColumn()==4){
 			if(e.getFirstRow()!=-1 || e.getColumn()!=-1){
 				//String First=codigos.get(e.getFirstRow());
 				//String second=modelo.getValueAt(e.getFirstRow(), e.getColumn()).toString();
@@ -29,7 +29,9 @@ public class CambiarCodigo implements TableModelListener{
 					int nuevaCantidad=Integer.parseInt(modelo.getValueAt(e.getFirstRow(), e.getColumn()-1).toString())-1;
 					modelo.setValueAt(nuevaCantidad, e.getFirstRow(), e.getColumn()-1);
 					if(nuevaCantidad<=0){
+						modelo.setValueAt("Completado", e.getFirstRow(), e.getColumn());
 						modelo.setCellEditable(e.getFirstRow(),e.getColumn(), false);
+						return;
 					}
 					//Si coincide se reduce en uno la cantidad de productos y si llega a 0 se vuelve no editable(o se intenta).
 				}
