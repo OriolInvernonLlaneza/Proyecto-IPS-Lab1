@@ -20,10 +20,12 @@ import logica.GrupoProducto;
 import logica.Producto;
 import javax.swing.JCheckBox;
 import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 
 @SuppressWarnings("serial")
-public class VentanaNotificacion extends JDialog {
+public class DialogoNotificacion extends JDialog {
 	
 	private VentanaAlmacenero aT;
 	private  List<GrupoProducto> productosEnFalta;
@@ -67,22 +69,16 @@ public class VentanaNotificacion extends JDialog {
 		
 	}
 	
-	public VentanaNotificacion(VentanaAlmacenero aT, List<GrupoProducto> productosEnFalta,String idPedido, String idAlmacenero) {
+	public DialogoNotificacion(VentanaAlmacenero aT, List<GrupoProducto> productosEnFalta,String idPedido, String idAlmacenero) {
 		this.aT=aT;
 		this.productosEnFalta=productosEnFalta;
 		manager = ResourceManager.getResourceManager();
 		setTitle(manager.getString("notificacionTitulo"));
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 520, 416);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
-		{
-			txtNotificacion = new TextArea();
-			txtNotificacion.setEditable(false);
-			contentPanel.add(txtNotificacion);
-			txtNotificacion.setText(redactar());
-		}
 		{
 			JPanel pnBotones = new JPanel();
 			FlowLayout fl_pnBotones = (FlowLayout) pnBotones.getLayout();
@@ -93,7 +89,10 @@ public class VentanaNotificacion extends JDialog {
 				btnAceptar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						try {
-							ConsultasMyShop.crearIncidencia(idPedido, idAlmacenero, txtNotificacion.getText());
+							if(!(txtNotificacion.getText().equals("")))
+								ConsultasMyShop.crearIncidencia(idPedido, idAlmacenero, txtNotificacion.getText());
+							else
+								JOptionPane.showMessageDialog(null, "Se debe introducir información relacionada con la incidencia.","Error descripcion",JOptionPane.OK_OPTION);;
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -133,11 +132,26 @@ public class VentanaNotificacion extends JDialog {
 				checkOtrosMotiv.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						txtNotificacion.setEditable(true);
-						txtNotificacion.setText("Por favor, escriba aquí los motivos por los cuales no se peude acabar la orden de trabajo.");
+						txtNotificacion.setText("");
 					}
 				});
 				grupoNotificacion.add(checkOtrosMotiv);
 				panelOpciones.add(checkOtrosMotiv);
+			}
+		}
+		{
+			JPanel panelTxtArea = new JPanel();
+			contentPanel.add(panelTxtArea, BorderLayout.CENTER);
+			panelTxtArea.setLayout(new BorderLayout(0, 0));
+			{
+				txtNotificacion = new TextArea();
+				panelTxtArea.add(txtNotificacion);
+				txtNotificacion.setEditable(false);
+				txtNotificacion.setText(redactar());
+			}
+			{
+				JLabel lblDescripcion = new JLabel("Descripcion:");
+				panelTxtArea.add(lblDescripcion, BorderLayout.NORTH);
 			}
 		}
 	}

@@ -70,7 +70,7 @@ public class VentanaAlmacenero extends JFrame {
 	
 	TableModelListener cambiarCodigo;
 	
-	private VentanaNotificacion vN;
+	private DialogoNotificacion vN;
 	private JPanel panelBotonesGeneral;
 	private JButton btnSalir;
 	
@@ -351,7 +351,7 @@ public class VentanaAlmacenero extends JFrame {
 							productosEnFalta.add(pedidoElegido.getAgrupacion().get(tOT.getValueAt(row, 0).toString()));//Si no esta cogido lo a�adimos para notificar
 						}
 					}
-					vN= new VentanaNotificacion(aT,productosEnFalta,pedidoElegido.getId(),almacenero.getId());
+					vN= new DialogoNotificacion(aT,productosEnFalta,pedidoElegido.getId(),almacenero.getId());
 					vN.setLocationRelativeTo(aT);
 					vN.setModal(true);//Que no s epeuda tocar el resto del programa hasta que se acabe.
 					vN.setVisible(true);
