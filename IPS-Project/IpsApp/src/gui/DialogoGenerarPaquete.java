@@ -17,62 +17,71 @@ import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 
 public class DialogoGenerarPaquete extends JDialog {
-	private JButton btnGenerarEtiquetaY;
+	private JButton btnGenerar;
 	
 	Almacenero almacenero;
 	DialogoUltimaComprobacion dialogoUltimaComprobacion;
-	private JScrollPane scrollPane;
-	private JTextArea txtrLosProductosSe;
+	private JScrollPane scInstrucciones;
+	private JTextArea txtInstrucciones;
+	private ResourceManager manager;
+	
+	private void localizar(){
+		txtInstrucciones.setText(manager.getString("instrucciones_empaquetado"));
+		btnGenerar.setText(manager.getString("boton_generar"));
+	}
+	
 
 	/**
 	 * Create the dialog.
 	 */
 	public DialogoGenerarPaquete(DialogoUltimaComprobacion dialogoUltimaComprobacion, Almacenero almacenero) {
 		this.dialogoUltimaComprobacion = dialogoUltimaComprobacion;
+		manager = ResourceManager.getResourceManager();
 		setModal(true);
 		setResizable(false);
 		this.almacenero = almacenero;
 		setBounds(100, 100, 600, 360);
 		getContentPane().setLayout(null);
-		getContentPane().add(getBtnGenerarEtiquetaY());
-		getContentPane().add(getScrollPane());
+		getContentPane().add(getBtnGenerar());
+		getContentPane().add(getScInstrucciones());
+		
+		localizar();
 
 	}
-	private JButton getBtnGenerarEtiquetaY() {
-		if (btnGenerarEtiquetaY == null) {
-			btnGenerarEtiquetaY = new JButton("Generar etiqueta y albaran");
-			btnGenerarEtiquetaY.addActionListener(new ActionListener() {
+	private JButton getBtnGenerar() {
+		if (btnGenerar == null) {
+			btnGenerar = new JButton();
+			btnGenerar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					//try {
 						//almacenero.empaquetar(almacenero.getOrdenDeTrabajoActual());
-						JOptionPane.showMessageDialog(null, "Etiqueta y albaran impresos, la aplicación volverá a la pantalla principal");
+						JOptionPane.showMessageDialog(null, manager.getString("elementos_impresos"));
 						dispose();
 						dialogoUltimaComprobacion.dispose();
 					//} catch (SQLException e1) {
-						//JOptionPane.showMessageDialog(null, "Ha habido un error al empaquetar");
+						//JOptionPane.showMessageDialog(null, manager.getString("error_empaquetado"));
 					//}
 					
 				}
 			});
-			btnGenerarEtiquetaY.setBounds(203, 252, 211, 34);
+			btnGenerar.setBounds(203, 252, 211, 34);
 		}
-		return btnGenerarEtiquetaY;
+		return btnGenerar;
 	}
-	private JScrollPane getScrollPane() {
-		if (scrollPane == null) {
-			scrollPane = new JScrollPane();
-			scrollPane.setBounds(10, 11, 574, 192);
-			scrollPane.setViewportView(getTxtrLosProductosSe());
+	private JScrollPane getScInstrucciones() {
+		if (scInstrucciones == null) {
+			scInstrucciones = new JScrollPane();
+			scInstrucciones.setBounds(10, 11, 574, 192);
+			scInstrucciones.setViewportView(getTxtInstrucciones());
 		}
-		return scrollPane;
+		return scInstrucciones;
 	}
-	private JTextArea getTxtrLosProductosSe() {
-		if (txtrLosProductosSe == null) {
-			txtrLosProductosSe = new JTextArea();
-			txtrLosProductosSe.setLineWrap(true);
-			txtrLosProductosSe.setWrapStyleWord(true);
-			txtrLosProductosSe.setText("Los productos se corresponden con los de la orden de trabajo. A continuacion, colocalos en un paquete y cierralo. Tras ello, pulsa el boton 'Generar etiqueta y albaran' para que el albaran y la etiqueta se impriman, una vez impresos,  pegalos en el paquete.");
+	private JTextArea getTxtInstrucciones() {
+		if (txtInstrucciones == null) {
+			txtInstrucciones = new JTextArea();
+			txtInstrucciones.setLineWrap(true);
+			txtInstrucciones.setWrapStyleWord(true);
 		}
-		return txtrLosProductosSe;
+		return txtInstrucciones;
 	}
 }

@@ -25,12 +25,20 @@ public class DialogoUltimaComprobacion extends JDialog {
 	private DialogoGenerarPaquete dialogoGenerarPaquete;
 	private DialogoUltimaComprobacion myself = this;
 	private JScrollPane scrollPane;
-	private JTextArea txtrElPedidoSe;
+	private JTextArea txtResultadoPedido;
+	
+	private ResourceManager manager;
+	
+	private void localizar(){
+		btnComprobar.setText(manager.getString("comprobar"));
+		txtResultadoPedido.setText(manager.getString("pedido_marcado_empaquetar"));
+	}
 
 	/**
 	 * Create the dialog.
 	 */
 	public DialogoUltimaComprobacion(Almacenero almacenero) {
+		manager = ResourceManager.getResourceManager();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setResizable(false);
@@ -39,10 +47,12 @@ public class DialogoUltimaComprobacion extends JDialog {
 		getContentPane().setLayout(null);
 		getContentPane().add(getBtnComprobar());
 		getContentPane().add(getScrollPane());
+		
+		localizar();
 	}
 	private JButton getBtnComprobar() {
 		if (btnComprobar == null) {
-			btnComprobar = new JButton("Comprobar");
+			btnComprobar = new JButton();
 			btnComprobar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					boolean productosCorrectos = almacenero.comprobarProductosRecogidos(almacenero.getOrdenDeTrabajoActual());
@@ -52,7 +62,7 @@ public class DialogoUltimaComprobacion extends JDialog {
 						dialogoGenerarPaquete.setVisible(true);
 					}
 					else {
-						JOptionPane.showMessageDialog(null, "Los productos recogidos no se corresponden con los de la orden de trabajo");
+						JOptionPane.showMessageDialog(null, manager.getString("productos_no_concuerdan"));
 					}
 				}
 			});
@@ -64,17 +74,16 @@ public class DialogoUltimaComprobacion extends JDialog {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setBounds(10, 11, 574, 181);
-			scrollPane.setViewportView(getTxtrElPedidoSe());
+			scrollPane.setViewportView(getTxtResultadoPedido());
 		}
 		return scrollPane;
 	}
-	private JTextArea getTxtrElPedidoSe() {
-		if (txtrElPedidoSe == null) {
-			txtrElPedidoSe = new JTextArea();
-			txtrElPedidoSe.setWrapStyleWord(true);
-			txtrElPedidoSe.setLineWrap(true);
-			txtrElPedidoSe.setText("El pedido se ha marcado para empaquetar, coloca los productos de la orden de trabajo sobre la cinta transportadora y pulsa el bot\u00F3n 'Comprobar' para revisar que los productos son los correctos.");
+	private JTextArea getTxtResultadoPedido() {
+		if (txtResultadoPedido == null) {
+			txtResultadoPedido = new JTextArea();
+			txtResultadoPedido.setWrapStyleWord(true);
+			txtResultadoPedido.setLineWrap(true);
 		}
-		return txtrElPedidoSe;
+		return txtResultadoPedido;
 	}
 }

@@ -39,7 +39,7 @@ public class DialogoPedido extends JDialog {
 	private HashMap<String, GrupoProducto> agrupacion;
 	
 	private JPanel pnDialogo;
-	private JPanel panel_1;
+	private JPanel pnBotones;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
 	private JPanel pnResumen;
@@ -74,6 +74,8 @@ public class DialogoPedido extends JDialog {
 	}
 	
 	private void localizar(){
+		setTitle(manager.getString("titulo_pedido"));
+		
 		btnAceptar.setText(manager.getString("aceptar"));
 		btnCancelar.setText(manager.getString("cancelar"));
 		
@@ -93,7 +95,7 @@ public class DialogoPedido extends JDialog {
 		setModal(true);
 		setBounds(100, 100, 536, 394);
 		getContentPane().add(getPnDialogo(), BorderLayout.CENTER);
-		getContentPane().add(getPanel_1(), BorderLayout.SOUTH);
+		getContentPane().add(getPnBotones(), BorderLayout.SOUTH);
 		
 		txtResumen.setText(escribirResumen());
 		txtResumen.setCaretPosition(0);
@@ -130,16 +132,16 @@ public class DialogoPedido extends JDialog {
 		}
 		return pnDialogo;
 	}
-	private JPanel getPanel_1() {
-		if (panel_1 == null) {
-			panel_1 = new JPanel();
-			FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
-			flowLayout.setAlignment(FlowLayout.RIGHT);
-			panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-			panel_1.add(getBtnAceptar());
-			panel_1.add(getBtnCancelar());
+	private JPanel getPnBotones() {
+		if (pnBotones == null) {
+			pnBotones = new JPanel();
+			FlowLayout fl_pnBotones = (FlowLayout) pnBotones.getLayout();
+			fl_pnBotones.setAlignment(FlowLayout.RIGHT);
+			pnBotones.setBorder(new LineBorder(new Color(0, 0, 0)));
+			pnBotones.add(getBtnAceptar());
+			pnBotones.add(getBtnCancelar());
 		}
-		return panel_1;
+		return pnBotones;
 	}
 	private JButton getBtnAceptar() {
 		if (btnAceptar == null) {

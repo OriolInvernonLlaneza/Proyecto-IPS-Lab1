@@ -36,7 +36,13 @@ public class DialogoNotificacion extends JDialog {
 	private TextArea txtNotificacion;
 
 	private void localizar(){
-		
+//		checkFaltaProd.setText(manager.getString("falta_productos"));
+//		checkOtrosMotiv.setText(manager.getString("chk_otros_motivos"));
+//		
+//		btnCancelar.setText(manager.getString("cancelar"));
+//		btnAceptar.setText(manager.getString("aceptar"));
+//		
+//		lblDescripcion.setText(manager.getString("descripcion") + ": ");
 	}
 
 	/**
@@ -92,7 +98,7 @@ public class DialogoNotificacion extends JDialog {
 							if(!(txtNotificacion.getText().equals("")))
 								ConsultasMyShop.crearIncidencia(idPedido, idAlmacenero, txtNotificacion.getText());
 							else
-								JOptionPane.showMessageDialog(null, "Se debe introducir información relacionada con la incidencia.","Error descripcion",JOptionPane.OK_OPTION);;
+								JOptionPane.showMessageDialog(null, manager.getString("informacion_faltante"), manager.getString("titulo_error_descripcion"), JOptionPane.OK_OPTION);;
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -116,7 +122,7 @@ public class DialogoNotificacion extends JDialog {
 			JPanel panelOpciones = new JPanel();
 			contentPanel.add(panelOpciones, BorderLayout.NORTH);
 			{
-				JCheckBox checkFaltaProd = new JCheckBox("Falta de Productos");
+				JCheckBox checkFaltaProd = new JCheckBox(manager.getString("falta_productos"));
 				checkFaltaProd.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						txtNotificacion.setText(redactar());
@@ -128,7 +134,7 @@ public class DialogoNotificacion extends JDialog {
 				panelOpciones.add(checkFaltaProd);
 			}
 			{
-				JCheckBox checkOtrosMotiv = new JCheckBox("Otros Motivos");
+				JCheckBox checkOtrosMotiv = new JCheckBox(manager.getString("chk_otros_motivos"));
 				checkOtrosMotiv.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						txtNotificacion.setEditable(true);
@@ -150,10 +156,11 @@ public class DialogoNotificacion extends JDialog {
 				txtNotificacion.setText(redactar());
 			}
 			{
-				JLabel lblDescripcion = new JLabel("Descripcion:");
+				JLabel lblDescripcion = new JLabel(manager.getString("descripcion") + ": ");
 				panelTxtArea.add(lblDescripcion, BorderLayout.NORTH);
 			}
 		}
+		localizar();
 	}
 
 }
