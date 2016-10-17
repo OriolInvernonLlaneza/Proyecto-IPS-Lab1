@@ -48,9 +48,8 @@ public class DialogoNotificacion extends JDialog {
 	private void localizar(){
 		checkFaltaProd.setText(manager.getString("falta_productos"));
 		checkOtrosMotiv.setText(manager.getString("chk_otros_motivos"));
-		
 		checkOtrosMotiv.setToolTipText(manager.getString("chk_otros_motivos"));
-		
+
 		btnCancelar.setText(manager.getString("cancelar"));
 		btnAceptar.setText(manager.getString("aceptar"));
 		
