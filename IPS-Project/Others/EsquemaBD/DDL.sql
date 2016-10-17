@@ -66,6 +66,14 @@ CREATE TABLE OrdenTrabajo(
 	FOREIGN KEY (idPedido) REFERENCES pedido
 );
 
+CREATE TABLE Incidencia(
+	idPedido VARCHAR(20),
+	idAlmacenero VARCHAR(20),
+	descripcion_incidencia VARCHAR(500),
+	PRIMARY KEY (idPedido),
+	FOREIGN KEY (idPedido, idAlmacenero) REFERENCES OrdenTrabajo
+);
+
 
 CREATE TABLE Paquete(
 	idPaquete VARCHAR(20),
