@@ -1,54 +1,67 @@
 package gui;
 
+import java.awt.EventQueue;
+
+import javax.swing.JDialog;
+import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import javax.swing.JButton;
 import java.awt.FlowLayout;
-import java.awt.TextArea;
-import java.awt.event.ActionEvent;
+import javax.swing.JCheckBox;
+import javax.swing.ButtonGroup;
+import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
+
+import database.ConsultasMyShop;
+import logica.GrupoProducto;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.awt.event.ActionEvent;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import database.ConsultasMyShop;
-import logica.Almacenero;
-import logica.GrupoProducto;
-import logica.Producto;
-import javax.swing.JCheckBox;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-
-@SuppressWarnings("serial")
 public class DialogoNotificacion extends JDialog {
-	
-	private VentanaAlmacenero aT;
 	private  List<GrupoProducto> productosEnFalta;
+	private String idPedido;
+	private String idAlmacenero;
 	private ResourceManager manager;
-
-	private final JPanel contentPanel = new JPanel();
+	
+	
+	private JPanel contentPanel;
+	private JPanel pnBotones;
+	private JPanel pnOpciones;
+	private JPanel pnTxtArea;
+	private JButton btnAceptar;
+	private JButton btnCancelar;
+	private JCheckBox checkFaltaProd;
+	private JCheckBox checkOtrosMotiv;
+	private final ButtonGroup grupoMotivos = new ButtonGroup();
+	private JTextArea txtNotificacion;
+	private JLabel lblDescripcion;
+	
 	private final ButtonGroup grupoNotificacion = new ButtonGroup();
-	private TextArea txtNotificacion;
 
 	private void localizar(){
-//		checkFaltaProd.setText(manager.getString("falta_productos"));
-//		checkOtrosMotiv.setText(manager.getString("chk_otros_motivos"));
-//		
-//		btnCancelar.setText(manager.getString("cancelar"));
-//		btnAceptar.setText(manager.getString("aceptar"));
-//		
-//		lblDescripcion.setText(manager.getString("descripcion") + ": ");
+		checkFaltaProd.setText(manager.getString("falta_productos"));
+		checkOtrosMotiv.setText(manager.getString("chk_otros_motivos"));
+		
+		checkOtrosMotiv.setToolTipText(manager.getString("chk_otros_motivos"));
+		
+		btnCancelar.setText(manager.getString("cancelar"));
+		btnAceptar.setText(manager.getString("aceptar"));
+		
+		lblDescripcion.setText(manager.getString("descripcion") + ": ");
 	}
 
 	/**
 	 * Create the dialog.
 	 */
-	//M�todo para redactar el miniinforme del area de texto.
+	//Metodo para redactar el miniinforme del area de texto.
+
 	private String redactar(){
 		Date fecha = new Date();
 		StringBuilder sb= new StringBuilder();
@@ -74,93 +87,128 @@ public class DialogoNotificacion extends JDialog {
 		return sb.toString();
 		
 	}
+
 	
-	public DialogoNotificacion(VentanaAlmacenero aT, List<GrupoProducto> productosEnFalta,String idPedido, String idAlmacenero) {
-		this.aT=aT;
+	public DialogoNotificacion(List<GrupoProducto> productosEnFalta,String idPedido, String idAlmacenero) {
 		this.productosEnFalta=productosEnFalta;
+		this.idPedido=idPedido;
+		this.idAlmacenero=idAlmacenero;
 		manager = ResourceManager.getResourceManager();
 		setTitle(manager.getString("notificacionTitulo"));
 		setBounds(100, 100, 520, 416);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(new BorderLayout(0, 0));
-		{
-			JPanel pnBotones = new JPanel();
-			FlowLayout fl_pnBotones = (FlowLayout) pnBotones.getLayout();
-			fl_pnBotones.setAlignment(FlowLayout.RIGHT);
-			contentPanel.add(pnBotones, BorderLayout.SOUTH);
-			{
-				JButton btnAceptar = new JButton(manager.getString("aceptar"));
-				btnAceptar.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						try {
-							if(!(txtNotificacion.getText().equals("")))
-								ConsultasMyShop.crearIncidencia(idPedido, idAlmacenero, txtNotificacion.getText());
-							else
-								JOptionPane.showMessageDialog(null, manager.getString("informacion_faltante"), manager.getString("titulo_error_descripcion"), JOptionPane.OK_OPTION);;
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						dispose();
-					}
-				});
-				pnBotones.add(btnAceptar);
-			}
-			{
-				JButton btnCancelar = new JButton(manager.getString("cancelar"));
-				btnCancelar.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						dispose();
-					}
-				});
-				pnBotones.add(btnCancelar);
-			}
-		}
-		{
-			JPanel panelOpciones = new JPanel();
-			contentPanel.add(panelOpciones, BorderLayout.NORTH);
-			{
-				JCheckBox checkFaltaProd = new JCheckBox(manager.getString("falta_productos"));
-				checkFaltaProd.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						txtNotificacion.setText(redactar());
-						txtNotificacion.setEditable(false);
-					}
-				});
-				grupoNotificacion.add(checkFaltaProd);
-				checkFaltaProd.setSelected(true);
-				panelOpciones.add(checkFaltaProd);
-			}
-			{
-				JCheckBox checkOtrosMotiv = new JCheckBox(manager.getString("chk_otros_motivos"));
-				checkOtrosMotiv.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						txtNotificacion.setEditable(true);
-						txtNotificacion.setText("");
-					}
-				});
-				grupoNotificacion.add(checkOtrosMotiv);
-				panelOpciones.add(checkOtrosMotiv);
-			}
-		}
-		{
-			JPanel panelTxtArea = new JPanel();
-			contentPanel.add(panelTxtArea, BorderLayout.CENTER);
-			panelTxtArea.setLayout(new BorderLayout(0, 0));
-			{
-				txtNotificacion = new TextArea();
-				panelTxtArea.add(txtNotificacion);
-				txtNotificacion.setEditable(false);
-				txtNotificacion.setText(redactar());
-			}
-			{
-				JLabel lblDescripcion = new JLabel(manager.getString("descripcion") + ": ");
-				panelTxtArea.add(lblDescripcion, BorderLayout.NORTH);
-			}
-		}
+		getContentPane().add(getContentPanel(), BorderLayout.CENTER);
+		
 		localizar();
 	}
 
+	private JPanel getContentPanel() {
+		if (contentPanel == null) {
+			contentPanel = new JPanel();
+			contentPanel.setLayout(new BorderLayout(0, 0));
+			contentPanel.add(getPnBotones(), BorderLayout.SOUTH);
+			contentPanel.add(getPnOpciones(), BorderLayout.NORTH);
+			contentPanel.add(getPnTxtArea());
+		}
+		return contentPanel;
+	}
+	private JPanel getPnBotones() {
+		if (pnBotones == null) {
+			pnBotones = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) pnBotones.getLayout();
+			flowLayout.setAlignment(FlowLayout.RIGHT);
+			pnBotones.add(getBtnAceptar());
+			pnBotones.add(getBtnCancelar());
+		}
+		return pnBotones;
+	}
+	private JPanel getPnOpciones() {
+		if (pnOpciones == null) {
+			pnOpciones = new JPanel();
+			pnOpciones.add(getCheckFaltaProd());
+			pnOpciones.add(getCheckOtrosMotiv());
+		}
+		return pnOpciones;
+	}
+	private JPanel getPnTxtArea() {
+		if (pnTxtArea == null) {
+			pnTxtArea = new JPanel();
+			pnTxtArea.setLayout(new BorderLayout(0, 0));
+			pnTxtArea.add(getTxtNotificacion(), BorderLayout.CENTER);
+			pnTxtArea.add(getLblDescripcion(), BorderLayout.NORTH);
+		}
+		return pnTxtArea;
+	}
+	private JButton getBtnAceptar() {
+		if (btnAceptar == null) {
+			btnAceptar = new JButton("Aceptar");
+			btnAceptar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					try {
+						if(!(txtNotificacion.getText().equals("")))
+							ConsultasMyShop.crearIncidencia(idPedido, idAlmacenero, txtNotificacion.getText());
+						else
+							JOptionPane.showMessageDialog(null, manager.getString("informacion_faltante"), manager.getString("titulo_error_descripcion"),JOptionPane.OK_OPTION);;
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					dispose();
+				}
+			});		
+		
+		}
+		return btnAceptar;
+	}
+		
+	private JButton getBtnCancelar() {
+		if (btnCancelar == null) {
+			btnCancelar = new JButton("Cancelar");
+			btnCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
+		}
+		return btnCancelar;
+	}
+	private JCheckBox getCheckFaltaProd() {
+		if (checkFaltaProd == null) {
+			checkFaltaProd = new JCheckBox("Falta de productos");
+			checkFaltaProd.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					txtNotificacion.setText(redactar());
+					txtNotificacion.setEditable(false);
+				}
+			});
+			grupoMotivos.add(checkFaltaProd);
+			checkFaltaProd.setSelected(true);
+		}
+		return checkFaltaProd;
+	}
+	private JCheckBox getCheckOtrosMotiv() {
+		if (checkOtrosMotiv == null) {
+			checkOtrosMotiv = new JCheckBox();
+			checkOtrosMotiv.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					txtNotificacion.setEditable(true);
+					txtNotificacion.setText("");
+				}
+			});
+			grupoMotivos.add(checkOtrosMotiv);
+		}
+		return checkOtrosMotiv;
+	}
+	private JTextArea getTxtNotificacion() {
+		if (txtNotificacion == null) {
+			txtNotificacion = new JTextArea();
+			txtNotificacion.setText(redactar());
+		}
+		return txtNotificacion;
+	}
+	private JLabel getLblDescripcion() {
+		if (lblDescripcion == null) {
+			lblDescripcion = new JLabel();
+		}
+		return lblDescripcion;
+	}
 }
