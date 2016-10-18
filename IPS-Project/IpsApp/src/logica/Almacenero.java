@@ -2,6 +2,7 @@ package logica;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import database.ConsultasMyShop;
@@ -132,6 +133,21 @@ public class Almacenero {
 	 * @return
 	 */
 	public boolean comprobarProductosRecogidos(OrdenDeTrabajo ot) {
+		/*List<GrupoProducto> productosRecogidos = ot.getProductosRecogidos();
+		HashMap<String, GrupoProducto> productosOrdenados = ot.getPedido().getAgrupacion(); // Productos que mandaba la OT recoger
+		if (productosOrdenados.size() != productosRecogidos.size()) {
+			return false;
+		}
+		for(GrupoProducto grupoProducto: productosRecogidos) {
+			//Para cada producto recogido, comprobar si se habia ordenado recoger, y si se recogio la cantidad correcta
+			if (productosOrdenados.containsKey(grupoProducto.getProducto().getId())) {
+				if(productosOrdenados.get(grupoProducto.getProducto().getId()).getCantidad() != grupoProducto.getCantidad())
+					return false;
+			}
+			else {
+				return false;
+			}
+		}*/
 		return true;
 	}
 	

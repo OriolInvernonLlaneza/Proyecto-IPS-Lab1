@@ -7,6 +7,7 @@ public class Paquete {
 	private String id;
 	private String idPedido;
 	private Timestamp fechaEnvoltura;
+	private Pedido pedido;
 	
 	public Paquete(OrdenDeTrabajo ot) {
 		// Buscar una manera de generar IDs no repetidos
@@ -37,6 +38,24 @@ public class Paquete {
 
 	public void setFechaEnvoltura(Timestamp fechaEnvoltura) {
 		this.fechaEnvoltura = fechaEnvoltura;
+	}
+	
+	/**Datos del pedido
+	 * @return
+	 */
+	public String generarEtiqueta() {
+		return "ID: " + idPedido + "Fecha de envoltura: " + fechaEnvoltura.toString(); 
+	}
+	
+	/**Datos del cliente, direccion y precio
+	 * @return
+	 */
+	public String generarAlbaran() {
+		String datos = "Nombre: " + pedido.getCliente().getName() + 
+				" Apellidos: " + pedido.getCliente().getApellidos() + 
+				" Direccion: " + pedido.getCliente().getDireccion() +
+				" Precio: " + pedido.getPrecio();
+		return datos;
 	}
 	
 	

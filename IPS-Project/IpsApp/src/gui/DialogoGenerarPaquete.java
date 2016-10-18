@@ -79,6 +79,7 @@ public class DialogoGenerarPaquete extends JDialog {
 	private JTextArea getTxtInstrucciones() {
 		if (txtInstrucciones == null) {
 			txtInstrucciones = new JTextArea();
+			txtInstrucciones.setEditable(false);
 			txtInstrucciones.setLineWrap(true);
 			txtInstrucciones.setWrapStyleWord(true);
 		}

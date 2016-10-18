@@ -81,6 +81,7 @@ public class DialogoUltimaComprobacion extends JDialog {
 	private JTextArea getTxtResultadoPedido() {
 		if (txtResultadoPedido == null) {
 			txtResultadoPedido = new JTextArea();
+			txtResultadoPedido.setEditable(false);
 			txtResultadoPedido.setWrapStyleWord(true);
 			txtResultadoPedido.setLineWrap(true);
 		}
