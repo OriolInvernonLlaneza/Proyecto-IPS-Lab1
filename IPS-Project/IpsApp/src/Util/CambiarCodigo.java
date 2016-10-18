@@ -6,17 +6,22 @@ import javax.swing.JOptionPane;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import logica.OrdenDeTrabajo;
+
 	
 public class CambiarCodigo implements TableModelListener{
 
 	List<String> codigos;
 	private ModeloEditableUnaCelda modelo;
+	private OrdenDeTrabajo oT;
 	
-	public CambiarCodigo(List<String> codigos,ModeloEditableUnaCelda modelo) {
+	public CambiarCodigo(List<String> codigos,ModeloEditableUnaCelda modelo,OrdenDeTrabajo oT) {
 		this.codigos=codigos;
 		this.modelo=modelo;
+		this.oT=oT;
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public void tableChanged(TableModelEvent e) {
 		if(e.UPDATE==e.getType() && !(modelo.getValueAt(e.getFirstRow(), e.getColumn()).toString().equals(""))&& !(modelo.getValueAt(e.getFirstRow(), e.getColumn()).toString().equals("Completado"))&& e.getColumn()==4){
@@ -26,6 +31,7 @@ public class CambiarCodigo implements TableModelListener{
 				if(codigos.get(e.getFirstRow()).equals(modelo.getValueAt(e.getFirstRow(), e.getColumn()).toString())){
 					int nuevaCantidad=Integer.parseInt(modelo.getValueAt(e.getFirstRow(), e.getColumn()-1).toString())-1;
 					modelo.setValueAt(nuevaCantidad, e.getFirstRow(), e.getColumn()-1);
+					oT.anadirProducto(oT.getPedido().encontrarGrupoProductoPorID((modelo.getValueAt(e.getFirstRow(), 0)).toString()));
 					if(nuevaCantidad<=0){
 						modelo.setValueAt("Completado", e.getFirstRow(), e.getColumn());
 						modelo.setCellEditable(e.getFirstRow(),e.getColumn(), false);
@@ -34,7 +40,7 @@ public class CambiarCodigo implements TableModelListener{
 					//Si coincide se reduce en uno la cantidad de productos y si llega a 0 se vuelve no editable(o se intenta).
 				}
 				else{
-					JOptionPane.showMessageDialog(null,"El código no coincide.Por favor, use el producto adecuado.","Error codigo de barras", JOptionPane.OK_OPTION);
+					JOptionPane.showMessageDialog(null,"El código no coincide. Por favor, use el producto adecuado.","Error codigo de barras", JOptionPane.OK_OPTION);
 				}
 				modelo.setValueAt("", e.getFirstRow(), e.getColumn());
 			}

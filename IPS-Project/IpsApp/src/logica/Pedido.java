@@ -86,6 +86,9 @@ public class Pedido {
 		return codigos;
 	}
 	
+	public GrupoProducto encontrarGrupoProductoPorID(String ID){
+		return agrupacion.get(ID);
+	}
     
 
 }

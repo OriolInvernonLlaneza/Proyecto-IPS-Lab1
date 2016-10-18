@@ -48,5 +48,18 @@ public class OrdenDeTrabajo {
 	public void setProductosRecogidos(List<GrupoProducto> productosRecogidos) {
 		this.productosRecogidos = productosRecogidos;
 	}
+	
+	//Metodo para anadir productos a la orden de trabajo.
+	public void anadirProducto(GrupoProducto gProducto){
+		//Miramos si el producto esta en la lista.
+		if(productosRecogidos.contains(gProducto)){
+			//Si lo esta entonces solo tenemos que añadir una unidad en ese producto.
+			productosRecogidos.get(productosRecogidos.indexOf(gProducto)).anadirProducto();;
+		}
+		else{
+			//Si no, tenemos que crear un nuevo GrupoProducto con el contador de unidades a 1 para no modificar el presente en los pedidos.
+			productosRecogidos.add(new GrupoProducto(gProducto.getProducto(),1));
+		}
+	}
 
 }

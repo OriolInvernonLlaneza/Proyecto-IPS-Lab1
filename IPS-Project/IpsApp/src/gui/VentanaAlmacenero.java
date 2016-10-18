@@ -248,7 +248,13 @@ public class VentanaAlmacenero extends JFrame {
 						pedidoElegido=pedidos.get(elegido);
 						RellenarTablaOT(pedidoElegido);
 						almacenero.setOrdenDeTrabajoActual(new OrdenDeTrabajo(almacenero, pedidoElegido, "En curso"));
-						cambiarCodigo=new CambiarCodigo(pedidoElegido.getCodigos(),modeloTOT);
+						cambiarCodigo=new CambiarCodigo(pedidoElegido.getCodigos(),modeloTOT, almacenero.getOrdenDeTrabajoActual());
+						try {
+							ConsultasMyShop.crearUnaOrdenDeTrabajo(almacenero.getId(), pedidoElegido.getId());
+						} catch (SQLException e) {
+							//Ya esta asignada todo ok.
+							//e.printStackTrace();
+						}
 						//El modelo debe cambiar las celdas no editables por todas editables
 						modeloTOT.restart();
 						//El modelo debe añadir de nuevo el listener con la nueva informacion.

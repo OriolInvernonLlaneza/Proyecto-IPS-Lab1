@@ -139,8 +139,11 @@ public class DialogoNotificacion extends JDialog {
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
-						if(!(txtNotificacion.getText().equals("")))
+						if(!(txtNotificacion.getText().equals(""))){
 							ConsultasMyShop.crearIncidencia(idPedido, idAlmacenero, txtNotificacion.getText());
+							//Mirar esto bien.
+							ConsultasMyShop.cambiarEstadoOrdenDeTrabajo("Notificado", idPedido);
+						}
 						else
 							JOptionPane.showMessageDialog(null, manager.getString("informacion_faltante"), manager.getString("titulo_error_descripcion"),JOptionPane.OK_OPTION);;
 					} catch (SQLException e) {
