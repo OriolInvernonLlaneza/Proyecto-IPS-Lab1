@@ -1,28 +1,24 @@
 package gui;
 
-import java.awt.EventQueue;
-
-import javax.swing.JDialog;
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.JButton;
 import java.awt.FlowLayout;
-import javax.swing.JCheckBox;
-import javax.swing.ButtonGroup;
-import javax.swing.JTextArea;
-import javax.swing.border.EmptyBorder;
-
-import database.ConsultasMyShop;
-import logica.GrupoProducto;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-import java.awt.event.ActionEvent;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
+import database.ConsultasMyShop;
+import logica.GrupoProducto;
 
 public class DialogoNotificacion extends JDialog {
 	private  List<GrupoProducto> productosEnFalta;

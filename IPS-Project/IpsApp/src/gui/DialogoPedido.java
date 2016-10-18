@@ -57,7 +57,7 @@ public class DialogoPedido extends JDialog {
 	private String escribirResumen(){
 		double precio = 0;
 		
-		StringBuilder str = new StringBuilder(manager.cambiarFechaAZona(Calendar.getInstance().getTime()));
+		StringBuilder str = new StringBuilder(manager.cambiarFechaAZona(Calendar.getInstance(manager.getLocale()).getTime()));
 		str.append("\n");
 		str.append("---------------------------");
 		str.append("\n");
@@ -148,7 +148,7 @@ public class DialogoPedido extends JDialog {
 			btnAceptar = new JButton();
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					if(txApellidos.getText() == "" && txApellidos.getText().length() >=3 && txNombre.getText().length() >=3 && txNombre.getText() == ""){
+					if(txApellidos.getText() == "" && txApellidos.getText().length() <3 && txNombre.getText().length() <3 && txNombre.getText() == ""){
 						JOptionPane.showMessageDialog(null, manager.getString("camposVacios"), manager.getString("error"), JOptionPane.ERROR_MESSAGE);
 						return;
 					}else{
@@ -183,6 +183,11 @@ public class DialogoPedido extends JDialog {
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton();
+			btnCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
 		}
 		return btnCancelar;
 	}
