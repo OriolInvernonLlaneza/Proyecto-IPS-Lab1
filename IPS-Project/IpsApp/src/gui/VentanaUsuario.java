@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +37,6 @@ import Util.SpinnerRenderer;
 import database.ConsultasMyShop;
 import logica.GrupoProducto;
 import logica.Producto;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
  
 public class VentanaUsuario extends JFrame {
 	

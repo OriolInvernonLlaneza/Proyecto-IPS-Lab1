@@ -1,20 +1,15 @@
 package gui;
 
-import java.awt.EventQueue;
-
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.sql.SQLException;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import logica.Almacenero;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
-import javax.swing.JScrollPane;
 
 public class DialogoGenerarPaquete extends JDialog {
 	private JButton btnGenerar;

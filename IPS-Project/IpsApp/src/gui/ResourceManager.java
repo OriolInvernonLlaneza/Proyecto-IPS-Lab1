@@ -1,8 +1,8 @@
 package gui;
 
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -10,7 +10,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.JComponent;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.NumberFormatter;
 
 public class ResourceManager {
 	
@@ -24,7 +23,7 @@ public class ResourceManager {
 	private ResourceManager(Locale locale){
 		try {
 			bundle = ResourceBundle.getBundle(BUNDLE, locale);
-			formato = new SimpleDateFormat("DD/MM/YYYY hh:mm:ss", locale);
+			formato = new SimpleDateFormat("dd/MM/YYYY hh:mm:ss aaa", locale);
 			this.locale = locale;
 		} catch (MissingResourceException e) {
 			bundle = ResourceBundle.getBundle(BUNDLE, new Locale("es"));
@@ -77,8 +76,23 @@ public class ResourceManager {
 		return formato.format(fecha).toString();
 	}
 	
+	public Date parsearFecha(String fecha){
+		Date date = null;
+		try {
+			date = formato.parse(fecha);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return date;
+	}
+	
 	public String formatearNumeros(Number numero){
 		return NumberFormat.getCurrencyInstance().format(numero);
+	}
+
+	public Locale getLocale() {
+		return locale;
 	}
 
 }

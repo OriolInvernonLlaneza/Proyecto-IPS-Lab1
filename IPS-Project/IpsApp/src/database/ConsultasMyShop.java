@@ -46,8 +46,8 @@ public class ConsultasMyShop {
 				GrupoProducto grupo = new GrupoProducto(producto, rsProductos.getInt(7));
 				productos.add(grupo);
 			}
-			//idPedido, idUsuario, preciopedido, direccion, fecha
-			pedidos.add(new Pedido(rs.getString(1), rs.getString(2), rs.getDate(3),rs.getInt(4), rs.getDouble(5), rs.getString(6), productos));
+			//pedido.idpedido, pedido.idusuario, fecha, sum(cantidad), precio_pedido, direccion
+			pedidos.add(new Pedido(rs.getString(1), rs.getString(2), rs.getDate(3), rs.getInt(4), rs.getDouble(5), rs.getString(6), productos));
 		}
 		
 		return pedidos;
