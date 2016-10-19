@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -48,14 +49,14 @@ public class DialogoGenerarPaquete extends JDialog {
 			btnGenerar = new JButton();
 			btnGenerar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//try {
-						//almacenero.empaquetar(almacenero.getOrdenDeTrabajoActual());
+					try {
+						almacenero.empaquetar(almacenero.getOrdenDeTrabajoActual());
 						JOptionPane.showMessageDialog(null, manager.getString("elementos_impresos"));
 						dispose();
 						dialogoUltimaComprobacion.dispose();
-					//} catch (SQLException e1) {
-						//JOptionPane.showMessageDialog(null, manager.getString("error_empaquetado"));
-					//}
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null, manager.getString("error_empaquetado"));
+					}
 					
 				}
 			});

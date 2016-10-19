@@ -384,9 +384,9 @@ public class VentanaAlmacenero extends JFrame {
 					}
 					else {
 						try {
-							casoPruebaPedro();
-							//OrdenDeTrabajo ot = almacenero.getOrdenDeTrabajoActual();
-							//almacenero.marcarParaEmpaquetar(ot);
+							//casoPruebaPedro();
+							OrdenDeTrabajo ot = almacenero.getOrdenDeTrabajoActual();
+							almacenero.marcarParaEmpaquetar(ot);
 							dialogoUltimaComprobacion = new DialogoUltimaComprobacion(almacenero);
 							dialogoUltimaComprobacion.setLocationRelativeTo(null);
 							dialogoUltimaComprobacion.setVisible(true);
