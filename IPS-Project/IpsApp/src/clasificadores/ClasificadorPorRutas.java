@@ -15,7 +15,6 @@ import logica.Almacenado;
  */
 public class ClasificadorPorRutas<T extends Almacenado> implements Clasificador<T> {
 
-	private final double ENTRAR_ALMACEN = 5.0;
 	private final double CAMBIAR_CARA = 2.0;
 	private final double CAMBIAR_ESTANTERIA = 7.0;
 	private final double RECORRER_ESTANTERIA = 4.0;
@@ -23,7 +22,6 @@ public class ClasificadorPorRutas<T extends Almacenado> implements Clasificador<
 	//Dijkstra
 	private int[] pd; //Pasos que tomar
 	public final static int INDEX_NOT_FOUND = -1; 
-	//private static final double FLOYD_INFINITE = 99;
 	
 	private double[][] costes;
 	private boolean[][] caminos;

@@ -10,7 +10,9 @@ import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,7 +28,9 @@ import javax.swing.event.TableModelListener;
 import Util.CambiarCodigo;
 import Util.ModeloEditableUnaCelda;
 import Util.ModeloNoEditable;
+import clasificadores.ClasificadorPorRutas;
 import database.ConsultasMyShop;
+import logica.Almacen;
 import logica.Almacenero;
 import logica.GrupoProducto;
 import logica.OrdenDeTrabajo;
@@ -151,7 +155,8 @@ public class VentanaAlmacenero extends JFrame {
 	//Metodo para añadir las filas correspondientes al producto elegido en la tabla de pedidos.
 	private void RellenarTablaOT(Pedido pedido){
 		Object[] nuevaFila = new Object[5];
-		for(GrupoProducto grupo : pedido.getAgrupacion().values()){
+		List<GrupoProducto> grupos = reorganizarLista(new HashSet<>(pedido.getAgrupacion().values()));
+		for(GrupoProducto grupo : grupos){
 			Producto producto = grupo.getProducto();
 			nuevaFila[0] = producto.getId();
 			nuevaFila[1] = producto.getNombre();
@@ -160,6 +165,12 @@ public class VentanaAlmacenero extends JFrame {
 			nuevaFila[3] = grupo.getCantidad();
 			modeloTOT.addRow(nuevaFila);
 		}
+	}
+	
+	private List<GrupoProducto> reorganizarLista(Set<GrupoProducto> grupos){
+		Almacen<GrupoProducto> almacen = new Almacen<>(3, 10);
+		ClasificadorPorRutas<GrupoProducto> clas = new ClasificadorPorRutas<>(almacen, grupos.size());
+		return clas.ordenar(grupos);
 	}
 	
 	

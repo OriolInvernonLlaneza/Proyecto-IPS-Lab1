@@ -1,6 +1,6 @@
 package logica;
 
-public class GrupoProducto implements Comparable<GrupoProducto>{
+public class GrupoProducto implements Comparable<GrupoProducto>, Almacenado{
 	
 	private Producto producto;
 	private int cantidad;
@@ -60,6 +60,11 @@ public class GrupoProducto implements Comparable<GrupoProducto>{
 			string+=" - " + cantidad + "x";
 		return string;
 		
+	}
+
+	@Override
+	public String getPosicion() {
+		return this.producto.getLocalizacion();
 	}
 	
 	
