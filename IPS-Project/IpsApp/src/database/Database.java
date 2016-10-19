@@ -27,8 +27,8 @@ public class Database {
         try {
             props = new Properties();
             props.load(new FileInputStream("IpsApp/DB.properties"));
-            //conn = DriverManager.getConnection("jdbc:oracle:thin:@156.35.94.99:1521:DESA", props);
-            conn = DriverManager.getConnection("jdbc:h2:./IpsApp/Database/files/DBApp;IFEXISTS=TRUE;AUTO_SERVER=TRUE", "SA", "");
+            conn = DriverManager.getConnection("jdbc:oracle:thin:@156.35.94.99:1521:DESA", props);
+            //conn = DriverManager.getConnection("jdbc:h2:./IpsApp/Database/files/DBApp;IFEXISTS=TRUE;AUTO_SERVER=TRUE", "SA", "");
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IOException file){

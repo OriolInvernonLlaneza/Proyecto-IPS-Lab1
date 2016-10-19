@@ -72,7 +72,7 @@ CREATE TABLE Incidencia(
 	descripcion_incidencia VARCHAR(500),
 	PRIMARY KEY (idPedido),
 	FOREIGN KEY (idPedido) REFERENCES OrdenTrabajo(idPedido),
-	FOREIGN KEY (idAlmacenero) REFERENCES OrdenTrabajo(idAlmacenero)
+	FOREIGN KEY (idAlmacenero) REFERENCES Almacenero(idAlmacenero)
 );
 
 
