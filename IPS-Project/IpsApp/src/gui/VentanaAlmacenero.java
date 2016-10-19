@@ -349,7 +349,7 @@ public class VentanaAlmacenero extends JFrame {
 							productosEnFalta.add(pedidoElegido.getAgrupacion().get(tOT.getValueAt(row, 0).toString()));//Si no esta cogido lo a�adimos para notificar
 						}
 					}
-					vN= new DialogoNotificacion(productosEnFalta,pedidoElegido.getId(),almacenero.getId());
+					vN= new DialogoNotificacion(productosEnFalta,pedidoElegido.getId(),almacenero.getId(), btnRefrescar);
 					vN.setLocationRelativeTo(aT);
 					vN.setModal(true);//Que no se peuda tocar el resto del programa hasta que se acabe.
 					vN.setVisible(true);

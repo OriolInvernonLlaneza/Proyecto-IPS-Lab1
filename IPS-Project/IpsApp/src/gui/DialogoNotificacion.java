@@ -26,6 +26,8 @@ public class DialogoNotificacion extends JDialog {
 	private String idAlmacenero;
 	private ResourceManager manager;
 	
+	//Componente de la VENTANA ALMACENERO APRA TENER ACESO A REFRESCAR TABLAS.
+	private JButton btnRefrescar;
 	
 	private JPanel contentPanel;
 	private JPanel pnBotones;
@@ -84,10 +86,11 @@ public class DialogoNotificacion extends JDialog {
 	}
 
 	
-	public DialogoNotificacion(List<GrupoProducto> productosEnFalta,String idPedido, String idAlmacenero) {
+	public DialogoNotificacion(List<GrupoProducto> productosEnFalta,String idPedido, String idAlmacenero, JButton btnRefrescar) {
 		this.productosEnFalta=productosEnFalta;
 		this.idPedido=idPedido;
 		this.idAlmacenero=idAlmacenero;
+		this.btnRefrescar=btnRefrescar;
 		manager = ResourceManager.getResourceManager();
 		setTitle(manager.getString("notificacionTitulo"));
 		setBounds(100, 100, 520, 416);
@@ -143,13 +146,15 @@ public class DialogoNotificacion extends JDialog {
 							ConsultasMyShop.crearIncidencia(idPedido, idAlmacenero, txtNotificacion.getText());
 							//Mirar esto bien.
 							ConsultasMyShop.cambiarEstadoOrdenDeTrabajo("Incidencia", idPedido);
+							
 						}
 						else
-							JOptionPane.showMessageDialog(null, manager.getString("informacion_faltante"), manager.getString("titulo_error_descripcion"),JOptionPane.OK_OPTION);;
+							JOptionPane.showMessageDialog(null, manager.getString("informacion_faltante"), manager.getString("titulo_error_descripcion"),JOptionPane.OK_OPTION);
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					btnRefrescar.doClick();
 					dispose();
 				}
 			});		
