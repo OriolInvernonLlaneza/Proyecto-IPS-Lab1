@@ -43,7 +43,7 @@ CREATE TABLE Pedido(
 	direccion VARCHAR(500),
 	fecha TIMESTAMP,
 	PRIMARY KEY (idPedido),
-	FOREIGN KEY(idUsuario) references Usuario
+	FOREIGN KEY(idUsuario) references Usuario(idUsuario)
 
 );
 
@@ -52,8 +52,8 @@ CREATE TABLE ProductoPedido(
 	idPedido VARCHAR(20),
 	cantidad NUMERIC(4, 0),
 	
-	FOREIGN KEY(idProducto) REFERENCES Producto,
-	FOREIGN KEY (idPedido) REFERENCES Pedido
+	FOREIGN KEY(idProducto) REFERENCES Producto(idProducto),
+	FOREIGN KEY (idPedido) REFERENCES Pedido(idPedido)
 );
 
 CREATE TABLE OrdenTrabajo(
@@ -62,8 +62,8 @@ CREATE TABLE OrdenTrabajo(
 	estado VARCHAR(70),
 	CHECK (estado IN ('Empaquetada', 'Asignada', 'Incidencia', 'Marcada para empaquetar')),
 	PRIMARY KEY (idPedido),
-	FOREIGN KEY (idAlmacenero) REFERENCES almacenero,
-	FOREIGN KEY (idPedido) REFERENCES pedido
+	FOREIGN KEY (idAlmacenero) REFERENCES almacenero(idAlmacenero),
+	FOREIGN KEY (idPedido) REFERENCES pedido(idPedido)
 );
 
 CREATE TABLE Incidencia(
@@ -71,8 +71,8 @@ CREATE TABLE Incidencia(
 	idAlmacenero VARCHAR(20),
 	descripcion_incidencia VARCHAR(500),
 	PRIMARY KEY (idPedido),
-	FOREIGN KEY (idPedido) REFERENCES OrdenTrabajo
-	FOREIGN KEY (idAlmacenero) REFERENCES OrdenTrabajo
+	FOREIGN KEY (idPedido) REFERENCES OrdenTrabajo(idPedido),
+	FOREIGN KEY (idAlmacenero) REFERENCES OrdenTrabajo(idAlmacenero)
 );
 
 
@@ -81,7 +81,7 @@ CREATE TABLE Paquete(
 	idPedido VARCHAR(20),
 	fechaEnvoltura TIMESTAMP,
 	PRIMARY KEY (idPaquete),
-	FOREIGN KEY(idPedido) REFERENCES PEDIDO
+	FOREIGN KEY(idPedido) REFERENCES PEDIDO(idPedido)
 );
 
 INSERT INTO Almacenero VALUES ('alm01', 'cntrsAlmacenero01', 'Almacenero01', 'AlmaceneroApellido01');

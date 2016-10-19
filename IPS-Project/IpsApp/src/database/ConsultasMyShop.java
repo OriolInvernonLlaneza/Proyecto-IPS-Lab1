@@ -76,7 +76,7 @@ public class ConsultasMyShop {
 	public static void crearUsuario(String id, String nombre, String apellido) throws SQLException{
 		String insertar = " INSERT INTO Usuario VALUES (?, ?, ?, ?)";
 		//id, contraseña, nombre, apellido
-		instance.executePreparedQuery(insertar, id, new GeneradorContrasena(nombre).generarID(), nombre, apellido);
+		instance.executeUpdate(insertar, id, new GeneradorContrasena(nombre).generarID(), nombre, apellido);
 	}
 	
 	/**
@@ -89,7 +89,7 @@ public class ConsultasMyShop {
 		
 		//pedido, usuario, precio, direccion, fecha
 		String insertar = " INSERT INTO Pedido VALUES ( ? , ? , ? , ? , ? ) ";
-		instance.executePreparedQuery(insertar, pedido.getId(), pedido.getIdUsuario(), precioTotal, "direccionBase", new java.sql.Timestamp(System.currentTimeMillis()));
+		instance.executeUpdate(insertar, pedido.getId(), pedido.getIdUsuario(), precioTotal, "direccionBase", new java.sql.Timestamp(System.currentTimeMillis()));
 		
 		//idProducto, idPedido, cantidad
 
@@ -145,7 +145,7 @@ public class ConsultasMyShop {
 	 */
 	public static void crearUnaOrdenDeTrabajo(String idAlmacenero, String idPedido) throws SQLException{
 		String insertar = " INSERT INTO OrdenTrabajo VALUES ( ? , ? , ?) ";
-		instance.executePreparedQuery(insertar, idAlmacenero, idPedido, "Asignada");	
+		instance.executeUpdate(insertar, idAlmacenero, idPedido, "Asignada");	
 	}
 	
 	/**Cambiar el estado de una orden de trabajo
@@ -155,7 +155,7 @@ public class ConsultasMyShop {
 	 */
 	public static void cambiarEstadoOrdenDeTrabajo(String nuevoEstado, String idPedido) throws SQLException {
 		String consulta = "UPDATE OrdenTrabajo set estado = ? where idPedido = ?";
-		instance.executePreparedQuery(consulta, nuevoEstado, idPedido);
+		instance.executeUpdate(consulta, nuevoEstado, idPedido);
 		
 	}
 	
@@ -165,12 +165,12 @@ public class ConsultasMyShop {
 	 */
 	public static void addPaquete(Paquete paquete) throws SQLException {
 		String consulta = "INSERT into Paquete values(?,?,?)";
-		instance.executePreparedQuery(consulta, paquete.getId(), paquete.getIdPedido(), paquete.getFechaEnvoltura());
+		instance.executeUpdate(consulta, paquete.getId(), paquete.getIdPedido(), paquete.getFechaEnvoltura());
 	}
 	
 	public static void crearIncidencia(String idPedido, String idAlmacenero, String descripcion) throws SQLException{
-		String consulta="INSERT INTO incidencia VALUES(?,?,?)";
-		instance.executePreparedQuery(consulta, idPedido,idAlmacenero,descripcion);
+		String consulta= " INSERT INTO incidencia VALUES(?, ?, ?) ";
+		instance.executeUpdate(consulta, idPedido,idAlmacenero,descripcion);
 	}
 	
 	

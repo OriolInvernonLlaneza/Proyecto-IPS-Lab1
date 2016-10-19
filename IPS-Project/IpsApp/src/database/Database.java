@@ -27,8 +27,8 @@ public class Database {
         try {
             props = new Properties();
             props.load(new FileInputStream("IpsApp/DB.properties"));
-            conn = DriverManager.getConnection("jdbc:oracle:thin:@156.35.94.99:1521:DESA", props);
-            //conn = DriverManager.getConnection("jdbc:h2:./IpsApp/Database/files/DBApp;IFEXISTS=TRUE", "SA", "");
+            //conn = DriverManager.getConnection("jdbc:oracle:thin:@156.35.94.99:1521:DESA", props);
+            conn = DriverManager.getConnection("jdbc:h2:./IpsApp/Database/files/DBApp;IFEXISTS=TRUE;AUTO_SERVER=TRUE", "SA", "");
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IOException file){
@@ -66,6 +66,20 @@ public class Database {
     	for(int i = 0; i< strings.length; i++)
     		prepared.setObject(i+1, strings[i]);
     	return prepared.executeQuery();
+    }
+    
+    /**
+     * Prepara y realiza un comando DDL con parametros preparados
+     * @param sql La consulta para insertar, actualizar o borrar
+     * @param strings Los distintos valores que quieres preparar. De cualquier tipo
+     * @return Un número > 0 que indica el número de filas actualizadas en una tabla. O 0 para indicar otra clase de consulta
+     * @throws SQLException
+     */
+    public int executeUpdate(String sql, Object... strings) throws SQLException{
+    	PreparedStatement prepared = conn.prepareStatement(sql);
+    	for(int i = 0; i< strings.length; i++)
+    		prepared.setObject(i+1, strings[i]);
+    	return prepared.executeUpdate();
     }
     
     /**

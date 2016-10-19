@@ -112,21 +112,21 @@ public class VentanaAlmacenero extends JFrame {
 	}
 	
 	//Inicializar teniendo en cuenta la base de datos.
-	private void inicializar() throws SQLException{
-		pedidos=ConsultasMyShop.getPedidos();
+	private void inicializar() {
+		try {
+			pedidos=ConsultasMyShop.getPedidos();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if(pedidos.isEmpty())
+			JOptionPane.showMessageDialog(this, manager.getString("avisoNoPedidos"), manager.getString("mensaje"), JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	//Refresca la informacion de pedidos cancelando la orden de trabajo actual.
 	private void refrescar(){
 		modeloTPedidos.setRowCount(0);
 		modeloTOT.setRowCount(0);
-		try {
-			inicializar();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+		inicializar();	
 	}
 	
 	//Cuando se refresca se vuelve a llenar tras borrar los contenidos de los pedidos
@@ -208,15 +208,10 @@ public class VentanaAlmacenero extends JFrame {
 		almacenero= new Almacenero("alm01", "cntrsAlmacenero01", "Almacenero01", "AlmaceneroApellido01");
 		
 		
-		try {
-			inicializar();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		inicializar();
+		RellenarTablaPedidos();
 		
 		localizar();
-		RellenarTablaPedidos();
 	}
 
 	private JPanel getPanelPedidos() {
@@ -253,7 +248,7 @@ public class VentanaAlmacenero extends JFrame {
 							ConsultasMyShop.crearUnaOrdenDeTrabajo(almacenero.getId(), pedidoElegido.getId());
 						} catch (SQLException e) {
 							//Ya esta asignada todo ok.
-							//e.printStackTrace();
+							e.printStackTrace();
 						}
 						//El modelo debe cambiar las celdas no editables por todas editables
 						modeloTOT.restart();

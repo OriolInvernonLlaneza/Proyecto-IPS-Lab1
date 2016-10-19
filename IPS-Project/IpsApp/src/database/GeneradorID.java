@@ -13,7 +13,7 @@ public abstract class GeneradorID implements Generador {
 
 	@Override
 	public String generarID() {
-		String code = Integer.toString((rng.nextInt() * ID_LENGTH) + 1);
+		String code = Integer.toString((rng.nextInt(10) * ID_LENGTH) + 1);
 		return completar(code);
 	}
 	
