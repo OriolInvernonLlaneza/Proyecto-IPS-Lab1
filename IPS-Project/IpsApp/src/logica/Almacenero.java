@@ -133,7 +133,7 @@ public class Almacenero {
 	 * @return
 	 */
 	public boolean comprobarProductosRecogidos(OrdenDeTrabajo ot) {
-		/*List<GrupoProducto> productosRecogidos = ot.getProductosRecogidos();
+		List<GrupoProducto> productosRecogidos = ot.getProductosRecogidos();
 		HashMap<String, GrupoProducto> productosOrdenados = ot.getPedido().getAgrupacion(); // Productos que mandaba la OT recoger
 		if (productosOrdenados.size() != productosRecogidos.size()) {
 			return false;
@@ -147,7 +147,7 @@ public class Almacenero {
 			else {
 				return false;
 			}
-		}*/
+		}
 		return true;
 	}
 	

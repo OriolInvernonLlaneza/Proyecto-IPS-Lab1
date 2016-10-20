@@ -35,15 +35,15 @@ CREATE TABLE Producto(
 	localizacion VARCHAR(3),
 	
 	PRIMARY KEY(idProducto),
-	UNIQUE (codigo_barras)
+	UNIQUE (codigo_barras),
 	CONSTRAINT tamano_localizacion CHECK (LENGTH(localizacion) = 3),
-	CONTRAINT localizacion_unique UNIQUE (localizacion)
+	CONSTRAINT localizacion_unique UNIQUE (localizacion)
 );
 
 CREATE TABLE Pedido(
 	idPedido VARCHAR(20),
 	idUsuario VARCHAR(20),
-	precio_pedido NUMBER(5,2),
+	precio_pedido NUMBER(10,2),
 	direccion VARCHAR(500),
 	fecha TIMESTAMP,
 	PRIMARY KEY (idPedido),
