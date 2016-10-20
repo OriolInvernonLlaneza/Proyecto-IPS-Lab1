@@ -27,6 +27,7 @@ public class ConsultasMyShop {
 		ResultSet rs= instance.executeQuery(" SELECT pedido.idpedido, pedido.idusuario, fecha, sum(cantidad), precio_pedido, direccion "+
 												" FROM pedido, productoPedido " +
 												" WHERE pedido.idpedido = productoPedido.idpedido " +
+												" AND pedido.idpedido NOT IN(SELECT OrdenTrabajo.idPedido FROM  OrdenTrabajo WHERE estado<>'Asignada') "+
 												" GROUP BY pedido.idpedido, pedido.idusuario, fecha, precio_pedido,direccion " +
 												" ORDER BY fecha ");
 		while(rs.next()){
