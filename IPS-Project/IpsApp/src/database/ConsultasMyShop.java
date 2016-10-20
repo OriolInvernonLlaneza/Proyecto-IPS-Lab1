@@ -32,8 +32,8 @@ public class ConsultasMyShop {
 		while(rs.next()){
 			List<GrupoProducto> productos= new ArrayList<GrupoProducto>();
 			//idPedido, idUsuario, preciopedido, direccion, fecha
-			
-			String consulta=" SELECT DISTINCT producto.idproducto, producto.producto_nombre, producto.descripcion_producto, producto.codigo_barras, producto.stock, producto.precio, productopedido.cantidad "+
+												//String id, String nombre, String descripcion, double precio, double stock, String localizacion, String codigoBarras
+			String consulta=" SELECT DISTINCT producto.idproducto, producto.producto_nombre, producto.descripcion_producto, producto.precio, producto.stock, producto.localizacion,producto.codigo_barras, productopedido.cantidad "+
 						" FROM ProductoPedido, Producto "+ 
 						 " WHERE ProductoPedido.idproducto = Producto.idproducto "+ 
 						 " AND ProductoPedido.idpedido =  ? ";
@@ -41,9 +41,9 @@ public class ConsultasMyShop {
 			while(rsProductos.next()){
 				// idProducto, producto_nombre, descripcion_producto, codigo_barras, stock, precio -- cantidad
 
-				Producto producto = new Producto(rsProductos.getString(1),rsProductos.getString(2), rsProductos.getString(3), rsProductos.getDouble(5),rsProductos.getDouble(6),"A3", rsProductos.getString(4));
+				Producto producto = new Producto(rsProductos.getString(1),rsProductos.getString(2), rsProductos.getString(3), rsProductos.getDouble(4),rsProductos.getDouble(5), rsProductos.getString(6), rsProductos.getString(7));
 
-				GrupoProducto grupo = new GrupoProducto(producto, rsProductos.getInt(7));
+				GrupoProducto grupo = new GrupoProducto(producto, rsProductos.getInt(8));
 				productos.add(grupo);
 			}
 			//pedido.idpedido, pedido.idusuario, fecha, sum(cantidad), precio_pedido, direccion
