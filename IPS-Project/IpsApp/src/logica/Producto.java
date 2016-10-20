@@ -10,7 +10,6 @@ public class Producto implements Comparable<Producto>, Almacenado{
 	private String descripcion;
 	private String codigoBarras;
 	
-	
 	public Producto(String id, String nombre, String descripcion, double precio, double stock, String localizacion, String codigoBarras) {
 		this.id = id;
 		this.precio = precio;
